@@ -1,94 +1,100 @@
-const canvas = document.getElementById("canvas");
-const context = canvas.getContext("2d");
+window.addEventListener("load", function() {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 876;
+    canvas.height = 720;
 
-const canvasWidth = canvas.width = 876;
-const canvasHeight = canvas.height = 720;
+    var gameFrame = 0;
+    var stagFrames = 3;
 
-var gameFrame = 0;
-var stagFrames = 3;
+    const sprites = new Image();
+    sprites.src = "img/sprites.png";
 
-const sprites = new Image();
-sprites.src = "img/sprites.png";
+    const controls = ["w", "a", "s", "d"/* , "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight" */];
 
-function spriteCycle() {
-    if(gameFrame % stagFrames == 0) {
-        if (player.x < 88) {player.x+=26}
-        else player.x = 10
+    class InputHandler {
+        constructor(game) {
+            this.game = game;
+            window.addEventListener("keydown", (e) => {
+                if ((controls.includes(e.key)) && this.game.keys.indexOf(e.key) === -1) this.game.keys.push(e.key)
+            });
+            window.addEventListener("keyup", (e) => {
+                if (this.game.keys.indexOf(e.key) > -1) this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
+            });
+            // ADD MOUSE FIRE SUPPORT ! ! !
+            /* window.addEventListener("mousedown", e => {
+                console.log("CLICK")
+            });
+            window.addEventListener("mouseup", e => {
+                console.log("NO CLICK")
+            }); */
+        }
+    };
+
+    class Player {
+        constructor(game) {
+            this.game = game;
+            this.width = 14;
+            this.height = 23;
+            this.x = 10;
+            this.y = 371;
+            this.px = 424;
+            this.py = 338;
+            this.speed = 3.5;
+            this.animateUp = function() {{if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("s")){this.y = 409; this.spriteCycle()}}};
+            this.animateLeft = function() {{if (!this.game.keys.includes("d")){this.y = 445; this.spriteCycle()}}},
+            this.animateDown = function() {{if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("w")){this.y = 371; this.spriteCycle()}}},
+            this.animateRight = function() {{if (!this.game.keys.includes("a")){this.y = 478; this.spriteCycle()}}},
+            this.playableArea = function() {
+                if (this.py <= 1) {this.py = 1};
+                if (this.py >= 692) {this.py = 692};
+                if (this.px <= 0) {this.px = 0};
+                if (this.px >= 858) {this.px = 858}
+            };
+            this.spriteCycle = function() {
+                if(gameFrame % stagFrames == 0) {
+                    if (this.x < 88) {this.x+=26}
+                    else this.x = 10
+                }
+            };
+        };
+        update() {
+            if (this.game.keys.includes("w")) this.py -= this.speed, this.animateUp();
+            if (this.game.keys.includes("a")) this.px -= this.speed, this.animateLeft();
+            if (this.game.keys.includes("s")) this.py += this.speed, this.animateDown();
+            if (this.game.keys.includes("d")) this.px += this.speed, this.animateRight();
+            this.playableArea()
+        };
+        draw(context) {
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.3, this.height * 1.3);
+        }
     }
-};
 
-const player = {
-    x: 10,
-    y: 371,
-    w: 14,
-    h: 23,
-    px:424,
-    py:338,
-    speed: 3.5,
-    // SPEED === 3.5 ! ! !
-    moveUp: function() {this.py-=this.speed},
-    moveLeft: function() {this.px-=this.speed},
-    moveDown: function() {this.py+=this.speed},
-    moveRight: function() {this.px+=this.speed},
-    animateUp: function() {if (!controls.d.pressed && !controls.a.pressed && !controls.s.pressed){this.y = 409; spriteCycle()}},
-    animateDown: function() {if (!controls.d.pressed && !controls.a.pressed && !controls.w.pressed){this.y = 371; spriteCycle()}},
-    animateLeft: function() {if (!controls.d.pressed){this.y = 445; spriteCycle()}},
-    animateRight: function() {if (!controls.a.pressed){this.y = 478; spriteCycle()}},
-    shootUp: function() {},
-    shootLeft: function() {},
-    shootDown: function() {},
-    shootRight: function() {},
-};
+    class Game {
+        constructor(height, width) {
+            this.width = width;
+            this.height = height;
+            this.player = new Player(this);
+            this.input = new InputHandler(this);
+            this.keys = []
+        };
+        update() {
+            this.player.update();
+        };
+        draw(context) {
+            this.player.draw(context);
+        }
+    }
 
-const controls = {
-    w: {pressed: false, function() {player.animateUp(), player.moveUp()}},
-    a: {pressed: false, function() {player.animateLeft(), player.moveLeft()}},
-    s: {pressed: false, function() {player.animateDown(), player.moveDown()}},
-    d: {pressed: false, function() {player.animateRight(), player.moveRight()}},
-    ArrowUp: {pressed: false, function() {player.shootUp()}},                            //<----------------
-    ArrowLeft: {pressed: false, function() {player.shootLeft()}},                        //<---------------
-    ArrowDown: {pressed: false, function() {player.shootDown()}},                        //<--------------
-    ArrowRight: {pressed: false, function() {player.shootRight()}}                       //<-------------
-};
+    const game = new Game(canvas.height, canvas.width);
 
-document.addEventListener("keydown", (e) => {
-    if (controls[e.key]) {controls[e.key].pressed = true}
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.update();
+        game.draw(ctx);
+        gameFrame++;
+        requestAnimationFrame(animate);
+    };
+
+    animate();
 });
-
-document.addEventListener("keyup", (e) => {
-    if (controls[e.key]) {controls[e.key].pressed = false}
-});
-
-// ADD MOUSE FIRE SUPPORT ! ! !
-
-/* canvas.addEventListener("mousedown", e => {
-    console.log("CLICK")
-});
-
-canvas.addEventListener("mouseup", e => {
-    console.log("NO CLICK")
-}); */
-
-const actions = () => {
-    Object.keys(controls).forEach(key=> {
-        controls[key].pressed && controls[key].function()
-    })
-};
-
-function playableArea () {
-    if (player.py <= 1) {player.py = 1};
-    if (player.py >= 692) {player.py = 692};
-    if (player.px <= 0) {player.px = 0};
-    if (player.px >= 858) {player.px = 858}
-};
-
-function animate() {
-    actions();
-    playableArea();
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
-    context.drawImage(sprites, player.x, player.y, player.w, player.h, player.px, player.py, player.w * 1.3, player.h * 1.3);
-    gameFrame++;
-    requestAnimationFrame(animate)
-};
-
-animate();
