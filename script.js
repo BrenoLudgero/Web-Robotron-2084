@@ -99,26 +99,7 @@ window.addEventListener("load", function() {
         draw(context) {
             context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.3, this.height * 1.3);
             this.projectiles.forEach(projectile => {projectile.draw(context)})
-        };
-        shootRight() {
-            
         }
-    };
-
-    class Enemy {
-        
-    };
-
-    class Layer {
-        
-    };
-
-    class Background {
-        
-    };
-
-    class UI {
-        
     };
 
     class Game {
