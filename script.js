@@ -43,35 +43,35 @@ window.addEventListener("load", function() {
             if (this.game.keys.includes("d")) game.player.move(true, true);
 
             if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight"))
-                game.player.shoot(game.player.px + 8, game.player.py - 15, false, true, -10)
+                game.player.shoot(game.player.px + 8, game.player.py - 15, false, true, false, -10)
             ;
             else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowLeft"))
-                game.player.shoot(game.player.px + 4, game.player.py - 15, true, true, -10)
+                game.player.shoot(game.player.px + 4, game.player.py, true, true, true, -10)
             ;
             else if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp"))
-                game.player.shoot(game.player.px - 16, game.player.py + 15, true, false, -10)
+                game.player.shoot(game.player.px - 16, game.player.py + 15, true, false, false, -10)
             ;
             else if (this.game.keys.includes("ArrowLeft") && this.game.keys.includes("ArrowDown"))
-                game.player.shoot(game.player.px + 4, game.player.py + game.player.height, false, false, 10)
+                game.player.shoot(game.player.px + 4, game.player.py + game.player.height, false, false, true, 10)
             ;
             else if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight"))
-                game.player.shoot(game.player.px + 8, game.player.py + 22, false, true, 10)
+                game.player.shoot(game.player.px + 8, game.player.py + 22, false, true, false, 10)
             ;
             else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowRight"))
-                game.player.shoot(game.player.px + 12, game.player.py + game.player.height, true, true, 10)
+                game.player.shoot(game.player.px + 12, game.player.py + game.player.height, true, true, true, 10)
             ;
             else if (this.game.keys.includes("ArrowRight") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp"))
-                game.player.shoot(game.player.px + game.player.width - 2, game.player.py + 15, true, false, 10)
+                game.player.shoot(game.player.px + game.player.width - 2, game.player.py + 15, true, false, false, 10)
             ;
             else if (this.game.keys.includes("ArrowRight") && this.game.keys.includes("ArrowUp"))
-                game.player.shoot(game.player.px + 12, game.player.py - 15, false, false, -10)
+                game.player.shoot(game.player.px + 12, game.player.py, false, false, true, -10)
         }
     };
 
 
 
     class Projectile {
-        constructor(game, px, py, dx, dy, speed) {
+        constructor(game, px, py, dx, dy, diag, speed) {
             this.game = game;
             this.width = 22;
             this.height = 2;
@@ -81,6 +81,7 @@ window.addEventListener("load", function() {
             this.py = py;
             this.dx = dx;
             this.dy = dy;
+            this.diag = diag;
             this.speed = speed;
             this.delete = false
         };
@@ -98,9 +99,11 @@ window.addEventListener("load", function() {
             if (this.px > canvas.width || this.px < 0 || this.py > canvas.height || this.py < 0)
                 this.delete = true
         };
-
         draw(context) {
-            if (this.dx && !this.dy)
+            if (this.diag)
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, 4, 4)
+            ;
+            else if (this.dx && !this.dy)
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height)
             ;
             else if (this.dy && !this.dx || this.dx && this.dy || !this.dx && !this.dy) 
@@ -147,9 +150,9 @@ window.addEventListener("load", function() {
                         this.spriteCycle(),
                         this.y = 371
             };
-            this.shoot = function(px, py, dx, dy, speed) {
+            this.shoot = function(px, py, dx, dy, diag, speed) {
                 if (this.projectileTimer <= 0)
-                    this.projectiles.push(new Projectile(this.game, px, py, dx, dy, speed)), 
+                    this.projectiles.push(new Projectile(this.game, px, py, dx, dy, diag, speed)), 
                     this.projectileTimer = this.projectileDelay
             };
             this.spriteCycle = function () {
