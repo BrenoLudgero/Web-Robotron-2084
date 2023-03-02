@@ -7,7 +7,7 @@ window.addEventListener("load", function() {
     canvas.height = 720;
 
     var gameFrame = 0;
-    var stagFrames = 3;
+    var stagFrames = 4;
 
     const sprites = new Image();
     sprites.src = "img/sprites.png"; // Ripped by Sean Riddle
@@ -37,10 +37,10 @@ window.addEventListener("load", function() {
         };
 
         update() {
-            if (this.game.keys.includes("w")) game.player.goUp();
-            if (this.game.keys.includes("a")) game.player.goLeft();
-            if (this.game.keys.includes("s")) game.player.goDown();
-            if (this.game.keys.includes("d")) game.player.goRight();
+            if (this.game.keys.includes("w")) game.player.move(false, true);
+            if (this.game.keys.includes("a")) game.player.move(true, false);
+            if (this.game.keys.includes("s")) game.player.move(false, false);
+            if (this.game.keys.includes("d")) game.player.move(true, true);
 
             if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight"))
                 game.player.shoot(game.player.px + 8, game.player.py - 15, false, true, -10)
@@ -122,32 +122,41 @@ window.addEventListener("load", function() {
             this.speed = 3.5;
             this.projectiles = [];
             this.projectileTimer = 0;
-            this.projectileDelay = 10;
-            //                                      \/  \/  \/  move() like shoot()  \/  \/  \/
-            this.goUp = function() {
-                this.py -= this.speed;
-                if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("s"))
-                    this.y = 409, this.spriteCycle()
-            };
-            this.goLeft = function() {
-                this.px -= this.speed;
-                if (!this.game.keys.includes("d"))
-                    this.y = 445, this.spriteCycle()
-            };
-            this.goDown = function() {
-                this.py += this.speed;
-                if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("w"))
-                    this.y = 371, this.spriteCycle()
-            };
-            this.goRight = function() {
-                this.px += this.speed;
-                if (!this.game.keys.includes("a"))
-                    this.y = 478, this.spriteCycle()
+            this.projectileDelay = 10
+            ;
+            this.move = function(dx, dy) {
+                if (dx && dy)
+                    this.px += this.speed,
+                    this.spriteCycle(),
+                    this.y = 478
+                ;
+                if (dx && !dy)
+                    this.px -= this.speed,
+                    this.spriteCycle(),
+                    this.y = 445
+                ;
+                if (!dx && dy)
+                    this.py -= this.speed;
+                    if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("s"))
+                        this.spriteCycle(),
+                        this.y = 409
+                ;
+                if (!dx && !dy)
+                    this.py += this.speed;
+                    if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("w"))
+                        this.spriteCycle(),
+                        this.y = 371
             };
             this.shoot = function(px, py, dx, dy, speed) {
-                if (this.projectileTimer <=0)
+                if (this.projectileTimer <= 0)
                     this.projectiles.push(new Projectile(this.game, px, py, dx, dy, speed)), 
                     this.projectileTimer = this.projectileDelay
+            };
+            this.spriteCycle = function () {
+                if (gameFrame % stagFrames == 0)
+                    if (this.x < 88)
+                        this.x += 26
+                    else this.x = 10
             };
             this.playableArea = function() {
                 if (this.py <= 1)
@@ -161,12 +170,6 @@ window.addEventListener("load", function() {
                 ;
                 if (this.px >= 858)
                     this.px = 858
-            };
-            this.spriteCycle = function() {
-                if (gameFrame % stagFrames == 0)
-                    if (this.x < 88)
-                        this.x += 26
-                    else this.x = 10
             }
         };
 
@@ -183,30 +186,6 @@ window.addEventListener("load", function() {
             this.projectiles.forEach(projectile => projectile.draw(context))
         }
     };
-
-
-
-/*     class Enemy {
-        
-    };
-
-
-
-    class Layer {
-        
-    };
-
-
-
-    class Background {
-        
-    };
-
-
-
-    class UI {
-        
-    }; */
 
 
 
