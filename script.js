@@ -37,34 +37,37 @@ window.addEventListener("load", function() {
         };
 
         update() {
-            if (this.game.keys.includes("w")) game.player.move(false, true);
-            if (this.game.keys.includes("a")) game.player.move(true, false);
-            if (this.game.keys.includes("s")) game.player.move(false, false);
-            if (this.game.keys.includes("d")) game.player.move(true, true);
-
+            if (this.game.keys.includes("w")) game.player.move(false, true)
+            ;
+            if (this.game.keys.includes("a")) game.player.move(true, false)
+            ;
+            if (this.game.keys.includes("s")) game.player.move(false, false)
+            ;
+            if (this.game.keys.includes("d")) game.player.move(true, true)
+            ;
             if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight"))
-                game.player.shoot(game.player.px + 8, game.player.py - 15, false, true, false, -10)
+                game.player.shoot(game.player.px + 8, game.player.py + 8, false, true, false, -30)
             ;
             else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowLeft"))
-                game.player.shoot(game.player.px + 4, game.player.py, true, true, true, -10)
+                game.player.shoot(game.player.px + 14, game.player.py + 14, true, true, true, -30)
             ;
             else if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp"))
-                game.player.shoot(game.player.px - 16, game.player.py + 15, true, false, false, -10)
+                game.player.shoot(game.player.px + 12, game.player.py + 12, true, false, false, -30)
             ;
             else if (this.game.keys.includes("ArrowLeft") && this.game.keys.includes("ArrowDown"))
-                game.player.shoot(game.player.px + 4, game.player.py + game.player.height, false, false, true, 10)
+                game.player.shoot(game.player.px + 4, game.player.py + 24, false, false, true, 10)
             ;
             else if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight"))
-                game.player.shoot(game.player.px + 8, game.player.py + 22, false, true, false, 10)
+                game.player.shoot(game.player.px + 8, game.player.py + 26, false, true, false, 10)
             ;
             else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowRight"))
-                game.player.shoot(game.player.px + 12, game.player.py + game.player.height, true, true, true, 10)
+                game.player.shoot(game.player.px + 12, game.player.py + 24, true, true, true, 10)
             ;
             else if (this.game.keys.includes("ArrowRight") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp"))
-                game.player.shoot(game.player.px + game.player.width - 2, game.player.py + 15, true, false, false, 10)
+                game.player.shoot(game.player.px + 14, game.player.py + 12, true, false, false, 10)
             ;
             else if (this.game.keys.includes("ArrowRight") && this.game.keys.includes("ArrowUp"))
-                game.player.shoot(game.player.px + 12, game.player.py, false, false, true, -10)
+                game.player.shoot(game.player.px + 4, game.player.py + 12, false, false, true, -30)
         }
     };
 
@@ -73,8 +76,8 @@ window.addEventListener("load", function() {
     class Projectile {
         constructor(game, px, py, dx, dy, diag, speed) {
             this.game = game;
-            this.width = 22;
-            this.height = 2;
+            this.width = 2;
+            this.height = 3;
             this.x = 0;
             this.y = 510;
             this.px = px;
@@ -82,32 +85,80 @@ window.addEventListener("load", function() {
             this.dx = dx;
             this.dy = dy;
             this.diag = diag;
+            this.multiple = function() {}
             this.speed = speed;
             this.delete = false
         };
-
         update() {
+            if (this.px > canvas.width || this.px < 0 || this.py > canvas.height || this.py < 0)
+                this.delete = true
+            ;
             if (this.dx)
                 this.px += this.speed
             ;
             if (this.dy)
                 this.py += this.speed
             ;
-            if (!this.dx && !this.dy)
-                this.px -= this.speed, this.py += this.speed
-            ;
-            if (this.px > canvas.width || this.px < 0 || this.py > canvas.height || this.py < 0)
-                this.delete = true
+            else if (!this.dx && !this.dy)
+                this.px -= this.speed,
+                this.py += this.speed
         };
         draw(context) {
-            if (this.diag)
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, 4, 4)
+            if (this.dx && !this.diag)  //      \/  \/  \/      REDUCE      \/  \/  \/
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height)
             ;
-            else if (this.dx && !this.dy)
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height)
+            if (this.dy && !this.diag)
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height)
             ;
-            else if (this.dy && !this.dx || this.dx && this.dy || !this.dx && !this.dy) 
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.height, this.width)
+            else if (this.dx && this.diag || this.dy && this.diag)
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height)
+            ;
+            else if (!this.dx && this.diag || !this.dy && this.diag)
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height),
+                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height)
         }
     };
 
@@ -125,7 +176,7 @@ window.addEventListener("load", function() {
             this.speed = 3.5;
             this.projectiles = [];
             this.projectileTimer = 0;
-            this.projectileDelay = 10
+            this.projectileDelay = 12
             ;
             this.move = function(dx, dy) {
                 if (dx && dy)
