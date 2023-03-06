@@ -15,6 +15,12 @@ window.addEventListener("load", function() {
 
 
 
+    function RNG(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    };
+
+
+
     class InputHandler {
         constructor(game) {
             this.game = game;
@@ -261,10 +267,6 @@ window.addEventListener("load", function() {
     };
 
 
-    
-    function randomPosition(min, max) {
-        return Math.floor(Math.random() * (max - min) ) + min;
-    };
 
     class Grunt extends Enemy {
         constructor(game) {
@@ -273,13 +275,13 @@ window.addEventListener("load", function() {
             this.height = 27;
             this.x = 8;
             this.y = 285;
-            this.px = randomPosition(8, 846);
-            this.py = randomPosition(8, 680);
+            this.px = RNG(8, 846);
+            this.py = RNG(8, 680);
             this.movementTimer = 0;
             this.movementInterval = 80;
-            this.speed = 4;
-            this.delete = false;
-            this.stagFrames = 2;
+            this.movementRate = 10;
+            this.speed = 6;
+            this.delete = false
 
             this.spriteCycle = function () {
                 if (this.x < 98) {
@@ -303,16 +305,29 @@ window.addEventListener("load", function() {
                     this.px = 851
                 }
             }
-        }
+        };
 
         update() {
+            var randomNumber = RNG(1, 3);
             if (this.movementTimer > this.movementInterval) {
-                this.movementTimer = 0,
-                this.spriteCycle()
+                if (randomNumber === 1) {
+                    if (this.px > game.player.px) {
+                        this.px -= this.speed
+                    } else {
+                        this.px += this.speed
+                    };
+                    if (this.py > game.player.py) {
+                        this.py -= this.speed
+                    } else {
+                        this.py += this.speed
+                    }
+                    this.spriteCycle()
+                }
+                this.movementTimer = 0
             } else {
-                    this.movementTimer += this.stagFrames
+                this.movementTimer += this.movementRate
             };
-            this.playableArea();
+            this.playableArea()
         }
     };
 
@@ -368,7 +383,7 @@ window.addEventListener("load", function() {
         requestAnimationFrame(animate)
     };
 
-    game.addEnemy(20, Grunt);
+    game.addEnemy(30, Grunt);
     animate(0)
 
 });
