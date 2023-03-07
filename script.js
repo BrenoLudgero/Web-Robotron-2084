@@ -3,8 +3,8 @@ window.addEventListener("load", function() {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    canvas.width = 876;
-    canvas.height = 720;
+    canvas.width = 1016;
+    canvas.height = 786;
 
     var gameFrame = 0;
 
@@ -16,7 +16,7 @@ window.addEventListener("load", function() {
 
 
     function RNG(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
+        return Math.floor(Math.random() * (max - min)) + 1;
     };
 
 
@@ -48,31 +48,32 @@ window.addEventListener("load", function() {
             if (this.game.keys.includes("w")) {
                 game.player.move(false, true)
             };
-            if (this.game.keys.includes("a")) {
-                game.player.move(true, false)
-            };
             if (this.game.keys.includes("s")) {
                 game.player.move(false, false)
             };
             if (this.game.keys.includes("d")) {
                 game.player.move(true, true)
+            } else if (this.game.keys.includes("a")) {
+                game.player.move(true, false)
             };
             if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + 8, game.player.py + 8, false, true, false, -30)
+                game.player.shoot(game.player.px + 8, game.player.py + 8, false, true, false, -45)
             } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px + 14, game.player.py + 14, true, true, true, -30)
-            } else if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + 12, game.player.py + 12, true, false, false, -30)
-            } else if (this.game.keys.includes("ArrowLeft") && this.game.keys.includes("ArrowDown")) {
-                game.player.shoot(game.player.px + 4, game.player.py + 24, false, false, true, 10)
-            } else if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
+                game.player.shoot(game.player.px + 14, game.player.py + 14, true, true, true, -45)
+            } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowRight")) {
+                game.player.shoot(game.player.px + 4, game.player.py + 12, false, false, true, -45)
+            };
+            if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
                 game.player.shoot(game.player.px + 8, game.player.py + 26, false, true, false, 10)
             } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowRight")) {
                 game.player.shoot(game.player.px + 12, game.player.py + 24, true, true, true, 10)
+            } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowLeft")) {
+                game.player.shoot(game.player.px + 4, game.player.py + 24, false, false, true, 10)
+            };
+            if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
+                game.player.shoot(game.player.px + 12, game.player.py + 12, true, false, false, -45)
             } else if (this.game.keys.includes("ArrowRight") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
                 game.player.shoot(game.player.px + 14, game.player.py + 12, true, false, false, 10)
-            } else if (this.game.keys.includes("ArrowRight") && this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + 4, game.player.py + 12, false, false, true, -30)
             }
         }
     };
@@ -116,13 +117,13 @@ window.addEventListener("load", function() {
                 for (let i = 0; i < 11; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height)
                 }
-            };
-            if (this.dy && !this.diag) {
+            } else if (this.dy && !this.diag) {
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
                 for (let i = 0; i < 11; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height)
                 }
-            } else if (this.dx && this.diag || this.dy && this.diag) {
+            }; 
+            if (this.dx && this.diag || this.dy && this.diag) {
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
                 for (let i = 0; i < 10; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height)
@@ -151,27 +152,25 @@ window.addEventListener("load", function() {
             this.projectiles = [];
             this.projectileTimer = 0;
             this.projectileDelay = 12;
-            this.stagFrames = 3;
+            this.animationDelay = 4;
+            this.alive = true;
 
             this.move = function(dx, dy) {
                 if (dx && dy) {
                     this.px += this.speed,
                     this.spriteCycle(),
                     this.y = 478
-                };
-                if (dx && !dy) {
+                } else if (dx && !dy) {
                     this.px -= this.speed,
                     this.spriteCycle(),
                     this.y = 445
-                };
-                if (!dx && dy) {
+                } else if (!dx && dy) {
                     this.py -= this.speed;
                     if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("s")) {
                         this.spriteCycle(),
                         this.y = 409
                     }
-                };
-                if (!dx && !dy) {
+                } else if (!dx && !dy) {
                     this.py += this.speed;
                     if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("w")) {
                         this.spriteCycle(),
@@ -188,7 +187,7 @@ window.addEventListener("load", function() {
             };
 
             this.spriteCycle = function () {
-                if (gameFrame % this.stagFrames == 0) {
+                if (gameFrame % this.animationDelay == 0) {
                     if (this.x < 88) {
                         this.x += 26
                     } else {
@@ -200,15 +199,13 @@ window.addEventListener("load", function() {
             this.playableArea = function() {
                 if (this.py <= 1) {
                     this.py = 1
-                };
-                if (this.py >= 689) {
-                    this.py = 689
+                } else if (this.py >= 742) {
+                    this.py = 742
                 };
                 if (this.px <= 1) {
                     this.px = 1
-                };
-                if (this.px >= 857) {
-                    this.px = 857
+                } else if (this.px >= 990) {
+                    this.px = 990
                 }
             }
         };
@@ -222,7 +219,7 @@ window.addEventListener("load", function() {
         };
 
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.3, this.height * 1.3);
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.8, this.height * 1.8);
             this.projectiles.forEach(projectile => projectile.draw(context))
         }
     };
@@ -244,30 +241,28 @@ window.addEventListener("load", function() {
             this.playableArea = function() {
                 if (this.py <= 1) {
                     this.py = 1
+                } else if (this.py >= 738) {
+                    this.py = 738
                 };
-                if (this.py >= 692) {
-                    this.py = 692
-                };
-                if (this.px <= 0) {
-                    this.px = 0
-                };
-                if (this.px >= 858) {
-                    this.px = 858
+                if (this.px <= 1) {
+                    this.px = 1
+                } else if (this.px >= 982) {
+                    this.px = 982
                 }
             }
         };
 
         update() {
-            this.playableArea();
+            
         };
 
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.3, this.height * 1.3)
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.8, this.height * 1.8)
         }
     };
 
 
-
+    
     class Grunt extends Enemy {
         constructor(game) {
             super(game);
@@ -275,13 +270,13 @@ window.addEventListener("load", function() {
             this.height = 27;
             this.x = 8;
             this.y = 285;
-            this.px = RNG(8, 846);
-            this.py = RNG(8, 680);
+            this.px = RNG(1, 982);              // Limit Spawn Posisiton
+            this.py = RNG(1, 732);              // Limit Spawn Posisiton
             this.movementTimer = 0;
             this.movementInterval = 80;
             this.movementRate = 10;
             this.speed = 6;
-            this.delete = false
+            this.delete = false;
 
             this.spriteCycle = function () {
                 if (this.x < 98) {
@@ -289,26 +284,11 @@ window.addEventListener("load", function() {
                 } else {
                     this.x = 8
                 }
-            };
-
-            this.playableArea = function() {
-                if (this.py <= 1) {
-                    this.py = 1
-                };
-                if (this.py >= 686) {
-                    this.py = 686
-                };
-                if (this.px <= 1) {
-                    this.px = 1
-                };
-                if (this.px >= 851) {
-                    this.px = 851
-                }
             }
         };
 
         update() {
-            var randomNumber = RNG(1, 3);
+            let randomNumber = RNG(1, 4);
             if (this.movementTimer > this.movementInterval) {
                 if (randomNumber === 1) {
                     if (this.px > game.player.px) {
@@ -326,7 +306,7 @@ window.addEventListener("load", function() {
                 this.movementTimer = 0
             } else {
                 this.movementTimer += this.movementRate
-            };
+            }
             this.playableArea()
         }
     };
@@ -346,15 +326,27 @@ window.addEventListener("load", function() {
         };
 
         update() {
-            this.player.update();
-            this.enemies.forEach (enemy => {
-                enemy.update()
-            });
-            this.enemies = this.enemies.filter (enemy => !enemy.delete)
+            if (this.player.alive) {
+                this.player.update()
+                this.enemies.forEach (enemy => {
+                    enemy.update();
+                    if (this.checkCollision(this.player, enemy)) {
+                        this.player.alive = false
+                    };
+                    this.player.projectiles.forEach(projectile => {
+                        if (this.checkCollision(projectile, enemy)) {
+                            enemy.delete = true
+                        }
+                    })
+                })
+                this.enemies = this.enemies.filter (enemy => !enemy.delete)
+            }
         };
 
         draw(context) {
-            this.player.draw(context);
+            if (this.player.alive) {
+                this.player.draw(context)
+            };
             this.enemies.forEach (enemy => {
                 enemy.draw(context)
             })
@@ -364,6 +356,14 @@ window.addEventListener("load", function() {
             for (let i = 0; i < numberEnemies; i ++) {
                 this.enemies.push(new enemy(this))
             }
+        };
+
+        checkCollision(actorA, actorB) {
+            return (actorA.px < actorB.px + actorB.width &&
+                actorA.px + actorA.width > actorB.px &&
+                actorA.py < actorB.py + actorB.height &&
+                actorA.py + actorA.height > actorB.py
+            )
         }
     };
 
@@ -383,7 +383,7 @@ window.addEventListener("load", function() {
         requestAnimationFrame(animate)
     };
 
-    game.addEnemy(30, Grunt);
+    game.addEnemy(11, Grunt);
     animate(0)
 
 });
