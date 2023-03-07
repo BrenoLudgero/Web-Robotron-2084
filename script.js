@@ -1,3 +1,12 @@
+
+// Robotron: 2084 (Released in 1982)
+// Developed by Vid Kidz (Disbanded in 1984)
+// Manufactured and Published by Williams Electronics, Inc. (Now a Light & Wonder brand)
+// Copyright: Williams Electronics, Inc.  /  Williams Electronics Games, Inc.  /  Midway Amusement Games, LLC  /  Lawrence DeMar & Eugene Jarvis (1978 to present)
+
+// Reprogrammed in JavaScript by Breno Ludgero (https://www.linkedin.com/in/breno-ludgero/)
+// Based on the blue label ROM revision
+
 window.addEventListener("load", function() {
 
     const canvas = document.getElementById("canvas");
@@ -12,8 +21,6 @@ window.addEventListener("load", function() {
     sprites.src = "img/sprites.png"; // Ripped by Sean Riddle
 
     const controls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
-
-
 
     function RNG(min, max) {
         return Math.floor(Math.random() * (max - min)) + 1;
@@ -57,23 +64,23 @@ window.addEventListener("load", function() {
                 game.player.move(true, false)
             };
             if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + 8, game.player.py + 8, false, true, false, -45)
+                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py + 20, false, true, false, -45)
             } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px + 14, game.player.py + 14, true, true, true, -45)
+                game.player.shoot(game.player.px + 25, game.player.py + 25, true, true, true, -45)
             } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + 4, game.player.py + 12, false, false, true, -45)
+                game.player.shoot(game.player.px - 1, game.player.py + 25, false, false, true, -45)
             };
             if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + 8, game.player.py + 26, false, true, false, 10)
+                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py + 35, false, true, false, 10)
             } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + 12, game.player.py + 24, true, true, true, 10)
+                game.player.shoot(game.player.px + 20, game.player.py + 38, true, true, true, 10)
             } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px + 4, game.player.py + 24, false, false, true, 10)
+                game.player.shoot(game.player.px + 1, game.player.py + 38, false, false, true, 10)
             };
             if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + 12, game.player.py + 12, true, false, false, -45)
+                game.player.shoot(game.player.px + 20, game.player.py + game.player.adjustedHeight / 2, true, false, false, -45)
             } else if (this.game.keys.includes("ArrowRight") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + 14, game.player.py + 12, true, false, false, 10)
+                game.player.shoot(game.player.px + 20, game.player.py + game.player.adjustedHeight / 2, true, false, false, 10)
             }
         }
     };
@@ -84,7 +91,7 @@ window.addEventListener("load", function() {
         constructor(game, px, py, dx, dy, diag, speed) {
             this.game = game;
             this.width = 2;
-            this.height = 3;
+            this.height = 2;
             this.x = 0;
             this.y = 510;
             this.px = px;
@@ -114,23 +121,22 @@ window.addEventListener("load", function() {
         draw(context) {
             if (this.dx && !this.diag) {
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
-                for (let i = 0; i < 11; i ++) {
+                for (let i = 0; i < 18; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height)
                 }
             } else if (this.dy && !this.diag) {
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
-                for (let i = 0; i < 11; i ++) {
+                for (let i = 0; i < 18; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height)
                 }
-            }; 
-            if (this.dx && this.diag || this.dy && this.diag) {
+            } else if (this.dx && this.diag || this.dy && this.diag) {
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
-                for (let i = 0; i < 10; i ++) {
+                for (let i = 0; i < 14; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height)
                 }
             } else if (!this.dx && this.diag || !this.dy && this.diag) {
                 context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
-                for (let i = 0; i < 10; i ++) {
+                for (let i = 0; i < 14; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height)
                 }
             }
@@ -143,7 +149,9 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game;
             this.width = 14;
+            this.adjustedWidth = 25;
             this.height = 24;
+            this.adjustedHeight = 43;
             this.x = 10;
             this.y = 371;
             this.px = canvas.width /2 - this.width;
@@ -219,7 +227,7 @@ window.addEventListener("load", function() {
         };
 
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.8, this.height * 1.8);
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
             this.projectiles.forEach(projectile => projectile.draw(context))
         }
     };
@@ -257,7 +265,7 @@ window.addEventListener("load", function() {
         };
 
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width * 1.8, this.height * 1.8)
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight)
         }
     };
 
@@ -267,7 +275,9 @@ window.addEventListener("load", function() {
         constructor(game) {
             super(game);
             this.width = 18;
+            this.adjustedWidth = 32;
             this.height = 27;
+            this.adjustedHeight = 48;
             this.x = 8;
             this.y = 285;
             this.px = RNG(1, 982);              // Limit Spawn Posisiton
@@ -300,7 +310,7 @@ window.addEventListener("load", function() {
                         this.py -= this.speed
                     } else {
                         this.py += this.speed
-                    }
+                    };
                     this.spriteCycle()
                 }
                 this.movementTimer = 0
@@ -330,12 +340,13 @@ window.addEventListener("load", function() {
                 this.player.update()
                 this.enemies.forEach (enemy => {
                     enemy.update();
-                    if (this.checkCollision(this.player, enemy)) {
+                    if (this.checkCollision(this.player, this.player.adjustedWidth, this.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
                         this.player.alive = false
                     };
                     this.player.projectiles.forEach(projectile => {
-                        if (this.checkCollision(projectile, enemy)) {
-                            enemy.delete = true
+                        if (this.checkCollision(projectile, 2, 2, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                            enemy.delete = true,
+                            projectile.delete = true
                         }
                     })
                 })
@@ -344,9 +355,7 @@ window.addEventListener("load", function() {
         };
 
         draw(context) {
-            if (this.player.alive) {
-                this.player.draw(context)
-            };
+            this.player.draw(context)
             this.enemies.forEach (enemy => {
                 enemy.draw(context)
             })
@@ -358,11 +367,11 @@ window.addEventListener("load", function() {
             }
         };
 
-        checkCollision(actorA, actorB) {
-            return (actorA.px < actorB.px + actorB.width &&
-                actorA.px + actorA.width > actorB.px &&
-                actorA.py < actorB.py + actorB.height &&
-                actorA.py + actorA.height > actorB.py
+        checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
+            return (actorA.px < actorB.px + widthB &&
+                actorA.px + widthA > actorB.px &&
+                actorA.py < actorB.py + heightB &&
+                actorA.py + heightA > actorB.py
             )
         }
     };
