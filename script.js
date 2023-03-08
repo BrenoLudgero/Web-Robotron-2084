@@ -365,11 +365,11 @@ window.addEventListener("load", function() {
                         };
                         projectile.delete = true
                     }
-                })
-            });
-            if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, game.enemy, game.enemy.adjustedWidth, game.enemy.adjustedHeight)) {
-                this.player.alive = false
-            }
+                });
+                if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                    game.player.alive = false
+                }
+            })
         };
 
         checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
@@ -423,7 +423,7 @@ window.addEventListener("load", function() {
                 this.collision.update();
                 this.enemies.forEach (enemy => {
                     enemy.update()
-                })
+                });
                 this.enemies = this.enemies.filter (enemy => !enemy.delete)
             }
         };
