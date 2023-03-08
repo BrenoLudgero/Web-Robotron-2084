@@ -2,10 +2,10 @@
 // Robotron: 2084 (Released in 1982)
 // Developed by Vid Kidz (Disbanded in 1984)
 // Manufactured and Published by Williams Electronics, Inc. (Now a Light & Wonder brand)
-// Copyright: Williams Electronics, Inc.  /  Williams Electronics Games, Inc.  /  Midway Amusement Games, LLC  /  Lawrence DeMar & Eugene Jarvis (1978 to present)
+// Copyrights: Williams Electronics, Inc.  /  Williams Electronics Games, Inc.  /  Midway Amusement Games, LLC  /  Lawrence DeMar & Eugene Jarvis (1978 to present)
 
 // Reprogrammed in JavaScript by Breno Ludgero (https://www.linkedin.com/in/breno-ludgero/)
-// Based on the blue label ROM revision
+// Based on the blue label ROM revision with default game settings
 
 window.addEventListener("load", function() {
 
@@ -26,7 +26,7 @@ window.addEventListener("load", function() {
         return Math.floor(Math.random() * (max - min)) + 1;
     };
 
-
+    // ADD GLOBAL "PLAYABLE AREA" FUNCTION
 
     class InputHandler {
         constructor(game) {
@@ -246,6 +246,14 @@ window.addEventListener("load", function() {
             this.speed = speed;
             this.delete = false;
 
+            this.spriteCycle = function (initial, increase, limit) {
+                if (this.x < limit) {
+                    this.x += increase
+                } else {
+                    this.x = initial
+                }
+            }
+
             this.playableArea = function() {
                 if (this.py <= 1) {
                     this.py = 1
@@ -280,21 +288,13 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 48;
             this.x = 8;
             this.y = 285;
-            this.px = RNG(1, 982);              // Limit Spawn Posisiton
-            this.py = RNG(1, 732);              // Limit Spawn Posisiton
+            this.px = RNG(1, 981);                                      // Limit Spawn Posisiton
+            this.py = RNG(1, 737);                                      // Limit Spawn Posisiton
             this.movementTimer = 0;
             this.movementInterval = 80;
             this.movementRate = 10;
             this.speed = 6;
-            this.delete = false;
-
-            this.spriteCycle = function () {
-                if (this.x < 98) {
-                    this.x += 30
-                } else {
-                    this.x = 8
-                }
-            }
+            this.delete = false
         };
 
         update() {
@@ -311,7 +311,7 @@ window.addEventListener("load", function() {
                     } else {
                         this.py += this.speed
                     };
-                    this.spriteCycle()
+                    this.spriteCycle(8, 30, 98)
                 }
                 this.movementTimer = 0
             } else {
@@ -322,6 +322,63 @@ window.addEventListener("load", function() {
     };
 
 
+
+    class Hulk extends Enemy {
+        constructor(game) {
+            super(game);
+            this.width = 26;
+            this.adjustedWidth = 47;
+            this.height = 32;
+            this.adjustedHeight = 57;
+            this.x = 409;
+            this.y = 434;
+            this.px = RNG(1, 967);                                      // Limit Spawn Posisiton
+            this.py = RNG(1, 727);                                      // Limit Spawn Posisiton
+            this.movementTimer = 0;
+            this.movementInterval = 30;
+            this.movementRate = 1;
+            this.speed = 8;
+            this.hulk = true;
+
+            this.playableArea = function() {
+                if (this.py <= 1) {
+                    this.py = 1
+                } else if (this.py >= 728) {
+                    this.py = 728
+                };
+                if (this.px <= 1) {
+                    this.px = 1
+                } else if (this.px >= 968) {
+                    this.px = 968
+                }
+            }
+        };
+
+        update() {
+            let randomNumber = RNG(1, 7000);                           // Temporary
+            if (this.movementTimer > this.movementInterval) { 
+                if (randomNumber >= 1 && randomNumber <= 1000) {
+                    this.px -= this.speed,
+                    this.spriteCycle(409, 26, 487)
+                } else if (randomNumber > 1001 && randomNumber <= 2000) {
+                    this.px += this.speed,
+                    this.spriteCycle(409, 26, 487)
+                } else if (randomNumber > 2001 && randomNumber <= 3000) {
+                    this.py -= this.speed,
+                    this.spriteCycle(409, 26, 487)
+                } else if (randomNumber > 3001 && randomNumber <= 4000) {
+                    this.py += this.speed,
+                    this.spriteCycle(409, 26, 487)
+                };
+                this.movementTimer = 0
+            } else {
+                this.movementTimer += this.movementRate
+            };
+            this.playableArea()
+        }
+    };
+
+    // ADD "COLLISION HANDLER" CLASS
 
     class Game {
         constructor(width, height) {
@@ -337,18 +394,32 @@ window.addEventListener("load", function() {
 
         update() {
             if (this.player.alive) {
-                this.player.update()
+                this.player.update();
                 this.enemies.forEach (enemy => {
                     enemy.update();
-                    if (this.checkCollision(this.player, this.player.adjustedWidth, this.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        this.player.alive = false
-                    };
                     this.player.projectiles.forEach(projectile => {
                         if (this.checkCollision(projectile, 2, 2, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                            enemy.delete = true,
+                            if (!enemy.hulk) {
+                                enemy.delete = true
+                            } else {
+                                if (enemy.px > game.player.px && enemy.py > game.player.py || enemy.px > game.player.px && enemy.py < game.player.py) {
+                                    enemy.px += enemy.speed
+                                } else if (enemy.px < game.player.px && enemy.py > game.player.py || enemy.px < game.player.px && enemy.py < game.player.py){
+                                    enemy.px -= enemy.speed
+                                };
+                                if (enemy.py > game.player.py && enemy.px > game.player.px || enemy.py > game.player.py && enemy.px < game.player.px) {
+                                    enemy.py += enemy.speed
+                                } else if (enemy.py < game.player.py && enemy.px > game.player.px || enemy.py < game.player.py && enemy.px < game.player.px) {
+                                    enemy.py -= enemy.speed
+                                };
+                                
+                            };
                             projectile.delete = true
                         }
-                    })
+                    });
+                    if (this.checkCollision(this.player, this.player.adjustedWidth, this.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                        this.player.alive = false
+                    }
                 })
                 this.enemies = this.enemies.filter (enemy => !enemy.delete)
             }
@@ -392,7 +463,8 @@ window.addEventListener("load", function() {
         requestAnimationFrame(animate)
     };
 
-    game.addEnemy(11, Grunt);
+    game.addEnemy(5, Grunt);
+    game.addEnemy(5, Hulk);
     animate(0)
 
 });
