@@ -1,4 +1,3 @@
-
 // Robotron: 2084 (Released in 1982)
 // Developed by Vid Kidz (Disbanded in 1984)
 // Manufactured and Published by Williams Electronics, Inc. (Now a Light & Wonder brand)
@@ -6,6 +5,15 @@
 
 // Reprogrammed in JavaScript by Breno Ludgero (https://www.linkedin.com/in/breno-ludgero/)
 // Based on the blue label ROM revision with default game settings
+
+
+
+/*          TO DO:
+LIMIT ENEMY SPAWN POSITION
+REFINE PLAYER SHOOTING
+ADD MOUSE FIRE SUPPORT */
+
+
 
 window.addEventListener("load", function() {
 
@@ -26,7 +34,7 @@ window.addEventListener("load", function() {
         return Math.floor(Math.random() * (max - min)) + 1;
     };
 
-    // ADD GLOBAL "PLAYABLE AREA" FUNCTION
+    
 
     class InputHandler {
         constructor(game) {
@@ -41,7 +49,6 @@ window.addEventListener("load", function() {
                     this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
             })
 
-            // ADD MOUSE FIRE SUPPORT ! ! !
             /* window.addEventListener("mousedown", e => {
                 console.log("CLICK")
             });
@@ -202,19 +209,6 @@ window.addEventListener("load", function() {
                         this.x = 10
                     }
                 }
-            };
-
-            this.playableArea = function() {
-                if (this.py <= 1) {
-                    this.py = 1
-                } else if (this.py >= 742) {
-                    this.py = 742
-                };
-                if (this.px <= 1) {
-                    this.px = 1
-                } else if (this.px >= 990) {
-                    this.px = 990
-                }
             }
         };
 
@@ -223,7 +217,7 @@ window.addEventListener("load", function() {
             this.projectiles.forEach(projectile => projectile.update());
             this.projectiles = this.projectiles.filter(projectile => !projectile.delete);
             this.projectileTimer --;
-            this.playableArea()
+            game.playableArea(this, 990, 742)
         };
 
         draw(context) {
@@ -244,28 +238,7 @@ window.addEventListener("load", function() {
             this.px = px;
             this.py = py;
             this.speed = speed;
-            this.delete = false;
-
-            this.spriteCycle = function (initial, increase, limit) {
-                if (this.x < limit) {
-                    this.x += increase
-                } else {
-                    this.x = initial
-                }
-            }
-
-            this.playableArea = function() {
-                if (this.py <= 1) {
-                    this.py = 1
-                } else if (this.py >= 738) {
-                    this.py = 738
-                };
-                if (this.px <= 1) {
-                    this.px = 1
-                } else if (this.px >= 982) {
-                    this.px = 982
-                }
-            }
+            this.delete = false
         };
 
         update() {
@@ -288,8 +261,8 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 48;
             this.x = 8;
             this.y = 285;
-            this.px = RNG(1, 981);                                      // Limit Spawn Posisiton
-            this.py = RNG(1, 737);                                      // Limit Spawn Posisiton
+            this.px = RNG(1, 981);
+            this.py = RNG(1, 737);
             this.movementTimer = 0;
             this.movementInterval = 80;
             this.movementRate = 10;
@@ -311,13 +284,13 @@ window.addEventListener("load", function() {
                     } else {
                         this.py += this.speed
                     };
-                    this.spriteCycle(8, 30, 98)
+                    game.spriteCycle(this, 8, 30, 98)
                 }
                 this.movementTimer = 0
             } else {
                 this.movementTimer += this.movementRate
             }
-            this.playableArea()
+            game.playableArea(this, 982, 738)
         }
     };
 
@@ -332,94 +305,124 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 57;
             this.x = 409;
             this.y = 434;
-            this.px = RNG(1, 967);                                      // Limit Spawn Posisiton
-            this.py = RNG(1, 727);                                      // Limit Spawn Posisiton
+            this.px = RNG(1, 967);
+            this.py = RNG(1, 727);
             this.movementTimer = 0;
             this.movementInterval = 30;
             this.movementRate = 1;
             this.speed = 8;
-            this.hulk = true;
-
-            this.playableArea = function() {
-                if (this.py <= 1) {
-                    this.py = 1
-                } else if (this.py >= 728) {
-                    this.py = 728
-                };
-                if (this.px <= 1) {
-                    this.px = 1
-                } else if (this.px >= 968) {
-                    this.px = 968
-                }
-            }
+            this.hulk = true
         };
 
         update() {
-            let randomNumber = RNG(1, 7000);                           // Temporary
+            let randomNumber = RNG(1, 7000);                                // Temporary
             if (this.movementTimer > this.movementInterval) { 
                 if (randomNumber >= 1 && randomNumber <= 1000) {
                     this.px -= this.speed,
-                    this.spriteCycle(409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487)
                 } else if (randomNumber > 1001 && randomNumber <= 2000) {
                     this.px += this.speed,
-                    this.spriteCycle(409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487)
                 } else if (randomNumber > 2001 && randomNumber <= 3000) {
                     this.py -= this.speed,
-                    this.spriteCycle(409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487)
                 } else if (randomNumber > 3001 && randomNumber <= 4000) {
                     this.py += this.speed,
-                    this.spriteCycle(409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487)
                 };
                 this.movementTimer = 0
             } else {
                 this.movementTimer += this.movementRate
             };
-            this.playableArea()
+            game.playableArea(this, 968, 728)
         }
     };
 
-    // ADD "COLLISION HANDLER" CLASS
+
+
+    class CollisionHandler {
+        constructor(game) {
+            this.game = game
+        };
+
+        update() {
+            game.enemies.forEach (enemy => {
+                game.player.projectiles.forEach(projectile => {
+                    if (this.checkCollision(projectile, 3, 0, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                        if (!enemy.hulk) {
+                            enemy.delete = true
+                        } else {
+                            if (enemy.px > game.player.px && enemy.py > game.player.py || enemy.px > game.player.px && enemy.py < game.player.py) {
+                                enemy.px += enemy.speed
+                            } else if (enemy.px < game.player.px && enemy.py > game.player.py || enemy.px < game.player.px && enemy.py < game.player.py){
+                                enemy.px -= enemy.speed
+                            };
+                            if (enemy.py > game.player.py && enemy.px > game.player.px || enemy.py > game.player.py && enemy.px < game.player.px) {
+                                enemy.py += enemy.speed
+                            } else if (enemy.py < game.player.py && enemy.px > game.player.px || enemy.py < game.player.py && enemy.px < game.player.px) {
+                                enemy.py -= enemy.speed
+                            }
+                        };
+                        projectile.delete = true
+                    }
+                })
+            });
+            if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, game.enemy, game.enemy.adjustedWidth, game.enemy.adjustedHeight)) {
+                this.player.alive = false
+            }
+        };
+
+        checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
+            return (actorA.px < actorB.px + widthB &&
+                actorA.px + widthA > actorB.px &&
+                actorA.py < actorB.py + heightB &&
+                actorA.py + heightA > actorB.py
+            )
+        }
+    };
+
+
 
     class Game {
         constructor(width, height) {
             this.keys = [];
             this.width = width;
             this.height = height;
+            this.player = new Player(this);
             this.enemy = new Enemy(this);
             this.enemies = [];
-            this.player = new Player(this);
             this.input = new InputHandler(this);
-            this.projectile = new Projectile(this)
+            this.collision = new CollisionHandler(this);
+            this.projectile = new Projectile(this);
+            
+            this.spriteCycle = function (actor, initial, increase, limit) {
+                if (actor.x < limit) {
+                    actor.x += increase
+                } else {
+                    actor.x = initial
+                }
+            };
+
+            this.playableArea = function (actor, maxPx, maxPy) {
+                if (actor.py <= 1) {
+                    actor.py = 1
+                } else if (actor.py >= maxPy) {
+                    actor.py = maxPy
+                };
+                if (actor.px <= 1) {
+                    actor.px = 1
+                } else if (actor.px >= maxPx) {
+                    actor.px = maxPx
+                }
+            }
         };
 
         update() {
             if (this.player.alive) {
                 this.player.update();
+                this.collision.update();
                 this.enemies.forEach (enemy => {
-                    enemy.update();
-                    this.player.projectiles.forEach(projectile => {
-                        if (this.checkCollision(projectile, 2, 2, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                            if (!enemy.hulk) {
-                                enemy.delete = true
-                            } else {
-                                if (enemy.px > game.player.px && enemy.py > game.player.py || enemy.px > game.player.px && enemy.py < game.player.py) {
-                                    enemy.px += enemy.speed
-                                } else if (enemy.px < game.player.px && enemy.py > game.player.py || enemy.px < game.player.px && enemy.py < game.player.py){
-                                    enemy.px -= enemy.speed
-                                };
-                                if (enemy.py > game.player.py && enemy.px > game.player.px || enemy.py > game.player.py && enemy.px < game.player.px) {
-                                    enemy.py += enemy.speed
-                                } else if (enemy.py < game.player.py && enemy.px > game.player.px || enemy.py < game.player.py && enemy.px < game.player.px) {
-                                    enemy.py -= enemy.speed
-                                };
-                                
-                            };
-                            projectile.delete = true
-                        }
-                    });
-                    if (this.checkCollision(this.player, this.player.adjustedWidth, this.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        this.player.alive = false
-                    }
+                    enemy.update()
                 })
                 this.enemies = this.enemies.filter (enemy => !enemy.delete)
             }
@@ -436,14 +439,6 @@ window.addEventListener("load", function() {
             for (let i = 0; i < numberEnemies; i ++) {
                 this.enemies.push(new enemy(this))
             }
-        };
-
-        checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
-            return (actorA.px < actorB.px + widthB &&
-                actorA.px + widthA > actorB.px &&
-                actorA.py < actorB.py + heightB &&
-                actorA.py + heightA > actorB.py
-            )
         }
     };
 
