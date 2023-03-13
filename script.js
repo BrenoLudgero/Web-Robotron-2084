@@ -10,7 +10,10 @@
 
 /*          TO DO:
 LIMIT ENEMY SPAWN POSITION
-REFINE PLAYER SHOOTING
+SOUNDS
+FIX HULK KNOCKBACK
+SPAWN / DEATH ANIMATIONS
+IMPLEMENT ALL ENEMIES
 ADD MOUSE FIRE SUPPORT */
 
 
@@ -31,7 +34,7 @@ window.addEventListener("load", function() {
     const controls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
 
     function RNG(min, max) {
-        return Math.floor(Math.random() * (max - min)) + 1;
+        return Math.floor(Math.random() * (max - min)) + 1
     };
 
     
@@ -40,13 +43,15 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game;
             window.addEventListener("keydown", (e) => {
-                if (controls.includes(e.key) && this.game.keys.indexOf(e.key) === -1)
+                if (controls.includes(e.key) && this.game.keys.indexOf(e.key) === -1) {
                     this.game.keys.push(e.key)
+                }
             });
 
             window.addEventListener("keyup", (e) => {
-                if (this.game.keys.indexOf(e.key) > -1)
+                if (this.game.keys.indexOf(e.key) > -1) {
                     this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
+                }
             })
 
             /* window.addEventListener("mousedown", e => {
@@ -71,23 +76,23 @@ window.addEventListener("load", function() {
                 game.player.move(true, false)
             };
             if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py + 20, false, true, false, -45)
+                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py - 4, false, false, true, false)
             } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px + 25, game.player.py + 25, true, true, true, -45)
+                game.player.shoot(game.player.px - 4, game.player.py - 4, true, false, true, false)
             } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px - 1, game.player.py + 25, false, false, true, -45)
+                game.player.shoot(game.player.px + game.player.adjustedWidth + 4, game.player.py - 4, false, true, true, false)
             };
             if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py + 35, false, true, false, 10)
+                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py + game.player.adjustedHeight, false, false, false, true)
             } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + 20, game.player.py + 38, true, true, true, 10)
+                game.player.shoot(game.player.px  + game.player.adjustedWidth + 3, game.player.py + game.player.adjustedHeight, false, true, false, true)
             } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px + 1, game.player.py + 38, false, false, true, 10)
+                game.player.shoot(game.player.px - 4, game.player.py + game.player.adjustedHeight, true, false, false, true)
             };
             if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + 20, game.player.py + game.player.adjustedHeight / 2, true, false, false, -45)
+                game.player.shoot(game.player.px - 4, game.player.py + game.player.adjustedHeight / 2, true, false, false, false)
             } else if (this.game.keys.includes("ArrowRight") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + 20, game.player.py + game.player.adjustedHeight / 2, true, false, false, 10)
+                game.player.shoot(game.player.px + game.player.adjustedWidth + 3, game.player.py + game.player.adjustedHeight / 2, false, true, false, false)
             }
         }
     };
@@ -95,56 +100,59 @@ window.addEventListener("load", function() {
 
 
     class Projectile {
-        constructor(game, px, py, dx, dy, diag, speed) {
+        constructor(game, px, py, left, right, up, down) {
             this.game = game;
-            this.width = 2;
-            this.height = 2;
+            this.width = 1;
+            this.height = 1;
             this.x = 0;
             this.y = 510;
             this.px = px;
             this.py = py;
-            this.dx = dx;
-            this.dy = dy;
-            this.diag = diag;
-            this.speed = speed;
+            this.left = left;
+            this.right = right;
+            this.up = up;
+            this.down = down;
             this.delete = false
         };
 
         update() {
-            if (this.px > canvas.width || this.px < 0 || this.py > canvas.height || this.py < 0) {
+            if (this.px > canvas.width + 10 || this.px < -10 || this.py > canvas.height + 10 || this.py < -10) {
                 this.delete = true
-            };
-            if (this.dx) {
-                this.px += this.speed
-            };
-            if (this.dy) {
-                this.py += this.speed
-            } else if (!this.dx && !this.dy) {
-                this.px -= this.speed,
-                this.py += this.speed
             }
         };
 
         draw(context) {
-            if (this.dx && !this.diag) {
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
+            if (this.up && !this.left && !this.right) {
+                for (let i = 0; i < 18; i ++) {
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py--, this.width, this.height)
+                }
+            } else if (this.up && this.left) {
+                for (let i = 0; i < 18; i ++) {
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py--, this.width, this.height)
+                }
+            } else if (this.up && this.right) {
+                for (let i = 0; i < 18; i ++) {
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py--, this.width, this.height)
+                }
+            } else if (this.left && !this.up && !this.down) {
+                for (let i = 0; i < 18; i ++) {
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py, this.width, this.height)
+                }
+            } else if (this.right && !this.up && !this.down) {
                 for (let i = 0; i < 18; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height)
                 }
-            } else if (this.dy && !this.diag) {
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
+            } else if (this.down && this.left) {
+                for (let i = 0; i < 18; i ++) {
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height)
+                }
+            } else if (this.down && !this.left && !this.right) {
                 for (let i = 0; i < 18; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height)
                 }
-            } else if (this.dx && this.diag || this.dy && this.diag) {
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
-                for (let i = 0; i < 14; i ++) {
+            } else if (this.down && this.right) {
+                for (let i = 0; i < 18; i ++) {
                     context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height)
-                }
-            } else if (!this.dx && this.diag || !this.dy && this.diag) {
-                context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.width, this.height);
-                for (let i = 0; i < 14; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height)
                 }
             }
         }
@@ -164,20 +172,20 @@ window.addEventListener("load", function() {
             this.px = canvas.width /2 - this.width;
             this.py = canvas.height /2 - this.height;
             this.speed = 3.5;
+            this.animationDelay = 4;
             this.projectiles = [];
             this.projectileTimer = 0;
-            this.projectileDelay = 12;
-            this.animationDelay = 4;
+            this.projectileDelay = 8;
             this.alive = true;
 
             this.move = function(dx, dy) {
                 if (dx && dy) {
-                    this.px += this.speed,
                     this.spriteCycle(),
+                    this.px += this.speed,
                     this.y = 478
                 } else if (dx && !dy) {
-                    this.px -= this.speed,
                     this.spriteCycle(),
+                    this.px -= this.speed,
                     this.y = 445
                 } else if (!dx && dy) {
                     this.py -= this.speed;
@@ -194,9 +202,9 @@ window.addEventListener("load", function() {
                 }
             };
 
-            this.shoot = function(px, py, dx, dy, diag, speed) {
+            this.shoot = function(px, py, left, right, up, down) {
                 if (this.projectileTimer <= 0) {
-                    this.projectiles.push(new Projectile(this.game, px, py, dx, dy, diag, speed)), 
+                    this.projectiles.push(new Projectile(this.game, px, py, left, right, up, down)), 
                     this.projectileTimer = this.projectileDelay
                 }
             };
@@ -238,7 +246,7 @@ window.addEventListener("load", function() {
             this.px = px;
             this.py = py;
             this.speed = speed;
-            this.delete = false
+            this.alive = true
         };
 
         update() {
@@ -264,10 +272,10 @@ window.addEventListener("load", function() {
             this.px = RNG(1, 981);
             this.py = RNG(1, 737);
             this.movementTimer = 0;
-            this.movementInterval = 80;
+            this.movementInterval = 40;
             this.movementRate = 10;
             this.speed = 6;
-            this.delete = false
+            this.alive = true
         };
 
         update() {
@@ -308,7 +316,7 @@ window.addEventListener("load", function() {
             this.px = RNG(1, 967);
             this.py = RNG(1, 727);
             this.movementTimer = 0;
-            this.movementInterval = 30;
+            this.movementInterval = 10;
             this.movementRate = 1;
             this.speed = 8;
             this.hulk = true
@@ -318,15 +326,19 @@ window.addEventListener("load", function() {
             let randomNumber = RNG(1, 7000);                                // Temporary
             if (this.movementTimer > this.movementInterval) { 
                 if (randomNumber >= 1 && randomNumber <= 1000) {
+                    this.y = 398,
                     this.px -= this.speed,
                     game.spriteCycle(this, 409, 26, 487)
                 } else if (randomNumber > 1001 && randomNumber <= 2000) {
+                    this.y = 474,
                     this.px += this.speed,
                     game.spriteCycle(this, 409, 26, 487)
                 } else if (randomNumber > 2001 && randomNumber <= 3000) {
+                    this.y = 434,
                     this.py -= this.speed,
                     game.spriteCycle(this, 409, 26, 487)
                 } else if (randomNumber > 3001 && randomNumber <= 4000) {
+                    this.y = 434,
                     this.py += this.speed,
                     game.spriteCycle(this, 409, 26, 487)
                 };
@@ -348,18 +360,18 @@ window.addEventListener("load", function() {
         update() {
             game.enemies.forEach (enemy => {
                 game.player.projectiles.forEach(projectile => {
-                    if (this.checkCollision(projectile, 3, 0, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                    if (this.checkCollision(projectile, projectile.width, projectile.height, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
                         if (!enemy.hulk) {
-                            enemy.delete = true
+                            enemy.alive = false
                         } else {
-                            if (enemy.px > game.player.px && enemy.py > game.player.py || enemy.px > game.player.px && enemy.py < game.player.py) {
+                            if (enemy.px > game.player.px) {
                                 enemy.px += enemy.speed
-                            } else if (enemy.px < game.player.px && enemy.py > game.player.py || enemy.px < game.player.px && enemy.py < game.player.py){
+                            } else if (enemy.px < game.player.px){
                                 enemy.px -= enemy.speed
                             };
-                            if (enemy.py > game.player.py && enemy.px > game.player.px || enemy.py > game.player.py && enemy.px < game.player.px) {
+                            if (enemy.py > game.player.py) {
                                 enemy.py += enemy.speed
-                            } else if (enemy.py < game.player.py && enemy.px > game.player.px || enemy.py < game.player.py && enemy.px < game.player.px) {
+                            } else if (enemy.py < game.player.py) {
                                 enemy.py -= enemy.speed
                             }
                         };
@@ -373,10 +385,16 @@ window.addEventListener("load", function() {
         };
 
         checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
-            return (actorA.px < actorB.px + widthB &&
-                actorA.px + widthA > actorB.px &&
-                actorA.py < actorB.py + heightB &&
-                actorA.py + heightA > actorB.py
+            /* ctx.beginPath(),
+            ctx.rect(actorA.px, actorA.py, actorA.adjustedWidth, actorA.adjustedHeight),
+            ctx.rect(actorB.px, actorB.py, actorB.adjustedWidth, actorB.adjustedHeight),        // Improve
+            ctx.strokeStyle = "red",
+            ctx.stroke(); */
+            return (
+                actorA.px <= actorB.px + widthB &&
+                actorA.px + widthA >= actorB.px &&
+                actorA.py <= actorB.py + heightB &&
+                actorA.py + heightA >= actorB.py
             )
         }
     };
@@ -419,12 +437,12 @@ window.addEventListener("load", function() {
 
         update() {
             if (this.player.alive) {
-                this.player.update();
                 this.collision.update();
+                this.player.update();
                 this.enemies.forEach (enemy => {
                     enemy.update()
                 });
-                this.enemies = this.enemies.filter (enemy => !enemy.delete)
+                this.enemies = this.enemies.filter (enemy => enemy.alive)
             }
         };
 
@@ -458,8 +476,8 @@ window.addEventListener("load", function() {
         requestAnimationFrame(animate)
     };
 
-    game.addEnemy(5, Grunt);
-    game.addEnemy(5, Hulk);
+    game.addEnemy(14, Grunt);
+    game.addEnemy(4, Hulk);
     animate(0)
 
 });
