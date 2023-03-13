@@ -11,9 +11,11 @@
 /*          TO DO:
 LIMIT ENEMY SPAWN POSITION
 SOUNDS
-FIX HULK KNOCKBACK
 SPAWN / DEATH ANIMATIONS
 IMPLEMENT ALL ENEMIES
+IMPLEMENT SCORE
+IMPLEMENT WAVES
+CAPS LOCK MOVEMENT
 ADD MOUSE FIRE SUPPORT */
 
 
@@ -276,7 +278,7 @@ window.addEventListener("load", function() {
             this.movementRate = 10;
             this.speed = 6;
             this.alive = true
-        };
+        }/* ;
 
         update() {
             let randomNumber = RNG(1, 4);
@@ -299,7 +301,7 @@ window.addEventListener("load", function() {
                 this.movementTimer += this.movementRate
             }
             game.playableArea(this, 982, 738)
-        }
+        } */
     };
 
 
@@ -320,7 +322,7 @@ window.addEventListener("load", function() {
             this.movementRate = 1;
             this.speed = 8;
             this.hulk = true
-        };
+        }/* ;
 
         update() {
             let randomNumber = RNG(1, 7000);                                // Temporary
@@ -347,7 +349,7 @@ window.addEventListener("load", function() {
                 this.movementTimer += this.movementRate
             };
             game.playableArea(this, 968, 728)
-        }
+        } */
     };
 
 
@@ -364,14 +366,25 @@ window.addEventListener("load", function() {
                         if (!enemy.hulk) {
                             enemy.alive = false
                         } else {
-                            if (enemy.px > game.player.px) {
-                                enemy.px += enemy.speed
-                            } else if (enemy.px < game.player.px){
-                                enemy.px -= enemy.speed
-                            };
-                            if (enemy.py > game.player.py) {
+                            if (game.player.px + game.player.adjustedWidth < enemy.px && game.player.py + game.player.adjustedHeight < enemy.py) {
+                                enemy.px += enemy.speed,
                                 enemy.py += enemy.speed
-                            } else if (enemy.py < game.player.py) {
+                            } else if (game.player.px + game.player.adjustedWidth < enemy.px && game.player.py - game.player.adjustedHeight > enemy.py) {
+                                enemy.px += enemy.speed,
+                                enemy.py -= enemy.speed
+                            } else if (game.player.px - game.player.adjustedWidth > enemy.px && game.player.py + game.player.adjustedHeight < enemy.py) {
+                                enemy.px -= enemy.speed,
+                                enemy.py += enemy.speed
+                            } else if (game.player.px - game.player.adjustedWidth > enemy.px && game.player.py - game.player.adjustedHeight > enemy.py) {
+                                enemy.px -= enemy.speed,
+                                enemy.py -= enemy.speed
+                            } else if (game.player.px + game.player.adjustedWidth < enemy.px) {
+                                enemy.px += enemy.speed
+                            } else if (game.player.px - game.player.adjustedWidth > enemy.px) {
+                                enemy.px -= enemy.speed
+                            } else if (game.player.py < enemy.py) {
+                                enemy.py += enemy.speed
+                            } else if (game.player.py > enemy.py) {
                                 enemy.py -= enemy.speed
                             }
                         };
@@ -476,8 +489,8 @@ window.addEventListener("load", function() {
         requestAnimationFrame(animate)
     };
 
-    game.addEnemy(14, Grunt);
-    game.addEnemy(4, Hulk);
+    //game.addEnemy(14, Grunt);
+    game.addEnemy(10, Hulk);
     animate(0)
 
 });
