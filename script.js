@@ -9,14 +9,14 @@
 
 
 /*          TO DO:
-LIMIT ENEMY SPAWN POSITION
 SOUNDS
 SPAWN / DEATH ANIMATIONS
-IMPLEMENT ALL ENEMIES
+IMPLEMENT ALL ACTORS
 IMPLEMENT SCORE
 IMPLEMENT WAVES
 CAPS LOCK MOVEMENT
-ADD MOUSE FIRE SUPPORT */
+ADD MOUSE FIRE SUPPORT
+CROSS-BROWSER SUPPORT */
 
 
 
@@ -35,11 +35,25 @@ window.addEventListener("load", function() {
 
     const controls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
 
+
+
     function RNG(min, max) {
         return Math.floor(Math.random() * (max - min)) + 1
     };
 
-    
+    function spawn(min, limitMin, startMax, max) {
+        const range1 = limitMin - min;
+        const range2 = max - startMax;
+        const totalRange = range1 + range2;
+      
+        let randomNumber = Math.floor(Math.random() * totalRange);
+      
+        if (randomNumber < range1) {
+          return Math.floor(Math.random() * (limitMin - min)) + min;
+        } else {
+          return Math.floor(Math.random() * (max - startMax)) + startMax;
+        }
+      };
 
     class InputHandler {
         constructor(game) {
@@ -220,6 +234,19 @@ window.addEventListener("load", function() {
                     }
                 }
             }
+
+            /* this.radius = function () {
+                const centerX = game.player.px + game.player.adjustedWidth / 2;
+                const centerY = game.player.py + game.player.adjustedHeight / 2;
+                const pointX = game.player.px + 150;
+                const pointY = game.player.py + 150;
+                const radius = Math.sqrt((pointX - centerX) ** 2 + (pointY - centerY) ** 2);
+                
+                ctx.strokeStyle = "white";
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.stroke()
+            } */
         };
 
         update() {
@@ -227,7 +254,8 @@ window.addEventListener("load", function() {
             this.projectiles.forEach(projectile => projectile.update());
             this.projectiles = this.projectiles.filter(projectile => !projectile.delete);
             this.projectileTimer --;
-            game.playableArea(this, 990, 742)
+            game.playableArea(this, 990, 742);
+            //this.radius();
         };
 
         draw(context) {
@@ -271,14 +299,14 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 48;
             this.x = 8;
             this.y = 285;
-            this.px = RNG(1, 981);
-            this.py = RNG(1, 737);
+            this.px = spawn(1, game.player.px - 85, game.player.px + 85, 981);
+            this.py = spawn(1, game.player.py - 85, game.player.py + 85, 737);
             this.movementTimer = 0;
             this.movementInterval = 40;
-            this.movementRate = 10;
+            this.movementRate = 8;
             this.speed = 6;
             this.alive = true
-        }/* ;
+        };
 
         update() {
             let randomNumber = RNG(1, 4);
@@ -301,7 +329,7 @@ window.addEventListener("load", function() {
                 this.movementTimer += this.movementRate
             }
             game.playableArea(this, 982, 738)
-        } */
+        }
     };
 
 
@@ -315,8 +343,8 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 57;
             this.x = 409;
             this.y = 434;
-            this.px = RNG(1, 967);
-            this.py = RNG(1, 727);
+            this.px = spawn(1, game.player.px - 85, game.player.px + 85, 967);
+            this.py = spawn(1, game.player.py - 85, game.player.py + 85, 727);
             this.movementTimer = 0;
             this.movementInterval = 10;
             this.movementRate = 1;
@@ -489,8 +517,8 @@ window.addEventListener("load", function() {
         requestAnimationFrame(animate)
     };
 
-    //game.addEnemy(14, Grunt);
-    game.addEnemy(10, Hulk);
+    game.addEnemy(30, Grunt);
+    game.addEnemy(6, Hulk);
     animate(0)
 
 });
