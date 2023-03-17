@@ -9,11 +9,14 @@
 
 
 /*          TO DO:
-SOUNDS
-SPAWN / DEATH ANIMATIONS
-IMPLEMENT ALL ACTORS
+IMPLEMENT ALL ACTORS & OBSTACLES
+HUMAN, ENEMY OBSTACLE INTERACTION
 IMPLEMENT SCORE
+SPAWN / DEATH ANIMATIONS
+SPLIT INTO MULTIPLE SCRIPTS
 IMPLEMENT WAVES
+SOUNDS
+REFINE LIMITED SPAWN, HULK SPAWNS FUTHER FROM PLAYER
 CAPS LOCK MOVEMENT
 ADD MOUSE FIRE SUPPORT
 CROSS-BROWSER SUPPORT */
@@ -24,6 +27,7 @@ window.addEventListener("load", function() {
 
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
 
     canvas.width = 1016;
     canvas.height = 786;
@@ -41,19 +45,33 @@ window.addEventListener("load", function() {
         return Math.floor(Math.random() * (max - min)) + 1
     };
 
-    function spawn(min, limitMin, startMax, max) {
-        const range1 = limitMin - min;
-        const range2 = max - startMax;
-        const totalRange = range1 + range2;
+    function randomPX(min, max) {
+        limitX = game.player.px - 130;
+        startX = game.player.px + 130;
       
-        let randomNumber = Math.floor(Math.random() * totalRange);
+        let randomNumber = Math.floor(Math.random() * max) + 1;
       
-        if (randomNumber < range1) {
-          return Math.floor(Math.random() * (limitMin - min)) + min;
+        if (randomNumber < limitX) {
+            return Math.floor(Math.random() * (limitX - min)) + 1;
         } else {
-          return Math.floor(Math.random() * (max - startMax)) + startMax;
+            return Math.floor(Math.random() * (max - startX)) + startX;
         }
-      };
+    };
+
+    function randomPY(min, max) {
+        limitY = game.player.py - 130;
+        startY = game.player.py + 130;
+      
+        let randomNumber = Math.floor(Math.random() * max) + 1;
+      
+        if (randomNumber < limitY) {
+            return Math.floor(Math.random() * (limitY - min)) + 1;
+        } else {
+            return Math.floor(Math.random() * (max - startY)) + startY;
+        }
+    };
+
+
 
     class InputHandler {
         constructor(game) {
@@ -140,35 +158,35 @@ window.addEventListener("load", function() {
         draw(context) {
             if (this.up && !this.left && !this.right) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py--, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py --, this.width, this.height)
                 }
             } else if (this.up && this.left) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py--, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px --, this.py --, this.width, this.height)
                 }
             } else if (this.up && this.right) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py--, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px ++, this.py --, this.width, this.height)
                 }
             } else if (this.left && !this.up && !this.down) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px --, this.py, this.width, this.height)
                 }
             } else if (this.right && !this.up && !this.down) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px ++, this.py, this.width, this.height)
                 }
             } else if (this.down && this.left) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px--, this.py++, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px --, this.py ++, this.width, this.height)
                 }
             } else if (this.down && !this.left && !this.right) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py++, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py ++, this.width, this.height)
                 }
             } else if (this.down && this.right) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px++, this.py++, this.width, this.height)
+                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px ++, this.py ++, this.width, this.height)
                 }
             }
         }
@@ -193,27 +211,34 @@ window.addEventListener("load", function() {
             this.projectileTimer = 0;
             this.projectileDelay = 8;
             this.alive = true;
+            this.border = {
+                color: "white",
+                borderX: this.px + this.adjustedWidth / 2,
+                borderY: this.py + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.x / 2.8) ** 2 + (this.y / 2.8) ** 2),
+                visible: false
+            };
 
             this.move = function(dx, dy) {
                 if (dx && dy) {
                     this.spriteCycle(),
-                    this.px += this.speed,
-                    this.y = 478
+                    this.y = 478,
+                    this.px += this.speed
                 } else if (dx && !dy) {
                     this.spriteCycle(),
-                    this.px -= this.speed,
-                    this.y = 445
+                    this.y = 445,
+                    this.px -= this.speed
                 } else if (!dx && dy) {
                     this.py -= this.speed;
                     if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("s")) {
-                        this.spriteCycle(),
-                        this.y = 409
+                        this.y = 409,
+                        this.spriteCycle()
                     }
                 } else if (!dx && !dy) {
                     this.py += this.speed;
                     if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("w")) {
-                        this.spriteCycle(),
-                        this.y = 371
+                        this.y = 371,
+                        this.spriteCycle()
                     }
                 }
             };
@@ -234,19 +259,6 @@ window.addEventListener("load", function() {
                     }
                 }
             }
-
-            /* this.radius = function () {
-                const centerX = game.player.px + game.player.adjustedWidth / 2;
-                const centerY = game.player.py + game.player.adjustedHeight / 2;
-                const pointX = game.player.px + 150;
-                const pointY = game.player.py + 150;
-                const radius = Math.sqrt((pointX - centerX) ** 2 + (pointY - centerY) ** 2);
-                
-                ctx.strokeStyle = "white";
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                ctx.stroke()
-            } */
         };
 
         update() {
@@ -254,13 +266,13 @@ window.addEventListener("load", function() {
             this.projectiles.forEach(projectile => projectile.update());
             this.projectiles = this.projectiles.filter(projectile => !projectile.delete);
             this.projectileTimer --;
-            game.playableArea(this, 990, 742);
-            //this.radius();
+            game.playableArea(this, 990, 742)
         };
 
         draw(context) {
             context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
-            this.projectiles.forEach(projectile => projectile.draw(context))
+            this.projectiles.forEach(projectile => projectile.draw(context));
+            game.drawBorder(this)
         }
     };
 
@@ -280,11 +292,11 @@ window.addEventListener("load", function() {
         };
 
         update() {
-            
         };
 
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight)
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
+            game.drawBorder(this)
         }
     };
 
@@ -299,13 +311,19 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 48;
             this.x = 8;
             this.y = 285;
-            this.px = spawn(1, game.player.px - 85, game.player.px + 85, 981);
-            this.py = spawn(1, game.player.py - 85, game.player.py + 85, 737);
+            this.px = randomPX(1, 981);
+            this.py = RNG(1, 737);
             this.movementTimer = 0;
             this.movementInterval = 40;
             this.movementRate = 8;
             this.speed = 6;
-            this.alive = true
+            this.border = {
+                color: "red",
+                borderX: this.px + this.adjustedWidth / 2,
+                borderY: this.py + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.x * 2) + (this.y * 2)),
+                visible: false
+            }
         };
 
         update() {
@@ -343,14 +361,21 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 57;
             this.x = 409;
             this.y = 434;
-            this.px = spawn(1, game.player.px - 85, game.player.px + 85, 967);
-            this.py = spawn(1, game.player.py - 85, game.player.py + 85, 727);
+            this.px = RNG(1, 967);
+            this.py = randomPY(1, 727);
             this.movementTimer = 0;
             this.movementInterval = 10;
             this.movementRate = 1;
             this.speed = 8;
-            this.hulk = true
-        }/* ;
+            this.hulk = true;
+            this.border = {
+                color: "lime",
+                borderX: this.px + this.adjustedWidth / 2,
+                borderY: this.py + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.x * 1.5) + (this.y * 1.5)),
+                visible: false
+            }
+        };
 
         update() {
             let randomNumber = RNG(1, 7000);                                // Temporary
@@ -377,7 +402,64 @@ window.addEventListener("load", function() {
                 this.movementTimer += this.movementRate
             };
             game.playableArea(this, 968, 728)
-        } */
+        }
+    };
+
+
+
+    class Human {
+        constructor(game) {
+            this.game = game;
+            this.width = this.width;
+            this.adjustedWidth = this.adjustedWidth;
+            this.height = this.height;
+            this.adjustedHeight = this.adjustedHeight;
+            this.x = this.x;
+            this.y = this.y;
+            this.px = this.px;
+            this.py = this.py;
+            this.speed = 3.5;
+            this.animationDelay = 4;
+            this.alive = true;
+            this.human = true;
+            this.rescued = false
+        }
+
+        update() {
+        };
+
+        draw(context) {
+            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
+            game.drawBorder(this)
+        }
+    };
+
+
+
+    class Mommy extends Human {
+        constructor(game) {
+            super(game);
+            this.game = game;
+            this.width = 14;
+            this.adjustedWidth = 25;
+            this.height = 28;
+            this.adjustedHeight = 50;
+            this.x = 114;
+            this.y = 369;
+            this.px = RNG(100, 970);
+            this.py = randomPY(100, 718);
+            this.border = {
+                color: "deepPink",
+                borderX: this.px + this.adjustedWidth / 2,
+                borderY: this.py + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.x * 2) + (this.y * 2)),
+                visible: false
+            }
+        };
+
+        update() {
+
+        }
     };
 
 
@@ -415,12 +497,22 @@ window.addEventListener("load", function() {
                             } else if (game.player.py > enemy.py) {
                                 enemy.py -= enemy.speed
                             }
-                        };
+                        }
                         projectile.delete = true
                     }
                 });
                 if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
                     game.player.alive = false
+                }
+                game.humans.forEach (human => {
+                    if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                        human.alive = false
+                    }
+                })
+            });
+            game.humans.forEach (human => {
+                if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, game.player, game.player.adjustedWidth, game.player.adjustedHeight)) {
+                    human.rescued = true
                 }
             })
         };
@@ -450,6 +542,8 @@ window.addEventListener("load", function() {
             this.player = new Player(this);
             this.enemy = new Enemy(this);
             this.enemies = [];
+            this.human = new Human(this);
+            this.humans = [];
             this.input = new InputHandler(this);
             this.collision = new CollisionHandler(this);
             this.projectile = new Projectile(this);
@@ -480,23 +574,47 @@ window.addEventListener("load", function() {
             if (this.player.alive) {
                 this.collision.update();
                 this.player.update();
-                this.enemies.forEach (enemy => {
+                this.enemies.forEach(enemy => {
                     enemy.update()
                 });
-                this.enemies = this.enemies.filter (enemy => enemy.alive)
+                this.humans.forEach (human => {
+                    human.update()
+                });
+                this.enemies = this.enemies.filter(enemy => enemy.alive);
+                this.humans = this.humans.filter(human => human.alive && !human.rescued)
+            }
+        };
+
+        drawBorder(actor) {
+            if (actor.border.visible) {
+                ctx.strokeStyle = actor.border.color;
+                ctx.beginPath();
+                ctx.arc(actor.border.borderX, actor.border.borderY, actor.border.radius, 0, 2 * Math.PI);
+                ctx.stroke()
             }
         };
 
         draw(context) {
             this.player.draw(context)
-            this.enemies.forEach (enemy => {
-                enemy.draw(context)
+            this.enemies.forEach(enemy => {
+                enemy.draw(context),
+                this.drawBorder(enemy)
+            });
+            this.humans.forEach (human => {
+                human.draw(context),
+                this.drawBorder(human)
             })
         };
 
         addEnemy(numberEnemies, enemy) {
             for (let i = 0; i < numberEnemies; i ++) {
                 this.enemies.push(new enemy(this))
+            }
+        };
+
+        addHuman(numberHumans, human) {
+            for (let i = 0; i < numberHumans; i ++) {
+                this.humans.push(new human(this))
             }
         }
     };
@@ -507,18 +625,19 @@ window.addEventListener("load", function() {
 
     let lastTime = 0;
     
-    function animate(timeStamp) {
+    function execute(timeStamp) {
         const deltaTime = timeStamp - lastTime;
         lastTime = timeStamp;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         game.update(deltaTime);
         game.draw(ctx);
         gameFrame ++;
-        requestAnimationFrame(animate)
+        requestAnimationFrame(execute)
     };
 
-    game.addEnemy(30, Grunt);
+    game.addEnemy(14, Grunt);
     game.addEnemy(6, Hulk);
-    animate(0)
-
+    game.addHuman(10, Mommy);
+    
+    execute(0)
 });
