@@ -1,69 +1,59 @@
 // Robotron: 2084 (Released in 1982)
 // Developed by Vid Kidz (Disbanded in 1984)
 // Manufactured and Published by Williams Electronics, Inc. (Now a Light & Wonder brand)
-// Copyrights: Williams Electronics, Inc.  /  Williams Electronics Games, Inc.  /  Midway Amusement Games, LLC  /  Lawrence DeMar & Eugene Jarvis (1978 to present)
+// Copyrights: Williams Electronics, Inc. / Williams Electronics Games, Inc. / Midway Amusement Games, LLC / Lawrence DeMar & Eugene Jarvis (1978 - Present)
 
 // Reprogrammed in JavaScript by Breno Ludgero (https://www.linkedin.com/in/breno-ludgero/)
 // Based on the blue label ROM revision with default game settings
 
-
-
-/*          TO DO:
+/* TO DO LIST (IN DESCENDING ORDER OF PRIORITY):
+GRUNT VANISHES BUT STILL EXISTS ON UPDATE (UNCOMMENT)
+REFINE LIMITED SPAWN, HULK SPAWNS FUTHER FROM PLAYER
+RIP YOUR OWN SPRITESHEET (NO MORE ADJUSTING DIMENSIONS)
+SPLIT SPRITES INTO MULTIPLE IMAGES
+SPLIT CODE INTO MULTIPLE SCRIPTS
+REFACTOR CODE (MAYBE. CAN BE IMPROVED OVERALL)
+FIX MOMMY BEHAVIOR THEN UPDATE HULK TO GO AFTER CLOSEST HUMAN (?)
+COMMENT CODE
+IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
+REWORK HTML SIZES, RESPONSIVENESS
 IMPLEMENT ALL ACTORS & OBSTACLES
-HUMAN, ENEMY OBSTACLE INTERACTION
+HUMAN, ENEMY INTERACTION WITH OBSTACLES
 IMPLEMENT SCORE
 SPAWN / DEATH ANIMATIONS
-SPLIT INTO MULTIPLE SCRIPTS
-IMPLEMENT WAVES
-SOUNDS
-REFINE LIMITED SPAWN, HULK SPAWNS FUTHER FROM PLAYER
-CAPS LOCK MOVEMENT
+IMPLEMENT ENEMY WAVES
+FIX CAPS LOCK LACK OF MOVEMENT
 ADD MOUSE FIRE SUPPORT
-CROSS-BROWSER SUPPORT */
-
-
+CHECK CROSS-BROWSER SUPPORT */
 
 window.addEventListener("load", function() {
-
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
-
     canvas.width = 1016;
     canvas.height = 786;
-
-    var gameFrame = 0;
-
+    var currentFrame = 0;
     const sprites = new Image();
     sprites.src = "img/sprites.png"; // Ripped by Sean Riddle
-
     const controls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
-
-
 
     function RNG(min, max) {
         return Math.floor(Math.random() * (max - min)) + 1
     };
-
     function randomPX(min, max) {
-        limitX = game.player.px - 130;
-        startX = game.player.px + 130;
-      
+        limitX = game.player.screenXPosition - 130;
+        startX = game.player.screenXPosition + 130;
         let randomNumber = Math.floor(Math.random() * max) + 1;
-      
         if (randomNumber < limitX) {
             return Math.floor(Math.random() * (limitX - min)) + 1;
         } else {
             return Math.floor(Math.random() * (max - startX)) + startX;
         }
     };
-
     function randomPY(min, max) {
-        limitY = game.player.py - 130;
-        startY = game.player.py + 130;
-      
+        limitY = game.player.screenYPosition - 130;
+        startY = game.player.screenYPosition + 130;
         let randomNumber = Math.floor(Math.random() * max) + 1;
-      
         if (randomNumber < limitY) {
             return Math.floor(Math.random() * (limitY - min)) + 1;
         } else {
@@ -72,65 +62,59 @@ window.addEventListener("load", function() {
     };
 
 
-
     class InputHandler {
         constructor(game) {
             this.game = game;
             window.addEventListener("keydown", (e) => {
-                if (controls.includes(e.key) && this.game.keys.indexOf(e.key) === -1) {
-                    this.game.keys.push(e.key)
+                if (controls.includes(e.key) && this.game.keysPressed.indexOf(e.key) === -1) {
+                    this.game.keysPressed.push(e.key)
                 }
             });
-
             window.addEventListener("keyup", (e) => {
-                if (this.game.keys.indexOf(e.key) > -1) {
-                    this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
+                if (this.game.keysPressed.indexOf(e.key) > -1) {
+                    this.game.keysPressed.splice(this.game.keysPressed.indexOf(e.key), 1)
                 }
             })
-
-            /* window.addEventListener("mousedown", e => {
+            /*; window.addEventListener("mousedown", e => {
                 console.log("CLICK")
             });
-
             window.addEventListener("mouseup", e => {
                 console.log("NO CLICK")
             }) */
         };
-
         update() {
-            if (this.game.keys.includes("w")) {
+            if (this.game.keysPressed.includes("w")) {
                 game.player.move(false, true)
             };
-            if (this.game.keys.includes("s")) {
+            if (this.game.keysPressed.includes("s")) {
                 game.player.move(false, false)
             };
-            if (this.game.keys.includes("d")) {
+            if (this.game.keysPressed.includes("d")) {
                 game.player.move(true, true)
-            } else if (this.game.keys.includes("a")) {
+            } else if (this.game.keysPressed.includes("a")) {
                 game.player.move(true, false)
             };
-            if (this.game.keys.includes("ArrowUp") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py - 4, false, false, true, false)
-            } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px - 4, game.player.py - 4, true, false, true, false)
-            } else if (this.game.keys.includes("ArrowUp") && this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + game.player.adjustedWidth + 4, game.player.py - 4, false, true, true, false)
+            if (this.game.keysPressed.includes("ArrowUp") && !this.game.keysPressed.includes("ArrowLeft") && !this.game.keysPressed.includes("ArrowRight")) {
+                game.player.shoot(game.player.screenXPosition + game.player.adjustedWidth / 2, game.player.screenYPosition - 4, false, false, true, false)
+            } else if (this.game.keysPressed.includes("ArrowUp") && this.game.keysPressed.includes("ArrowLeft")) {
+                game.player.shoot(game.player.screenXPosition - 4, game.player.screenYPosition - 4, true, false, true, false)
+            } else if (this.game.keysPressed.includes("ArrowUp") && this.game.keysPressed.includes("ArrowRight")) {
+                game.player.shoot(game.player.screenXPosition + game.player.adjustedWidth + 4, game.player.screenYPosition - 4, false, true, true, false)
             };
-            if (this.game.keys.includes("ArrowDown") && !this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px + game.player.adjustedWidth / 2, game.player.py + game.player.adjustedHeight, false, false, false, true)
-            } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowRight")) {
-                game.player.shoot(game.player.px  + game.player.adjustedWidth + 3, game.player.py + game.player.adjustedHeight, false, true, false, true)
-            } else if (this.game.keys.includes("ArrowDown") && this.game.keys.includes("ArrowLeft")) {
-                game.player.shoot(game.player.px - 4, game.player.py + game.player.adjustedHeight, true, false, false, true)
+            if (this.game.keysPressed.includes("ArrowDown") && !this.game.keysPressed.includes("ArrowLeft") && !this.game.keysPressed.includes("ArrowRight")) {
+                game.player.shoot(game.player.screenXPosition + game.player.adjustedWidth / 2, game.player.screenYPosition + game.player.adjustedHeight, false, false, false, true)
+            } else if (this.game.keysPressed.includes("ArrowDown") && this.game.keysPressed.includes("ArrowRight")) {
+                game.player.shoot(game.player.screenXPosition  + game.player.adjustedWidth + 3, game.player.screenYPosition + game.player.adjustedHeight, false, true, false, true)
+            } else if (this.game.keysPressed.includes("ArrowDown") && this.game.keysPressed.includes("ArrowLeft")) {
+                game.player.shoot(game.player.screenXPosition - 4, game.player.screenYPosition + game.player.adjustedHeight, true, false, false, true)
             };
-            if (this.game.keys.includes("ArrowLeft") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px - 4, game.player.py + game.player.adjustedHeight / 2, true, false, false, false)
-            } else if (this.game.keys.includes("ArrowRight") && !this.game.keys.includes("ArrowDown")  && !this.game.keys.includes("ArrowUp")) {
-                game.player.shoot(game.player.px + game.player.adjustedWidth + 3, game.player.py + game.player.adjustedHeight / 2, false, true, false, false)
+            if (this.game.keysPressed.includes("ArrowLeft") && !this.game.keysPressed.includes("ArrowDown")  && !this.game.keysPressed.includes("ArrowUp")) {
+                game.player.shoot(game.player.screenXPosition - 4, game.player.screenYPosition + game.player.adjustedHeight / 2, true, false, false, false)
+            } else if (this.game.keysPressed.includes("ArrowRight") && !this.game.keysPressed.includes("ArrowDown")  && !this.game.keysPressed.includes("ArrowUp")) {
+                game.player.shoot(game.player.screenXPosition + game.player.adjustedWidth + 3, game.player.screenYPosition + game.player.adjustedHeight / 2, false, true, false, false)
             }
         }
     };
-
 
 
     class Projectile {
@@ -138,60 +122,57 @@ window.addEventListener("load", function() {
             this.game = game;
             this.width = 1;
             this.height = 1;
-            this.x = 0;
-            this.y = 510;
-            this.px = px;
-            this.py = py;
-            this.left = left;
-            this.right = right;
-            this.up = up;
-            this.down = down;
-            this.delete = false
+            this.spritesheetXPosition = 0;
+            this.spritesheetYPosition = 510;
+            this.screenXPosition = px;
+            this.screenYPosition = py;
+            this.shotLeft = left;
+            this.shotRight = right;
+            this.shotUp = up;
+            this.shotDown = down;
+            this.shouldDelete = false
         };
-
         update() {
-            if (this.px > canvas.width + 10 || this.px < -10 || this.py > canvas.height + 10 || this.py < -10) {
-                this.delete = true
+            if (this.screenXPosition > canvas.width + 10 || this.screenXPosition < -10 || this.screenYPosition > canvas.height + 10 || this.screenYPosition < -10) {
+                this.shouldDelete = true
             }
         };
-
         draw(context) {
-            if (this.up && !this.left && !this.right) {
+            if (this.shotUp && !this.shotLeft && !this.shotRight) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py --, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition --, this.width, this.height)
                 }
-            } else if (this.up && this.left) {
+            } else if (this.shotUp && this.shotLeft) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px --, this.py --, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition --, this.screenYPosition --, this.width, this.height)
                 }
-            } else if (this.up && this.right) {
+            } else if (this.shotUp && this.shotRight) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px ++, this.py --, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition ++, this.screenYPosition --, this.width, this.height)
                 }
-            } else if (this.left && !this.up && !this.down) {
+            } else if (this.shotLeft && !this.shotUp && !this.shotDown) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px --, this.py, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition --, this.screenYPosition, this.width, this.height)
                 }
-            } else if (this.right && !this.up && !this.down) {
+            } else if (this.shotRight && !this.shotUp && !this.shotDown) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px ++, this.py, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition ++, this.screenYPosition, this.width, this.height)
                 }
-            } else if (this.down && this.left) {
+            } else if (this.shotDown && this.shotLeft) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px --, this.py ++, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition --, this.screenYPosition ++, this.width, this.height)
                 }
-            } else if (this.down && !this.left && !this.right) {
+            } else if (this.shotDown && !this.shotLeft && !this.shotRight) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py ++, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition ++, this.width, this.height)
                 }
-            } else if (this.down && this.right) {
+            } else if (this.shotDown && this.shotRight) {
                 for (let i = 0; i < 18; i ++) {
-                    context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px ++, this.py ++, this.width, this.height)
+                    context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition ++, this.screenYPosition ++, this.width, this.height)
                 }
             }
         }
     };
-
 
 
     class Player {
@@ -201,81 +182,75 @@ window.addEventListener("load", function() {
             this.adjustedWidth = 25;
             this.height = 24;
             this.adjustedHeight = 43;
-            this.x = 10;
-            this.y = 371;
-            this.px = canvas.width /2 - this.width;
-            this.py = canvas.height /2 - this.height;
-            this.speed = 3.5;
-            this.animationDelay = 4;
+            this.spritesheetXPosition = 10;
+            this.spritesheetYPosition = 371;
+            this.screenXPosition = canvas.width /2 - this.width;
+            this.screenYPosition = canvas.height /2 - this.height;
+            this.movingSpeed = 3.5;
+            this.movementAnimationDelay = 4;
             this.projectiles = [];
             this.projectileTimer = 0;
-            this.projectileDelay = 8;
-            this.alive = true;
-            this.border = {
+            this.projectileDelay = 9;
+            this.isAlive = true;
+            this.circleAround = {
                 color: "white",
-                borderX: this.px + this.adjustedWidth / 2,
-                borderY: this.py + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.x / 2.8) ** 2 + (this.y / 2.8) ** 2),
+                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
+                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.spritesheetXPosition / 2.8) ** 2 + (this.spritesheetYPosition / 2.8) ** 2),
                 visible: false
             };
-
             this.move = function(dx, dy) {
                 if (dx && dy) {
                     this.spriteCycle(),
-                    this.y = 478,
-                    this.px += this.speed
+                    this.spritesheetYPosition = 478,
+                    this.screenXPosition += this.movingSpeed
                 } else if (dx && !dy) {
                     this.spriteCycle(),
-                    this.y = 445,
-                    this.px -= this.speed
+                    this.spritesheetYPosition = 445,
+                    this.screenXPosition -= this.movingSpeed
                 } else if (!dx && dy) {
-                    this.py -= this.speed;
-                    if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("s")) {
-                        this.y = 409,
+                    this.screenYPosition -= this.movingSpeed;
+                    if (!this.game.keysPressed.includes("d") && !this.game.keysPressed.includes("a") && !this.game.keysPressed.includes("s")) {
+                        this.spritesheetYPosition = 409,
                         this.spriteCycle()
                     }
                 } else if (!dx && !dy) {
-                    this.py += this.speed;
-                    if (!this.game.keys.includes("d") && !this.game.keys.includes("a") && !this.game.keys.includes("w")) {
-                        this.y = 371,
+                    this.screenYPosition += this.movingSpeed;
+                    if (!this.game.keysPressed.includes("d") && !this.game.keysPressed.includes("a") && !this.game.keysPressed.includes("w")) {
+                        this.spritesheetYPosition = 371,
                         this.spriteCycle()
                     }
                 }
             };
-
             this.shoot = function(px, py, left, right, up, down) {
                 if (this.projectileTimer <= 0) {
                     this.projectiles.push(new Projectile(this.game, px, py, left, right, up, down)), 
                     this.projectileTimer = this.projectileDelay
                 }
             };
-
             this.spriteCycle = function () {
-                if (gameFrame % this.animationDelay == 0) {
-                    if (this.x < 88) {
-                        this.x += 26
+                if (currentFrame % this.movementAnimationDelay == 0) {
+                    if (this.spritesheetXPosition < 88) {
+                        this.spritesheetXPosition += 26
                     } else {
-                        this.x = 10
+                        this.spritesheetXPosition = 10
                     }
                 }
             }
         };
-
         update() {
             game.input.update();
             this.projectiles.forEach(projectile => projectile.update());
-            this.projectiles = this.projectiles.filter(projectile => !projectile.delete);
+            this.projectiles = this.projectiles.filter(projectile => !projectile.shouldDelete);
             this.projectileTimer --;
             game.playableArea(this, 990, 742)
         };
-
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
+            context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
             this.projectiles.forEach(projectile => projectile.draw(context));
-            game.drawBorder(this)
+            game.drawCircleAround(this)
         }
     };
-
 
 
     class Enemy {
@@ -283,25 +258,22 @@ window.addEventListener("load", function() {
             this.game = game;
             this.width = width;
             this.height = height;
-            this.x = x;
-            this.y = y;
-            this.px = px;
-            this.py = py;
-            this.speed = speed;
-            this.alive = true
+            this.spritesheetXPosition = x;
+            this.spritesheetYPosition = y;
+            this.screenXPosition = px;
+            this.screenYPosition = py;
+            this.movingSpeed = speed;
+            this.isAlive = true
         };
-
         update() {
         };
-
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
-            game.drawBorder(this)
+            context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
+            game.drawCircleAround(this)
         }
     };
 
 
-    
     class Grunt extends Enemy {
         constructor(game) {
             super(game);
@@ -309,36 +281,35 @@ window.addEventListener("load", function() {
             this.adjustedWidth = 32;
             this.height = 27;
             this.adjustedHeight = 48;
-            this.x = 8;
-            this.y = 285;
-            this.px = randomPX(1, 981);
-            this.py = RNG(1, 737);
+            this.spritesheetXPosition = 8;
+            this.spritesheetYPosition = 285;
+            this.screenXPosition = randomPX(1, 981);
+            this.screenYPosition = RNG(1, 737);
+            this.movingSpeed = 6;
             this.movementTimer = 0;
             this.movementInterval = 40;
             this.movementRate = 8;
-            this.speed = 6;
-            this.border = {
+            this.circleAround = {
                 color: "red",
-                borderX: this.px + this.adjustedWidth / 2,
-                borderY: this.py + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.x * 2) + (this.y * 2)),
+                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
+                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.spritesheetXPosition * 2) + (this.spritesheetYPosition * 2)),
                 visible: false
             }
         };
-
         update() {
-            let randomNumber = RNG(1, 4);
+            /* let randomNumber = RNG(1, 4);
             if (this.movementTimer > this.movementInterval) {
                 if (randomNumber === 1) {
-                    if (this.px > game.player.px) {
-                        this.px -= this.speed
+                    if (this.screenXPosition > game.player.screenXPosition) {
+                        this.screenXPosition -= this.movingSpeed
                     } else {
-                        this.px += this.speed
+                        this.screenXPosition += this.movingSpeed
                     };
-                    if (this.py > game.player.py) {
-                        this.py -= this.speed
+                    if (this.screenYPosition > game.player.screenYPosition) {
+                        this.screenYPosition -= this.movingSpeed
                     } else {
-                        this.py += this.speed
+                        this.screenYPosition += this.movingSpeed
                     };
                     game.spriteCycle(this, 8, 30, 98)
                 }
@@ -346,10 +317,9 @@ window.addEventListener("load", function() {
             } else {
                 this.movementTimer += this.movementRate
             }
-            game.playableArea(this, 982, 738)
+            game.playableArea(this, 982, 738) */
         }
     };
-
 
 
     class Hulk extends Enemy {
@@ -359,52 +329,46 @@ window.addEventListener("load", function() {
             this.adjustedWidth = 47;
             this.height = 32;
             this.adjustedHeight = 57;
-            this.x = 409;
-            this.y = 434;
-            this.px = RNG(1, 967);
-            this.py = randomPY(1, 727);
+            this.spritesheetXPosition = 409;
+            this.spritesheetYPosition = 434;
+            this.screenXPosition = RNG(1, 967);
+            this.screenYPosition = randomPY(1, 727);
             this.movementTimer = 0;
             this.movementInterval = 10;
             this.movementRate = 1;
-            this.speed = 8;
-            this.hulk = true;
-            this.border = {
+            this.movingSpeed = 8;
+            this.isHulk = true;
+            this.circleAround = {
                 color: "lime",
-                borderX: this.px + this.adjustedWidth / 2,
-                borderY: this.py + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.x * 1.5) + (this.y * 1.5)),
+                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
+                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.spritesheetXPosition * 1.5) + (this.spritesheetYPosition * 1.5)),
                 visible: false
             }
         };
-
         update() {
-            let randomNumber = RNG(1, 7000);                                // Temporary
+            /* let randomNumber = RNG(1, 7000);                                // Temporary
             if (this.movementTimer > this.movementInterval) { 
                 if (randomNumber >= 1 && randomNumber <= 1000) {
-                    this.y = 398,
-                    this.px -= this.speed,
-                    game.spriteCycle(this, 409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487, 398),
+                    this.screenXPosition -= this.movingSpeed
                 } else if (randomNumber > 1001 && randomNumber <= 2000) {
-                    this.y = 474,
-                    this.px += this.speed,
-                    game.spriteCycle(this, 409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487, 474),
+                    this.screenXPosition += this.movingSpeed
                 } else if (randomNumber > 2001 && randomNumber <= 3000) {
-                    this.y = 434,
-                    this.py -= this.speed,
-                    game.spriteCycle(this, 409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487, 434),
+                    this.screenYPosition -= this.movingSpeed
                 } else if (randomNumber > 3001 && randomNumber <= 4000) {
-                    this.y = 434,
-                    this.py += this.speed,
-                    game.spriteCycle(this, 409, 26, 487)
+                    game.spriteCycle(this, 409, 26, 487, 434),
+                    this.screenYPosition += this.movingSpeed
                 };
                 this.movementTimer = 0
             } else {
                 this.movementTimer += this.movementRate
-            };
+            }; */
             game.playableArea(this, 968, 728)
         }
     };
-
 
 
     class Human {
@@ -414,26 +378,45 @@ window.addEventListener("load", function() {
             this.adjustedWidth = this.adjustedWidth;
             this.height = this.height;
             this.adjustedHeight = this.adjustedHeight;
-            this.x = this.x;
-            this.y = this.y;
-            this.px = this.px;
-            this.py = this.py;
-            this.speed = 3.5;
-            this.animationDelay = 4;
-            this.alive = true;
-            this.human = true;
-            this.rescued = false
-        }
-
-        update() {
+            this.spritesheetXPosition = this.spritesheetXPosition;
+            this.spritesheetYPosition = this.spritesheetYPosition;
+            this.screenXPosition = this.screenXPosition;
+            this.screenYPosition = this.screenYPosition;
+            this.movementTimer = 0;
+            this.movementInterval = 10;
+            this.movementRate = 1;
+            this.directionTimer = 1000;
+            this.movingSpeed = 3.5;
+            this.isAlive = true;
+            this.wasRescued = false
         };
-
+        update() {
+            if (this.movementTimer > this.movementInterval) {
+                if (this.screenXPosition > game.player.screenXPosition) {
+                    game.spriteCycle(this, 114, 26, 192, 443),
+                    this.screenXPosition -= this.movingSpeed
+                } else {
+                    game.spriteCycle(this, 114, 26, 192, 476),
+                    this.screenXPosition += this.movingSpeed
+                };
+                if (this.screenYPosition > game.player.screenYPosition) {
+                    game.spriteCycle(this, 114, 26, 192, 408),
+                    this.screenYPosition -= this.movingSpeed
+                } else {
+                    game.spriteCycle(this, 114, 26, 192, 369),
+                    this.screenYPosition += this.movingSpeed
+                };
+                this.movementTimer = 0
+            } else {
+                this.movementTimer += this.movementRate
+            };
+            game.playableArea(this, 990, 742)
+        };
         draw(context) {
-            context.drawImage(sprites, this.x, this.y, this.width, this.height, this.px, this.py, this.adjustedWidth, this.adjustedHeight);
-            game.drawBorder(this)
+            context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
+            game.drawCircleAround(this)
         }
     };
-
 
 
     class Mommy extends Human {
@@ -444,99 +427,95 @@ window.addEventListener("load", function() {
             this.adjustedWidth = 25;
             this.height = 28;
             this.adjustedHeight = 50;
-            this.x = 114;
-            this.y = 369;
-            this.px = RNG(100, 970);
-            this.py = randomPY(100, 718);
-            this.border = {
+            this.spritesheetXPosition = 114;
+            this.spritesheetYPosition = 369;
+            this.screenXPosition = RNG(100, 970);
+            this.screenYPosition = randomPY(100, 718);
+            this.circleAround = {
                 color: "deepPink",
-                borderX: this.px + this.adjustedWidth / 2,
-                borderY: this.py + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.x * 2) + (this.y * 2)),
+                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
+                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
+                radius: Math.sqrt((this.spritesheetXPosition * 2) + (this.spritesheetYPosition * 2)),
                 visible: false
             }
-        };
-
-        update() {
-
         }
     };
-
 
 
     class CollisionHandler {
         constructor(game) {
             this.game = game
         };
-
         update() {
             game.enemies.forEach (enemy => {
                 game.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, projectile.width, projectile.height, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        if (!enemy.hulk) {
-                            enemy.alive = false
+                        if (!enemy.isHulk) {
+                            enemy.isAlive = false
                         } else {
-                            if (game.player.px + game.player.adjustedWidth < enemy.px && game.player.py + game.player.adjustedHeight < enemy.py) {
-                                enemy.px += enemy.speed,
-                                enemy.py += enemy.speed
-                            } else if (game.player.px + game.player.adjustedWidth < enemy.px && game.player.py - game.player.adjustedHeight > enemy.py) {
-                                enemy.px += enemy.speed,
-                                enemy.py -= enemy.speed
-                            } else if (game.player.px - game.player.adjustedWidth > enemy.px && game.player.py + game.player.adjustedHeight < enemy.py) {
-                                enemy.px -= enemy.speed,
-                                enemy.py += enemy.speed
-                            } else if (game.player.px - game.player.adjustedWidth > enemy.px && game.player.py - game.player.adjustedHeight > enemy.py) {
-                                enemy.px -= enemy.speed,
-                                enemy.py -= enemy.speed
-                            } else if (game.player.px + game.player.adjustedWidth < enemy.px) {
-                                enemy.px += enemy.speed
-                            } else if (game.player.px - game.player.adjustedWidth > enemy.px) {
-                                enemy.px -= enemy.speed
-                            } else if (game.player.py < enemy.py) {
-                                enemy.py += enemy.speed
-                            } else if (game.player.py > enemy.py) {
-                                enemy.py -= enemy.speed
+                            if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition && game.player.screenYPosition + game.player.adjustedHeight < enemy.screenYPosition) {
+                                enemy.screenXPosition += enemy.movingSpeed,
+                                enemy.screenYPosition += enemy.movingSpeed
+                            } else if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition && game.player.screenYPosition - game.player.adjustedHeight > enemy.screenYPosition) {
+                                enemy.screenXPosition += enemy.movingSpeed,
+                                enemy.screenYPosition -= enemy.movingSpeed
+                            } else if (game.player.screenXPosition - game.player.adjustedWidth > enemy.screenXPosition && game.player.screenYPosition + game.player.adjustedHeight < enemy.screenYPosition) {
+                                enemy.screenXPosition -= enemy.movingSpeed,
+                                enemy.screenYPosition += enemy.movingSpeed
+                            } else if (game.player.screenXPosition - game.player.adjustedWidth > enemy.screenXPosition && game.player.screenYPosition - game.player.adjustedHeight > enemy.screenYPosition) {
+                                enemy.screenXPosition -= enemy.movingSpeed,
+                                enemy.screenYPosition -= enemy.movingSpeed
+                            } else if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition) {
+                                enemy.screenXPosition += enemy.movingSpeed
+                            } else if (game.player.screenXPosition - game.player.adjustedWidth > enemy.screenXPosition) {
+                                enemy.screenXPosition -= enemy.movingSpeed
+                            } else if (game.player.screenYPosition < enemy.screenYPosition) {
+                                enemy.screenYPosition += enemy.movingSpeed
+                            } else if (game.player.screenYPosition > enemy.screenYPosition) {
+                                enemy.screenYPosition -= enemy.movingSpeed
                             }
                         }
-                        projectile.delete = true
+                        projectile.shouldDelete = true
                     }
                 });
                 if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                    game.player.alive = false
+                    game.player.isAlive = false
                 }
                 game.humans.forEach (human => {
                     if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        human.alive = false
+                        human.isAlive = false
                     }
                 })
             });
             game.humans.forEach (human => {
                 if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, game.player, game.player.adjustedWidth, game.player.adjustedHeight)) {
-                    human.rescued = true
+                    human.wasRescued = true
                 }
             })
         };
 
         checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
+            // --- Improve. Draws multiple times  ---
+            // ---     Put in drawHitboxes()      ---
             /* ctx.beginPath(),
-            ctx.rect(actorA.px, actorA.py, actorA.adjustedWidth, actorA.adjustedHeight),
-            ctx.rect(actorB.px, actorB.py, actorB.adjustedWidth, actorB.adjustedHeight),        // Improve
+            ctx.rect(actorA.screenXPosition, actorA.screenYPosition, actorA.adjustedWidth, actorA.adjustedHeight),
+            ctx.rect(actorB.screenXPosition, actorB.screenYPosition, actorB.adjustedWidth, actorB.adjustedHeight),
             ctx.strokeStyle = "red",
             ctx.stroke(); */
+            // --------------------------------------
             return (
-                actorA.px <= actorB.px + widthB &&
-                actorA.px + widthA >= actorB.px &&
-                actorA.py <= actorB.py + heightB &&
-                actorA.py + heightA >= actorB.py
+                actorA.screenXPosition <= actorB.screenXPosition + widthB &&
+                actorA.screenXPosition + widthA >= actorB.screenXPosition &&
+                actorA.screenYPosition <= actorB.screenYPosition + heightB &&
+                actorA.screenYPosition + heightA >= actorB.screenYPosition
             )
         }
     };
 
 
-
     class Game {
         constructor(width, height) {
-            this.keys = [];
+            this.keysPressed = [];
             this.width = width;
             this.height = height;
             this.player = new Player(this);
@@ -547,31 +526,39 @@ window.addEventListener("load", function() {
             this.input = new InputHandler(this);
             this.collision = new CollisionHandler(this);
             this.projectile = new Projectile(this);
-            
-            this.spriteCycle = function (actor, initial, increase, limit) {
-                if (actor.x < limit) {
-                    actor.x += increase
+            this.spriteCycle = function (actor, initial, increment, limit, y) {
+                actor.spritesheetYPosition = y;
+                if (actor.spritesheetXPosition < limit) {
+                    actor.spritesheetXPosition += increment
                 } else {
-                    actor.x = initial
+                    actor.spritesheetXPosition = initial
                 }
             };
-
             this.playableArea = function (actor, maxPx, maxPy) {
-                if (actor.py <= 1) {
-                    actor.py = 1
-                } else if (actor.py >= maxPy) {
-                    actor.py = maxPy
+                if (actor.screenYPosition <= 1) {
+                    actor.screenYPosition = 1
+                } else if (actor.screenYPosition >= maxPy) {
+                    actor.screenYPosition = maxPy
                 };
-                if (actor.px <= 1) {
-                    actor.px = 1
-                } else if (actor.px >= maxPx) {
-                    actor.px = maxPx
+                if (actor.screenXPosition <= 1) {
+                    actor.screenXPosition = 1
+                } else if (actor.screenXPosition >= maxPx) {
+                    actor.screenXPosition = maxPx
+                }
+            };
+            this.addEnemy = function(numberEnemies, enemy) {
+                for (let i = 0; i < numberEnemies; i ++) {
+                    this.enemies.push(new enemy(this))
+                }
+            };
+            this.addHuman = function(numberHumans, human) {
+                for (let i = 0; i < numberHumans; i ++) {
+                    this.humans.push(new human(this))
                 }
             }
         };
-
         update() {
-            if (this.player.alive) {
+            if (this.player.isAlive) {
                 this.collision.update();
                 this.player.update();
                 this.enemies.forEach(enemy => {
@@ -580,64 +567,46 @@ window.addEventListener("load", function() {
                 this.humans.forEach (human => {
                     human.update()
                 });
-                this.enemies = this.enemies.filter(enemy => enemy.alive);
-                this.humans = this.humans.filter(human => human.alive && !human.rescued)
+                this.enemies = this.enemies.filter(enemy => enemy.isAlive);
+                this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
             }
         };
-
-        drawBorder(actor) {
-            if (actor.border.visible) {
-                ctx.strokeStyle = actor.border.color;
+        drawCircleAround(actor) {
+            if (actor.circleAround.visible) {
+                ctx.strokeStyle = actor.circleAround.color;
                 ctx.beginPath();
-                ctx.arc(actor.border.borderX, actor.border.borderY, actor.border.radius, 0, 2 * Math.PI);
+                ctx.arc(actor.circleAround.circleAroundX, actor.circleAround.circleAroundY, actor.circleAround.radius, 0, 2 * Math.PI);
                 ctx.stroke()
             }
         };
-
         draw(context) {
             this.player.draw(context)
             this.enemies.forEach(enemy => {
                 enemy.draw(context),
-                this.drawBorder(enemy)
+                this.drawCircleAround(enemy)
             });
             this.humans.forEach (human => {
                 human.draw(context),
-                this.drawBorder(human)
+                this.drawCircleAround(human)
             })
-        };
-
-        addEnemy(numberEnemies, enemy) {
-            for (let i = 0; i < numberEnemies; i ++) {
-                this.enemies.push(new enemy(this))
-            }
-        };
-
-        addHuman(numberHumans, human) {
-            for (let i = 0; i < numberHumans; i ++) {
-                this.humans.push(new human(this))
-            }
         }
     };
 
 
-
     const game = new Game(canvas.width, canvas.height);
-
-    let lastTime = 0;
-    
+    let lastTimeStamp = 0;
     function execute(timeStamp) {
-        const deltaTime = timeStamp - lastTime;
-        lastTime = timeStamp;
+        const deltaTime = timeStamp - lastTimeStamp;
+        lastTimeStamp = timeStamp;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         game.update(deltaTime);
         game.draw(ctx);
-        gameFrame ++;
+        currentFrame ++;
         requestAnimationFrame(execute)
     };
-
     game.addEnemy(14, Grunt);
     game.addEnemy(6, Hulk);
     game.addHuman(10, Mommy);
-    
+
     execute(0)
 });

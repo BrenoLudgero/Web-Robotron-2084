@@ -2,33 +2,30 @@
     font-family: Robotron;
     src: url('Robotron.ttf') /* Created by André Nossek */
 }
-
 body {
+    margin: 0px;
     display: flex;
+    margin-top: 18px;
     font-family: Robotron;
     justify-content: space-around
 }
-
 #container {
     padding: 14px;
     padding-top: 2px;
     text-align: center;
     background-color: black
 }
-
 #info {
     height: auto;
     height: 34px;
     display: flex;
     justify-content: space-around
 }
-
 #score, #wave, #lives {
     margin: auto;
     color: white;
     font-size: 24px
 }
-
 #canvas {
     top: 30px;
     margin: auto;
