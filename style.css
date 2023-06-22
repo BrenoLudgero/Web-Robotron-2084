@@ -24,9 +24,10 @@ body {
 #score, #wave, #lives {
     margin: auto;
     color: white;
-    font-size: 24px
+    font-size: 24px;
+    pointer-events: none
 }
-#canvas {
+canvas {
     top: 30px;
     margin: auto;
     display: block;
