@@ -7,7 +7,6 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO DO LIST (IN DESCENDING ORDER OF PRIORITY):
-UPDATE SAFE SPAWN. ENEMIES SPAWN FUTHER FROM PLAYER BUT CLOSER TO EACH OTHER
 FIX circleAround
 FIX MOMMY BEHAVIOR THEN UPDATE HULK TO GO AFTER CLOSEST HUMAN (?)
 RIP YOUR OWN SPRITESHEET (NO MORE ADJUSTING DIMENSIONS)
@@ -100,7 +99,6 @@ window.addEventListener("load", function() {
         }
     };
 
-
     class Projectile {
         constructor(game, px, py, left, right, up, down) {
             this.game = game;
@@ -157,7 +155,6 @@ window.addEventListener("load", function() {
             }
         }
     };
-
 
     class Player {
         constructor(game) {
@@ -232,10 +229,9 @@ window.addEventListener("load", function() {
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
             this.projectiles.forEach(projectile => projectile.draw(context));
-            game.drawCircleAround(this)
+            //game.drawCircleAround(this)
         }
     };
-
 
     class Enemy {
         constructor(game) {
@@ -245,10 +241,9 @@ window.addEventListener("load", function() {
         };
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
-            game.drawCircleAround(this)
+            //game.drawCircleAround(this)
         }
     };
-
 
     class Grunt extends Enemy {
         constructor(game) {
@@ -262,7 +257,7 @@ window.addEventListener("load", function() {
             this.movingSpeed = 6;
             this.movementTimer = 0;
             this.movementInterval = 40;
-            this.movementRate = 8;
+            this.movementRate = 0;
             this.circleAround = {
                 color: "red",
                 circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
@@ -295,7 +290,6 @@ window.addEventListener("load", function() {
         }
     };
 
-
     class Hulk extends Enemy {
         constructor(game) {
             super(game);
@@ -307,7 +301,7 @@ window.addEventListener("load", function() {
             this.spritesheetYPosition = 434;
             this.movementTimer = 0;
             this.movementInterval = 10;
-            this.movementRate = 1;
+            this.movementRate = 0;
             this.movingSpeed = 8;
             this.isHulk = true;
             this.circleAround = {
@@ -319,18 +313,18 @@ window.addEventListener("load", function() {
             }
         };
         update() {
-            let randomNumber = RNG(1, 7000);  // Temporary
+            let randomNumber = RNG(1, 20);  // Temporary
             if (this.movementTimer > this.movementInterval) { 
-                if (randomNumber >= 1 && randomNumber <= 1000) {
+                if (randomNumber <= 5) {
                     game.spriteCycle(this, 409, 26, 487, 398),
                     this.screenXPosition -= this.movingSpeed
-                } else if (randomNumber > 1001 && randomNumber <= 2000) {
+                } else if (randomNumber <= 10) {
                     game.spriteCycle(this, 409, 26, 487, 474),
                     this.screenXPosition += this.movingSpeed
-                } else if (randomNumber > 2001 && randomNumber <= 3000) {
+                } else if (randomNumber <= 15) {
                     game.spriteCycle(this, 409, 26, 487, 434),
                     this.screenYPosition -= this.movingSpeed
-                } else if (randomNumber > 3001 && randomNumber <= 4000) {
+                } else if (randomNumber <= 20) {
                     game.spriteCycle(this, 409, 26, 487, 434),
                     this.screenYPosition += this.movingSpeed
                 };
@@ -342,13 +336,12 @@ window.addEventListener("load", function() {
         }
     };
 
-
     class Human {
         constructor(game) {
             this.game = game;
             this.movementTimer = 0;
             this.movementInterval = 10;
-            this.movementRate = 1;
+            this.movementRate = 0;
             this.directionTimer = 1000;
             this.movingSpeed = 3.5;
             this.isAlive = true;
@@ -378,10 +371,9 @@ window.addEventListener("load", function() {
         };
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
-            game.drawCircleAround(this)
+            //game.drawCircleAround(this)
         }
     };
-
 
     class Mommy extends Human {
         constructor(game) {
@@ -402,7 +394,6 @@ window.addEventListener("load", function() {
             }
         }
     };
-
 
     class CollisionHandler {
         constructor(game) {
@@ -455,8 +446,7 @@ window.addEventListener("load", function() {
                 }
             })
         };
-
-        checkCollision(actorA, widthA, heightA, actorB, widthB, heightB) {
+        checkCollision(actorA, widthActorA, heightActorA, actorB, widthActorB, heightActorB) {
             // --- Improve. Draws multiple times  ---
             // ---     Put in drawHitboxes()      ---
             /* ctx.beginPath(),
@@ -466,14 +456,13 @@ window.addEventListener("load", function() {
             ctx.stroke(); */
             // --------------------------------------
             return (
-                actorA.screenXPosition <= actorB.screenXPosition + widthB &&
-                actorA.screenXPosition + widthA >= actorB.screenXPosition &&
-                actorA.screenYPosition <= actorB.screenYPosition + heightB &&
-                actorA.screenYPosition + heightA >= actorB.screenYPosition
+                actorA.screenXPosition <= actorB.screenXPosition + widthActorB &&
+                actorA.screenXPosition + widthActorA >= actorB.screenXPosition &&
+                actorA.screenYPosition <= actorB.screenYPosition + heightActorB &&
+                actorA.screenYPosition + heightActorA >= actorB.screenYPosition
             )
         }
     };
-
 
     class Game {
         constructor(width, height) {
@@ -488,43 +477,44 @@ window.addEventListener("load", function() {
             this.input = new InputHandler(this);
             this.collision = new CollisionHandler(this);
             this.projectile = new Projectile(this);
-            this.spriteCycle = function (actor, initial, increment, limit, y) {
-                actor.spritesheetYPosition = y;
-                if (actor.spritesheetXPosition < limit) {
+            this.spriteCycle = function (actor, initialSpritesheetXPosition, increment, maxSpritesheetXPosition, spritesheetYPosition) {
+                actor.spritesheetYPosition = spritesheetYPosition;
+                if (actor.spritesheetXPosition < maxSpritesheetXPosition) {
                     actor.spritesheetXPosition += increment
                 } else {
-                    actor.spritesheetXPosition = initial
+                    actor.spritesheetXPosition = initialSpritesheetXPosition
                 }
             };
-            this.playableArea = function (actor, maxPx, maxPy) {
+            this.playableArea = function (actor, maxScreenXPosition, maxScreenYPosition) {
                 if (actor.screenYPosition <= 1) {
                     actor.screenYPosition = 1
-                } else if (actor.screenYPosition >= maxPy) {
-                    actor.screenYPosition = maxPy
+                } else if (actor.screenYPosition >= maxScreenYPosition) {
+                    actor.screenYPosition = maxScreenYPosition
                 };
                 if (actor.screenXPosition <= 1) {
                     actor.screenXPosition = 1
-                } else if (actor.screenXPosition >= maxPx) {
-                    actor.screenXPosition = maxPx
+                } else if (actor.screenXPosition >= maxScreenXPosition) {
+                    actor.screenXPosition = maxScreenXPosition
                 }
             };
             this.addEnemy = function(numberEnemies, enemy) {
-                const minimumDistance = 100;
+                const minimumDistanceFromPlayer = 120;
+                const minumumDistanceBetweenEnemies = 40;
                 for (let i = 0; i < numberEnemies; i++) {
                     const newEnemy = new enemy(this);
                     let isSafe = false;
                     while (!isSafe) {
-                        newEnemy.screenXPosition = RNG(1, canvas.width);
-                        newEnemy.screenYPosition = RNG(1, canvas.height);
+                        newEnemy.screenXPosition = RNG(1, canvas.width - 30);
+                        newEnemy.screenYPosition = RNG(1, canvas.height - 30);
                         const playerDistance = calculateDistance(newEnemy.screenXPosition, newEnemy.screenYPosition, this.player.screenXPosition, this.player.screenYPosition);
-                        let isSafeFromPlayer = playerDistance >= minimumDistance;
+                        let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                         let isSafeFromEnemies = true;
                         for (let j = 0; j < this.enemies.length; j++) {
                             const otherEnemy = this.enemies[j];
-                            const enemyDistance = calculateDistance(newEnemy.screenXPosition, newEnemy.screenYPosition, otherEnemy.screenXPosition, otherEnemy.screenYPosition);
-                            if (enemyDistance < minimumDistance) {
-                                isSafeFromEnemies = false
-                            break
+                            const distanceBetweenEnemies = calculateDistance(newEnemy.screenXPosition, newEnemy.screenYPosition, otherEnemy.screenXPosition, otherEnemy.screenYPosition);
+                            if (distanceBetweenEnemies <= minumumDistanceBetweenEnemies) {
+                                isSafeFromEnemies = false;
+                                break
                             }
                         };
                         if (isSafeFromPlayer && isSafeFromEnemies) {
@@ -535,23 +525,24 @@ window.addEventListener("load", function() {
                 }
             };
             this.addHuman = function(numberHumans, human) {
-                const minimumDistance = 75;
+                const minimumDistanceFromPlayer = 100;
+                const minimumDistanceFromEnemies = 60;
                 for (let i = 0; i < numberHumans; i++) {
                     const newHuman = new human(this);
                     let isSafe = false;
                     while (!isSafe) {
-                        newHuman.screenXPosition = RNG(1, 981);
-                        newHuman.screenYPosition = RNG(1, 737);
+                        newHuman.screenXPosition = RNG(1, canvas.width);
+                        newHuman.screenYPosition = RNG(1, canvas.height);
                         const playerDistance = calculateDistance(newHuman.screenXPosition, newHuman.screenYPosition, this.player.screenXPosition, this.player.screenYPosition);
-                        let isSafeFromPlayer = playerDistance >= minimumDistance;
+                        let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                         let isSafeFromEnemies = true;
                         for (let j = 0; j < this.enemies.length; j++) {
                             const enemy = this.enemies[j];
-                            const enemyDistance = calculateDistance(newHuman.screenXPosition, newHuman.screenYPosition, enemy.screenXPosition, enemy.screenYPosition);
-                            if (enemyDistance < minimumDistance) {
+                            const distanceFromEnemy = calculateDistance(newHuman.screenXPosition, newHuman.screenYPosition, enemy.screenXPosition, enemy.screenYPosition);
+                            if (distanceFromEnemy <= minimumDistanceFromEnemies) {
                                 isSafeFromEnemies = false;
-                            break
-                          }
+                                break
+                            }
                         };
                         if (isSafeFromPlayer && isSafeFromEnemies) {
                             this.humans.push(newHuman);
@@ -575,14 +566,14 @@ window.addEventListener("load", function() {
                 this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
             }
         };
-        drawCircleAround(actor) {
+        /* drawCircleAround(actor) {
             if (actor.circleAround.visible) {
                 ctx.strokeStyle = actor.circleAround.color;
                 ctx.beginPath();
                 ctx.arc(actor.circleAround.circleAroundX, actor.circleAround.circleAroundY, actor.circleAround.radius, 0, 2 * Math.PI);
                 ctx.stroke()
             }
-        };
+        }; */
         draw(context) {
             this.player.draw(context)
             this.enemies.forEach(enemy => {
@@ -593,7 +584,6 @@ window.addEventListener("load", function() {
             })
         }
     };
-
 
     const game = new Game(canvas.width, canvas.height);
     let lastTimeStamp = 0;
@@ -606,9 +596,8 @@ window.addEventListener("load", function() {
         currentFrame ++;
         requestAnimationFrame(execute)
     };
-    game.addEnemy(40, Grunt);
-    game.addEnemy(10, Hulk);
-    game.addHuman(5, Mommy);
-
+    game.addEnemy(120, Grunt);
+    game.addEnemy(30, Hulk);
+    game.addHuman(10, Mommy);
     execute(0)
 });
