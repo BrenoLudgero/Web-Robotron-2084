@@ -7,8 +7,7 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO DO LIST (IN DESCENDING ORDER OF PRIORITY):
-FIX circleAround
-FIX MOMMY BEHAVIOR THEN UPDATE HULK TO GO AFTER CLOSEST HUMAN (?)
+UPDATE MOMMY, HULK BEHAVIOR
 RIP YOUR OWN SPRITESHEET (NO MORE ADJUSTING DIMENSIONS)
 SPLIT SPRITES INTO MULTIPLE IMAGES
 SPLIT CODE INTO MULTIPLE SCRIPTS
@@ -34,28 +33,32 @@ window.addEventListener("load", function() {
     var currentFrame = 0;
     const sprites = new Image();
     sprites.src = "img/sprites.png"; // Ripped by Sean Riddle
-    const controls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
+    const playerControls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
+    var drawHitboxes = false;
 
     function RNG(min, max) {
         return Math.floor(Math.random() * (max - min)) + 1
     };
-    function calculateDistance(actor1xPosition, actor1yPosition, actor2xPosition, actor2yPosition) {
-        const distanceX = actor2xPosition - actor1xPosition;
-        const distanceY = actor2yPosition - actor1yPosition;
-        return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    function calculateDistance(actor1XPosition, actor1YPosition, actor2XPosition, actor2YPosition) {
+        const distanceX = actor2XPosition - actor1XPosition;
+        const distanceY = actor2YPosition - actor1YPosition;
+        return Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     };
 
     class InputHandler {
         constructor(game) {
             this.game = game;
             window.addEventListener("keydown", (e) => {
-                if (controls.includes(e.key) && this.game.keysPressed.indexOf(e.key) === -1) {
+                if (playerControls.includes(e.key) && this.game.keysPressed.indexOf(e.key) === -1) {
                     this.game.keysPressed.push(e.key)
                 }
             });
             window.addEventListener("keyup", (e) => {
                 if (this.game.keysPressed.indexOf(e.key) > -1) {
                     this.game.keysPressed.splice(this.game.keysPressed.indexOf(e.key), 1)
+                };
+                if (e.key == "h") {
+                    drawHitboxes = !drawHitboxes
                 }
             })
             /*; window.addEventListener("mousedown", e => {
@@ -100,14 +103,14 @@ window.addEventListener("load", function() {
     };
 
     class Projectile {
-        constructor(game, px, py, left, right, up, down) {
+        constructor(game, screenXPosition, screenYPosition, left, right, up, down) {
             this.game = game;
-            this.width = 1;
-            this.height = 1;
+            this.width = 2;
+            this.height = 2;
             this.spritesheetXPosition = 0;
             this.spritesheetYPosition = 510;
-            this.screenXPosition = px;
-            this.screenYPosition = py;
+            this.screenXPosition = screenXPosition;
+            this.screenYPosition = screenYPosition;
             this.shotLeft = left;
             this.shotRight = right;
             this.shotUp = up;
@@ -173,29 +176,22 @@ window.addEventListener("load", function() {
             this.projectileTimer = 0;
             this.projectileDelay = 9;
             this.isAlive = true;
-            this.circleAround = {
-                color: "white",
-                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
-                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.spritesheetXPosition / 4) ** 2 + (this.spritesheetYPosition / 4) ** 2),
-                visible: true
-            };
-            this.move = function(dx, dy) {
-                if (dx && dy) {
+            this.move = function(movingHorizontally, movingVertically) {
+                if (movingHorizontally && movingVertically) {
                     this.spriteCycle(),
                     this.spritesheetYPosition = 478,
                     this.screenXPosition += this.movingSpeed
-                } else if (dx && !dy) {
+                } else if (movingHorizontally && !movingVertically) {
                     this.spriteCycle(),
                     this.spritesheetYPosition = 445,
                     this.screenXPosition -= this.movingSpeed
-                } else if (!dx && dy) {
+                } else if (!movingHorizontally && movingVertically) {
                     this.screenYPosition -= this.movingSpeed;
                     if (!this.game.keysPressed.includes("d") && !this.game.keysPressed.includes("a") && !this.game.keysPressed.includes("s")) {
                         this.spritesheetYPosition = 409,
                         this.spriteCycle()
                     }
-                } else if (!dx && !dy) {
+                } else if (!movingHorizontally && !movingVertically) {
                     this.screenYPosition += this.movingSpeed;
                     if (!this.game.keysPressed.includes("d") && !this.game.keysPressed.includes("a") && !this.game.keysPressed.includes("w")) {
                         this.spritesheetYPosition = 371,
@@ -203,9 +199,9 @@ window.addEventListener("load", function() {
                     }
                 }
             };
-            this.shoot = function(px, py, left, right, up, down) {
+            this.shoot = function(screenXPosition, screenYPosition, left, right, up, down) {
                 if (this.projectileTimer <= 0) {
-                    this.projectiles.push(new Projectile(this.game, px, py, left, right, up, down)), 
+                    this.projectiles.push(new Projectile(this.game, screenXPosition, screenYPosition, left, right, up, down)), 
                     this.projectileTimer = this.projectileDelay
                 }
             };
@@ -229,7 +225,7 @@ window.addEventListener("load", function() {
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
             this.projectiles.forEach(projectile => projectile.draw(context));
-            //game.drawCircleAround(this)
+            game.drawHitbox(this)
         }
     };
 
@@ -237,11 +233,12 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game;
             this.isAlive = true
+            this.movementRate = 0;
             // screenX and screenY positions defined in game.addEnemy()
         };
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
-            //game.drawCircleAround(this)
+            game.drawHitbox(this)
         }
     };
 
@@ -256,15 +253,7 @@ window.addEventListener("load", function() {
             this.spritesheetYPosition = 285;
             this.movingSpeed = 6;
             this.movementTimer = 0;
-            this.movementInterval = 40;
-            this.movementRate = 0;
-            this.circleAround = {
-                color: "red",
-                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
-                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.spritesheetXPosition * 2) + (this.spritesheetYPosition * 2)),
-                visible: true
-            }
+            this.movementInterval = 300 // CHANGES BASED ON WAVE
         };
         update() {
             let randomNumber = RNG(1, 4);
@@ -300,17 +289,9 @@ window.addEventListener("load", function() {
             this.spritesheetXPosition = 409;
             this.spritesheetYPosition = 434;
             this.movementTimer = 0;
-            this.movementInterval = 10;
-            this.movementRate = 0;
+            this.movementInterval = 100; // CHANGES BASED ON WAVE
             this.movingSpeed = 8;
-            this.isHulk = true;
-            this.circleAround = {
-                color: "lime",
-                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
-                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.spritesheetXPosition * 1.5) + (this.spritesheetYPosition * 1.5)),
-                visible: true
-            }
+            this.isHulk = true
         };
         update() {
             let randomNumber = RNG(1, 20);  // Temporary
@@ -343,9 +324,10 @@ window.addEventListener("load", function() {
             this.movementInterval = 10;
             this.movementRate = 0;
             this.directionTimer = 1000;
-            this.movingSpeed = 3.5;
+            this.movingSpeed = 2;
             this.isAlive = true;
             this.wasRescued = false
+            // screenX and screenY positions defined in game.addHuman()
         };
         update() {
             if (this.movementTimer > this.movementInterval) {
@@ -371,7 +353,7 @@ window.addEventListener("load", function() {
         };
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
-            //game.drawCircleAround(this)
+            game.drawHitbox(this)
         }
     };
 
@@ -385,13 +367,6 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 50;
             this.spritesheetXPosition = 114;
             this.spritesheetYPosition = 369;
-            this.circleAround = {
-                color: "deepPink",
-                circleAroundX: this.screenXPosition + this.adjustedWidth / 2,
-                circleAroundY: this.screenYPosition + this.adjustedHeight / 2,
-                radius: Math.sqrt((this.spritesheetXPosition * 2) + (this.spritesheetYPosition * 2)),
-                visible: true
-            }
         }
     };
 
@@ -406,6 +381,7 @@ window.addEventListener("load", function() {
                         if (!enemy.isHulk) {
                             enemy.isAlive = false
                         } else {
+                            // FUNCTION
                             if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition && game.player.screenYPosition + game.player.adjustedHeight < enemy.screenYPosition) {
                                 enemy.screenXPosition += enemy.movingSpeed,
                                 enemy.screenYPosition += enemy.movingSpeed
@@ -447,14 +423,6 @@ window.addEventListener("load", function() {
             })
         };
         checkCollision(actorA, widthActorA, heightActorA, actorB, widthActorB, heightActorB) {
-            // --- Improve. Draws multiple times  ---
-            // ---     Put in drawHitboxes()      ---
-            /* ctx.beginPath(),
-            ctx.rect(actorA.screenXPosition, actorA.screenYPosition, actorA.adjustedWidth, actorA.adjustedHeight),
-            ctx.rect(actorB.screenXPosition, actorB.screenYPosition, actorB.adjustedWidth, actorB.adjustedHeight),
-            ctx.strokeStyle = "red",
-            ctx.stroke(); */
-            // --------------------------------------
             return (
                 actorA.screenXPosition <= actorB.screenXPosition + widthActorB &&
                 actorA.screenXPosition + widthActorA >= actorB.screenXPosition &&
@@ -477,6 +445,7 @@ window.addEventListener("load", function() {
             this.input = new InputHandler(this);
             this.collision = new CollisionHandler(this);
             this.projectile = new Projectile(this);
+            // GLOBAL ACTOR FUNCTION
             this.spriteCycle = function (actor, initialSpritesheetXPosition, increment, maxSpritesheetXPosition, spritesheetYPosition) {
                 actor.spritesheetYPosition = spritesheetYPosition;
                 if (actor.spritesheetXPosition < maxSpritesheetXPosition) {
@@ -498,55 +467,68 @@ window.addEventListener("load", function() {
                 }
             };
             this.addEnemy = function(numberEnemies, enemy) {
-                const minimumDistanceFromPlayer = 120;
-                const minumumDistanceBetweenEnemies = 40;
+                const minimumDistanceFromPlayer = 200; // Shrinks according to wave (120 minimum)
+                const minimumDistanceBetweenEnemies = 48;
+                const minimumDistanceFromHumans = 68;
                 for (let i = 0; i < numberEnemies; i++) {
                     const newEnemy = new enemy(this);
-                    let isSafe = false;
-                    while (!isSafe) {
-                        newEnemy.screenXPosition = RNG(1, canvas.width - 30);
-                        newEnemy.screenYPosition = RNG(1, canvas.height - 30);
+                    let safeToSpawn = false;
+                    // MULTIPLE FUNCTIONS
+                    while (!safeToSpawn) {
+                        newEnemy.screenXPosition = RNG(1, canvas.width - newEnemy.adjustedWidth);
+                        newEnemy.screenYPosition = RNG(1, canvas.height - newEnemy.adjustedHeight);
                         const playerDistance = calculateDistance(newEnemy.screenXPosition, newEnemy.screenYPosition, this.player.screenXPosition, this.player.screenYPosition);
                         let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                         let isSafeFromEnemies = true;
+                        let isSafeFromHumans = true;
                         for (let j = 0; j < this.enemies.length; j++) {
                             const otherEnemy = this.enemies[j];
                             const distanceBetweenEnemies = calculateDistance(newEnemy.screenXPosition, newEnemy.screenYPosition, otherEnemy.screenXPosition, otherEnemy.screenYPosition);
-                            if (distanceBetweenEnemies <= minumumDistanceBetweenEnemies) {
+                            if (distanceBetweenEnemies <= minimumDistanceBetweenEnemies) {
                                 isSafeFromEnemies = false;
                                 break
                             }
                         };
-                        if (isSafeFromPlayer && isSafeFromEnemies) {
+                        for (let k = 0; k < this.humans.length; k++) {
+                            const human = this.humans[k];
+                            const distanceFromHumans = calculateDistance(newEnemy.screenXPosition, newEnemy.screenYPosition, human.screenXPosition, human.screenYPosition);
+                            if (distanceFromHumans <= minimumDistanceFromHumans) {
+                                isSafeFromHumans = false;
+                                break
+                            }
+                        };
+                        if (isSafeFromPlayer && isSafeFromEnemies && isSafeFromHumans) {
                             this.enemies.push(newEnemy);
-                            isSafe = true
+                            safeToSpawn = true
                         }
                     }
                 }
             };
             this.addHuman = function(numberHumans, human) {
                 const minimumDistanceFromPlayer = 100;
-                const minimumDistanceFromEnemies = 60;
+                const minimumDistanceBetweenHumans = 120;
                 for (let i = 0; i < numberHumans; i++) {
                     const newHuman = new human(this);
-                    let isSafe = false;
-                    while (!isSafe) {
-                        newHuman.screenXPosition = RNG(1, canvas.width);
-                        newHuman.screenYPosition = RNG(1, canvas.height);
+                    let safeToSpawn = false;
+                    // MULTIPLE FUNCTIONS
+                    while (!safeToSpawn) {
+                        newHuman.screenXPosition = RNG(1, canvas.width - newHuman.adjustedWidth);
+                        newHuman.screenYPosition = RNG(1, canvas.height - newHuman.adjustedHeight);
                         const playerDistance = calculateDistance(newHuman.screenXPosition, newHuman.screenYPosition, this.player.screenXPosition, this.player.screenYPosition);
                         let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                         let isSafeFromEnemies = true;
-                        for (let j = 0; j < this.enemies.length; j++) {
-                            const enemy = this.enemies[j];
-                            const distanceFromEnemy = calculateDistance(newHuman.screenXPosition, newHuman.screenYPosition, enemy.screenXPosition, enemy.screenYPosition);
-                            if (distanceFromEnemy <= minimumDistanceFromEnemies) {
-                                isSafeFromEnemies = false;
+                        let isSafeFromHumans = true;
+                        for (let k = 0; k < this.humans.length; k++) {
+                            const otherHuman = this.humans[k];
+                            const distanceFromHumans = calculateDistance(newHuman.screenXPosition, newHuman.screenYPosition, otherHuman.screenXPosition, otherHuman.screenYPosition);
+                            if (distanceFromHumans <= minimumDistanceBetweenHumans) {
+                                isSafeFromHumans = false;
                                 break
                             }
                         };
-                        if (isSafeFromPlayer && isSafeFromEnemies) {
+                        if (isSafeFromPlayer && isSafeFromEnemies && isSafeFromHumans) {
                             this.humans.push(newHuman);
-                            isSafe = true
+                            safeToSpawn = true
                         }
                     }
                 }
@@ -566,14 +548,14 @@ window.addEventListener("load", function() {
                 this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
             }
         };
-        /* drawCircleAround(actor) {
-            if (actor.circleAround.visible) {
-                ctx.strokeStyle = actor.circleAround.color;
-                ctx.beginPath();
-                ctx.arc(actor.circleAround.circleAroundX, actor.circleAround.circleAroundY, actor.circleAround.radius, 0, 2 * Math.PI);
+        drawHitbox(actor) {
+            if (drawHitboxes) {
+                ctx.beginPath(),
+                ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.adjustedWidth, actor.adjustedHeight),
+                ctx.strokeStyle = "red",
                 ctx.stroke()
             }
-        }; */
+        };
         draw(context) {
             this.player.draw(context)
             this.enemies.forEach(enemy => {
@@ -596,8 +578,11 @@ window.addEventListener("load", function() {
         currentFrame ++;
         requestAnimationFrame(execute)
     };
-    game.addEnemy(120, Grunt);
-    game.addEnemy(30, Hulk);
-    game.addHuman(10, Mommy);
+    // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
+    game.addHuman(30, Mommy);
+    game.addEnemy(15, Hulk);
+    game.addEnemy(100, Grunt);
     execute(0)
-});
+    console.log("Humans: " + game.humans.length)
+    console.log("Enemies: " + game.enemies.length)
+})
