@@ -44,6 +44,14 @@ window.addEventListener("load", function() {
         const distanceY = actor2YPosition - actor1YPosition;
         return Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     };
+    function spriteCycle(actor, initialSpritesheetXPosition, increment, maxSpritesheetXPosition, spritesheetYPosition) {
+        actor.spritesheetYPosition = spritesheetYPosition;
+        if (actor.spritesheetXPosition < maxSpritesheetXPosition) {
+            actor.spritesheetXPosition += increment
+        } else {
+            actor.spritesheetXPosition = initialSpritesheetXPosition
+        }
+    };
 
     class InputHandler {
         constructor(game) {
@@ -162,7 +170,7 @@ window.addEventListener("load", function() {
     class Player {
         constructor(game) {
             this.game = game;
-            this.width = 14;
+            this.width = 15;
             this.adjustedWidth = 25;
             this.height = 24;
             this.adjustedHeight = 43;
@@ -176,6 +184,15 @@ window.addEventListener("load", function() {
             this.projectileTimer = 0;
             this.projectileDelay = 9;
             this.isAlive = true;
+            this.spriteCycle = function () {
+                if (currentFrame % this.movementAnimationDelay == 0) {
+                    if (this.spritesheetXPosition < 88) {
+                        this.spritesheetXPosition += 26
+                    } else {
+                        this.spritesheetXPosition = 10
+                    }
+                }
+            };
             this.move = function(movingHorizontally, movingVertically) {
                 if (movingHorizontally && movingVertically) {
                     this.spriteCycle(),
@@ -204,15 +221,6 @@ window.addEventListener("load", function() {
                     this.projectiles.push(new Projectile(this.game, screenXPosition, screenYPosition, left, right, up, down)), 
                     this.projectileTimer = this.projectileDelay
                 }
-            };
-            this.spriteCycle = function () {
-                if (currentFrame % this.movementAnimationDelay == 0) {
-                    if (this.spritesheetXPosition < 88) {
-                        this.spritesheetXPosition += 26
-                    } else {
-                        this.spritesheetXPosition = 10
-                    }
-                }
             }
         };
         update() {
@@ -233,7 +241,8 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game;
             this.isAlive = true
-            this.movementRate = 0;
+            this.movementRate = 10;
+            this.movementTimer = 0
             // screenX and screenY positions defined in game.addEnemy()
         };
         draw(context) {
@@ -252,7 +261,6 @@ window.addEventListener("load", function() {
             this.spritesheetXPosition = 8;
             this.spritesheetYPosition = 285;
             this.movingSpeed = 6;
-            this.movementTimer = 0;
             this.movementInterval = 300 // CHANGES BASED ON WAVE
         };
         update() {
@@ -269,7 +277,7 @@ window.addEventListener("load", function() {
                     } else {
                         this.screenYPosition += this.movingSpeed
                     };
-                    game.spriteCycle(this, 8, 30, 98, 285)
+                    spriteCycle(this, 8, 30, 98, 285)
                 }
                 this.movementTimer = 0
             } else {
@@ -288,25 +296,24 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 57;
             this.spritesheetXPosition = 409;
             this.spritesheetYPosition = 434;
-            this.movementTimer = 0;
             this.movementInterval = 100; // CHANGES BASED ON WAVE
             this.movingSpeed = 8;
             this.isHulk = true
         };
         update() {
-            let randomNumber = RNG(1, 20);  // Temporary
-            if (this.movementTimer > this.movementInterval) { 
-                if (randomNumber <= 5) {
-                    game.spriteCycle(this, 409, 26, 487, 398),
+            if (this.movementTimer > this.movementInterval) {
+                const newDirection = RNG(1, 4);
+                if (newDirection === 1) {
+                    spriteCycle(this, 409, 26, 487, 398),
                     this.screenXPosition -= this.movingSpeed
-                } else if (randomNumber <= 10) {
-                    game.spriteCycle(this, 409, 26, 487, 474),
+                } else if (newDirection === 2) {
+                    spriteCycle(this, 409, 26, 487, 474),
                     this.screenXPosition += this.movingSpeed
-                } else if (randomNumber <= 15) {
-                    game.spriteCycle(this, 409, 26, 487, 434),
+                } else if (newDirection === 3) {
+                    spriteCycle(this, 409, 26, 487, 434),
                     this.screenYPosition -= this.movingSpeed
-                } else if (randomNumber <= 20) {
-                    game.spriteCycle(this, 409, 26, 487, 434),
+                } else if (newDirection === 4) {
+                    spriteCycle(this, 409, 26, 487, 434),
                     this.screenYPosition += this.movingSpeed
                 };
                 this.movementTimer = 0
@@ -321,35 +328,12 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game;
             this.movementTimer = 0;
-            this.movementInterval = 10;
-            this.movementRate = 0;
-            this.directionTimer = 1000;
-            this.movingSpeed = 2;
+            this.movementInterval = 50;
+            this.movementRate = 5;
+            this.movingSpeed = 1;
             this.isAlive = true;
             this.wasRescued = false
             // screenX and screenY positions defined in game.addHuman()
-        };
-        update() {
-            if (this.movementTimer > this.movementInterval) {
-                if (this.screenXPosition > game.player.screenXPosition) {
-                    game.spriteCycle(this, 114, 26, 192, 443),
-                    this.screenXPosition -= this.movingSpeed
-                } else {
-                    game.spriteCycle(this, 114, 26, 192, 476),
-                    this.screenXPosition += this.movingSpeed
-                };
-                if (this.screenYPosition > game.player.screenYPosition) {
-                    game.spriteCycle(this, 114, 26, 192, 408),
-                    this.screenYPosition -= this.movingSpeed
-                } else {
-                    game.spriteCycle(this, 114, 26, 192, 369),
-                    this.screenYPosition += this.movingSpeed
-                };
-                this.movementTimer = 0
-            } else {
-                this.movementTimer += this.movementRate
-            };
-            game.playableArea(this, 990, 742)
         };
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
@@ -366,7 +350,29 @@ window.addEventListener("load", function() {
             this.height = 28;
             this.adjustedHeight = 50;
             this.spritesheetXPosition = 114;
-            this.spritesheetYPosition = 369;
+            this.spritesheetYPosition = 369
+        };
+        update() {
+            if (this.movementTimer > this.movementInterval) {
+                const newDirection = RNG(1, 4);
+                if (newDirection === 1) {
+                    spriteCycle(this, 114, 26, 192, 443),
+                    this.screenXPosition -= this.movingSpeed
+                } else if (newDirection === 2) {
+                    spriteCycle(this, 114, 26, 192, 476),
+                    this.screenXPosition += this.movingSpeed
+                } else if (newDirection === 3) {
+                    spriteCycle(this, 114, 26, 192, 408),
+                    this.screenYPosition -= this.movingSpeed
+                } else if (newDirection === 4) {
+                    spriteCycle(this, 114, 26, 192, 369),
+                    this.screenYPosition += this.movingSpeed
+                };
+                this.movementTimer = 0
+            } else {
+                this.movementTimer += this.movementRate;
+            };
+            game.playableArea(this, 990, 742)
         }
     };
 
@@ -374,36 +380,29 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game
         };
+        checkCollision(actorA, widthActorA, heightActorA, actorB, widthActorB, heightActorB) {
+            return (
+                actorA.screenXPosition <= actorB.screenXPosition + widthActorB &&
+                actorA.screenXPosition + widthActorA >= actorB.screenXPosition &&
+                actorA.screenYPosition <= actorB.screenYPosition + heightActorB &&
+                actorA.screenYPosition + heightActorA >= actorB.screenYPosition
+            )
+        };
         update() {
             game.enemies.forEach (enemy => {
                 game.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, projectile.width, projectile.height, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                        // If enemy hit is not a Hulk, it dies
                         if (!enemy.isHulk) {
                             enemy.isAlive = false
                         } else {
-                            // FUNCTION
-                            if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition && game.player.screenYPosition + game.player.adjustedHeight < enemy.screenYPosition) {
-                                enemy.screenXPosition += enemy.movingSpeed,
-                                enemy.screenYPosition += enemy.movingSpeed
-                            } else if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition && game.player.screenYPosition - game.player.adjustedHeight > enemy.screenYPosition) {
-                                enemy.screenXPosition += enemy.movingSpeed,
-                                enemy.screenYPosition -= enemy.movingSpeed
-                            } else if (game.player.screenXPosition - game.player.adjustedWidth > enemy.screenXPosition && game.player.screenYPosition + game.player.adjustedHeight < enemy.screenYPosition) {
-                                enemy.screenXPosition -= enemy.movingSpeed,
-                                enemy.screenYPosition += enemy.movingSpeed
-                            } else if (game.player.screenXPosition - game.player.adjustedWidth > enemy.screenXPosition && game.player.screenYPosition - game.player.adjustedHeight > enemy.screenYPosition) {
-                                enemy.screenXPosition -= enemy.movingSpeed,
-                                enemy.screenYPosition -= enemy.movingSpeed
-                            } else if (game.player.screenXPosition + game.player.adjustedWidth < enemy.screenXPosition) {
-                                enemy.screenXPosition += enemy.movingSpeed
-                            } else if (game.player.screenXPosition - game.player.adjustedWidth > enemy.screenXPosition) {
-                                enemy.screenXPosition -= enemy.movingSpeed
-                            } else if (game.player.screenYPosition < enemy.screenYPosition) {
-                                enemy.screenYPosition += enemy.movingSpeed
-                            } else if (game.player.screenYPosition > enemy.screenYPosition) {
-                                enemy.screenYPosition -= enemy.movingSpeed
-                            }
-                        }
+                            // Calculate knockback direction based on projectile direction
+                            const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
+                            const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
+                            // Apply knockback
+                            enemy.screenXPosition += knockbackXDirection * enemy.movingSpeed;
+                            enemy.screenYPosition += knockbackYDirection * enemy.movingSpeed
+                        };
                         projectile.shouldDelete = true
                     }
                 });
@@ -421,14 +420,6 @@ window.addEventListener("load", function() {
                     human.wasRescued = true
                 }
             })
-        };
-        checkCollision(actorA, widthActorA, heightActorA, actorB, widthActorB, heightActorB) {
-            return (
-                actorA.screenXPosition <= actorB.screenXPosition + widthActorB &&
-                actorA.screenXPosition + widthActorA >= actorB.screenXPosition &&
-                actorA.screenYPosition <= actorB.screenYPosition + heightActorB &&
-                actorA.screenYPosition + heightActorA >= actorB.screenYPosition
-            )
         }
     };
 
@@ -445,15 +436,6 @@ window.addEventListener("load", function() {
             this.input = new InputHandler(this);
             this.collision = new CollisionHandler(this);
             this.projectile = new Projectile(this);
-            // GLOBAL ACTOR FUNCTION
-            this.spriteCycle = function (actor, initialSpritesheetXPosition, increment, maxSpritesheetXPosition, spritesheetYPosition) {
-                actor.spritesheetYPosition = spritesheetYPosition;
-                if (actor.spritesheetXPosition < maxSpritesheetXPosition) {
-                    actor.spritesheetXPosition += increment
-                } else {
-                    actor.spritesheetXPosition = initialSpritesheetXPosition
-                }
-            };
             this.playableArea = function (actor, maxScreenXPosition, maxScreenYPosition) {
                 if (actor.screenYPosition <= 1) {
                     actor.screenYPosition = 1
@@ -534,6 +516,14 @@ window.addEventListener("load", function() {
                 }
             }
         };
+        drawHitbox(actor) {
+            if (drawHitboxes) {
+                ctx.beginPath(),
+                ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.adjustedWidth, actor.adjustedHeight),
+                ctx.strokeStyle = "red",
+                ctx.stroke()
+            }
+        };
         update() {
             if (this.player.isAlive) {
                 this.collision.update();
@@ -546,14 +536,6 @@ window.addEventListener("load", function() {
                 });
                 this.enemies = this.enemies.filter(enemy => enemy.isAlive);
                 this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
-            }
-        };
-        drawHitbox(actor) {
-            if (drawHitboxes) {
-                ctx.beginPath(),
-                ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.adjustedWidth, actor.adjustedHeight),
-                ctx.strokeStyle = "red",
-                ctx.stroke()
             }
         };
         draw(context) {
@@ -581,7 +563,7 @@ window.addEventListener("load", function() {
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
     game.addHuman(30, Mommy);
     game.addEnemy(15, Hulk);
-    game.addEnemy(100, Grunt);
+    //game.addEnemy(100, Grunt);
     execute(0)
     console.log("Humans: " + game.humans.length)
     console.log("Enemies: " + game.enemies.length)
