@@ -10,9 +10,12 @@
 UPDATE MOMMY, HULK BEHAVIOR
 RIP YOUR OWN SPRITESHEET (NO MORE ADJUSTING DIMENSIONS)
 SPLIT SPRITES INTO MULTIPLE IMAGES
+UPDATE SPRITE CYCLE
+ADJUST ENEMIES HITBOXES
 SPLIT CODE INTO MULTIPLE SCRIPTS
 REFACTOR CODE. MAKE BETTER USE OF CLASSES
 COMMENT CODE
+UPDATE PLAYER SHOOTING (VISUAL)
 IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
 REWORK HTML SIZES, RESPONSIVENESS
 IMPLEMENT ALL ACTORS & OBSTACLES
@@ -30,11 +33,12 @@ window.addEventListener("load", function() {
     ctx.imageSmoothingEnabled = false;
     canvas.width = 1016;
     canvas.height = 786;
-    var currentFrame = 0;
+    let currentFrame = 0;
     const sprites = new Image();
     sprites.src = "img/sprites.png"; // Ripped by Sean Riddle
     const playerControls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
-    var drawHitboxes = false;
+    let drawHitboxes = false;
+    let everyoneInvincible = false;
 
     function RNG(min, max) {
         return Math.floor(Math.random() * (max - min)) + 1
@@ -52,6 +56,53 @@ window.addEventListener("load", function() {
             actor.spritesheetXPosition = initialSpritesheetXPosition
         }
     };
+    function getRandomDirection() {
+        const directions = ["left", "right", "up", "down"]//, "upleft", "upright", "downleft", "downright"];
+        return directions[Math.floor(Math.random() * directions.length)]
+    };
+    function getRandomWalkDistance() {
+        const distances = [300, 450, 525, 650];
+        return distances[Math.floor(Math.random() * distances.length)]
+    }
+    function walkRandomly(actor) {
+        if (actor.remainingWalkingDistance > 0) {
+            switch(actor.currentDirection) {
+                case("left"):
+                    actor.screenXPosition -= actor.movingSpeed
+                    break
+                case("right"):
+                    actor.screenXPosition += actor.movingSpeed
+                    break;
+                case("up"):
+                    actor.screenYPosition -= actor.movingSpeed
+                    break
+                case("down"):
+                    actor.screenYPosition += actor.movingSpeed
+                    break
+                // HULKS MOVE 4 WAYS, HUMANS MOVE 8 WAYS
+                /* case("upleft"):
+                    actor.screenYPosition -= actor.movingSpeed,
+                    actor.screenXPosition -= actor.movingSpeed
+                    break
+                case("upright"):
+                    actor.screenYPosition -= actor.movingSpeed,
+                    actor.screenXPosition += actor.movingSpeed
+                    break
+                case("downleft"):
+                    actor.screenYPosition += actor.movingSpeed,
+                    actor.screenXPosition -= actor.movingSpeed
+                    break
+                case("downright"):
+                    actor.screenYPosition += actor.movingSpeed,
+                    actor.screenXPosition += actor.movingSpeed
+                    break */
+            }
+            actor.remainingWalkingDistance -= actor.movementRate
+        } else {
+            actor.currentDirection = getRandomDirection();
+            actor.remainingWalkingDistance = actor.walkingDistance;
+        };
+    }
 
     class InputHandler {
         constructor(game) {
@@ -241,8 +292,10 @@ window.addEventListener("load", function() {
         constructor(game) {
             this.game = game;
             this.isAlive = true
-            this.movementRate = 10;
-            this.movementTimer = 0
+            this.movementRate = 5;  //  DO  NOT  CHANGE !
+            this.currentDirection = getRandomDirection();
+            this.walkingDistance = getRandomWalkDistance();
+            this.remainingWalkingDistance = this.walkingDistance
             // screenX and screenY positions defined in game.addEnemy()
         };
         draw(context) {
@@ -260,11 +313,12 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 48;
             this.spritesheetXPosition = 8;
             this.spritesheetYPosition = 285;
-            this.movingSpeed = 6;
-            this.movementInterval = 300 // CHANGES BASED ON WAVE
+            this.movingSpeed = 7; // INCREASES ACCORDING TO WAVE LENGTH ?
+            this.movementTimer = 0;
+            this.movementInterval = 100 // DECREASES ACCORDING TO WAVE LENGTH
         };
         update() {
-            let randomNumber = RNG(1, 4);
+            let randomNumber = RNG(1, 3);
             if (this.movementTimer > this.movementInterval) {
                 if (randomNumber === 1) {
                     if (this.screenXPosition > game.player.screenXPosition) {
@@ -296,30 +350,17 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 57;
             this.spritesheetXPosition = 409;
             this.spritesheetYPosition = 434;
-            this.movementInterval = 100; // CHANGES BASED ON WAVE
-            this.movingSpeed = 8;
+            this.movingSpeed = 1; // INCREASES ACCORDING TO WAVE
             this.isHulk = true
         };
         update() {
-            if (this.movementTimer > this.movementInterval) {
-                const newDirection = RNG(1, 4);
-                if (newDirection === 1) {
-                    spriteCycle(this, 409, 26, 487, 398),
-                    this.screenXPosition -= this.movingSpeed
-                } else if (newDirection === 2) {
-                    spriteCycle(this, 409, 26, 487, 474),
-                    this.screenXPosition += this.movingSpeed
-                } else if (newDirection === 3) {
-                    spriteCycle(this, 409, 26, 487, 434),
-                    this.screenYPosition -= this.movingSpeed
-                } else if (newDirection === 4) {
-                    spriteCycle(this, 409, 26, 487, 434),
-                    this.screenYPosition += this.movingSpeed
-                };
-                this.movementTimer = 0
-            } else {
-                this.movementTimer += this.movementRate
-            };
+            walkRandomly(this);
+            /* 
+            UP: spriteCycle(this, 409, 26, 487, 434)
+            DOWN: spriteCycle(this, 409, 26, 487, 434)
+            LEFT: spriteCycle(this, 409, 26, 487, 398)
+            RIGHT: spriteCycle(this, 409, 26, 487, 474)
+            */
             game.playableArea(this, 968, 728)
         }
     };
@@ -327,12 +368,13 @@ window.addEventListener("load", function() {
     class Human {
         constructor(game) {
             this.game = game;
-            this.movementTimer = 0;
-            this.movementInterval = 50;
-            this.movementRate = 5;
-            this.movingSpeed = 1;
+            this.movementRate = 4;
+            this.movingSpeed = 0.8;
             this.isAlive = true;
-            this.wasRescued = false
+            this.wasRescued = false;
+            this.currentDirection = getRandomDirection();
+            this.walkingDistance = getRandomWalkDistance();
+            this.remainingWalkingDistance = this.walkingDistance
             // screenX and screenY positions defined in game.addHuman()
         };
         draw(context) {
@@ -353,26 +395,14 @@ window.addEventListener("load", function() {
             this.spritesheetYPosition = 369
         };
         update() {
-            if (this.movementTimer > this.movementInterval) {
-                const newDirection = RNG(1, 4);
-                if (newDirection === 1) {
-                    spriteCycle(this, 114, 26, 192, 443),
-                    this.screenXPosition -= this.movingSpeed
-                } else if (newDirection === 2) {
-                    spriteCycle(this, 114, 26, 192, 476),
-                    this.screenXPosition += this.movingSpeed
-                } else if (newDirection === 3) {
-                    spriteCycle(this, 114, 26, 192, 408),
-                    this.screenYPosition -= this.movingSpeed
-                } else if (newDirection === 4) {
-                    spriteCycle(this, 114, 26, 192, 369),
-                    this.screenYPosition += this.movingSpeed
-                };
-                this.movementTimer = 0
-            } else {
-                this.movementTimer += this.movementRate;
-            };
-            game.playableArea(this, 990, 742)
+            walkRandomly(this);
+            /* 
+            UP: spriteCycle(actor, 114, 26, 192, 408)
+            DOWN: spriteCycle(actor, 114, 26, 192, 369)
+            LEFT: spriteCycle(actor, 114, 26, 192, 443)
+            RIGHT: spriteCycle(actor, 114, 26, 192, 476)
+            */
+            game.playableArea(this, 990, 738)
         }
     };
 
@@ -392,7 +422,6 @@ window.addEventListener("load", function() {
             game.enemies.forEach (enemy => {
                 game.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, projectile.width, projectile.height, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        // If enemy hit is not a Hulk, it dies
                         if (!enemy.isHulk) {
                             enemy.isAlive = false
                         } else {
@@ -400,20 +429,22 @@ window.addEventListener("load", function() {
                             const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
                             const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
                             // Apply knockback
-                            enemy.screenXPosition += knockbackXDirection * enemy.movingSpeed;
-                            enemy.screenYPosition += knockbackYDirection * enemy.movingSpeed
+                            enemy.screenXPosition += knockbackXDirection * 10;
+                            enemy.screenYPosition += knockbackYDirection * 10
                         };
                         projectile.shouldDelete = true
                     }
                 });
-                if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                    game.player.isAlive = false
-                }
-                game.humans.forEach (human => {
-                    if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        human.isAlive = false
+                if (!everyoneInvincible) {
+                    if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                        game.player.isAlive = false
                     }
-                })
+                    game.humans.forEach (human => {
+                        if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
+                            human.isAlive = false
+                        }
+                    })
+                }
             });
             game.humans.forEach (human => {
                 if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, game.player, game.player.adjustedWidth, game.player.adjustedHeight)) {
@@ -449,7 +480,7 @@ window.addEventListener("load", function() {
                 }
             };
             this.addEnemy = function(numberEnemies, enemy) {
-                const minimumDistanceFromPlayer = 200; // Shrinks according to wave (120 minimum)
+                const minimumDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (120 MINUMUM)
                 const minimumDistanceBetweenEnemies = 48;
                 const minimumDistanceFromHumans = 68;
                 for (let i = 0; i < numberEnemies; i++) {
@@ -561,9 +592,9 @@ window.addEventListener("load", function() {
         requestAnimationFrame(execute)
     };
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
-    game.addHuman(30, Mommy);
-    game.addEnemy(15, Hulk);
-    //game.addEnemy(100, Grunt);
+    game.addHuman(15, Mommy);
+    game.addEnemy(7, Hulk);
+    game.addEnemy(10, Grunt);
     execute(0)
     console.log("Humans: " + game.humans.length)
     console.log("Enemies: " + game.enemies.length)
