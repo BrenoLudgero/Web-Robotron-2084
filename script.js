@@ -6,16 +6,17 @@
 // Reprogrammed in JavaScript by Breno Ludgero (https://www.linkedin.com/in/breno-ludgero/)
 // Based on the blue label ROM revision with default game settings
 
-/* TO DO LIST (IN DESCENDING ORDER OF PRIORITY):
-UPDATE MOMMY, HULK BEHAVIOR
-RIP YOUR OWN SPRITESHEET (NO MORE ADJUSTING DIMENSIONS)
+/* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
+SPLIT CODE INTO MULTIPLE SCRIPTS
+REFACTOR CODE. MAKE BETTER USE OF CLASSES
+UPDATE MOMMY, HULK SPRITE CYCLE
+REFINE MOMMY, HULK BEHAVIOR
+RIP YOUR OWN SPRITESHEET (NO MORE DIMENSION ADJUSTMENT)
 SPLIT SPRITES INTO MULTIPLE IMAGES
 UPDATE SPRITE CYCLE
 ADJUST ENEMIES HITBOXES
-SPLIT CODE INTO MULTIPLE SCRIPTS
-REFACTOR CODE. MAKE BETTER USE OF CLASSES
 COMMENT CODE
-UPDATE PLAYER SHOOTING (VISUAL)
+UPDATE PLAYER SHOOTING (HITBOX AND VISUAL)
 IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
 REWORK HTML SIZES, RESPONSIVENESS
 IMPLEMENT ALL ACTORS & OBSTACLES
@@ -38,7 +39,7 @@ window.addEventListener("load", function() {
     sprites.src = "img/sprites.png"; // Ripped by Sean Riddle
     const playerControls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
     let drawHitboxes = false;
-    let everyoneInvincible = false;
+    let everyoneInvincible = true;
 
     function RNG(min, max) {
         return Math.floor(Math.random() * (max - min)) + 1
@@ -56,14 +57,40 @@ window.addEventListener("load", function() {
             actor.spritesheetXPosition = initialSpritesheetXPosition
         }
     };
-    function getRandomDirection() {
-        const directions = ["left", "right", "up", "down"]//, "upleft", "upright", "downleft", "downright"];
-        return directions[Math.floor(Math.random() * directions.length)]
+    function setRandomDirection(actor) {
+        const fourDirections = ["left", "right", "up", "down"];
+        const eightDirections = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
+        if (actor.movementType == 1) {
+            return fourDirections[Math.floor(Math.random() * fourDirections.length)]
+        } else if (actor.movementType == 2) {
+            return eightDirections[Math.floor(Math.random() * eightDirections.length)]
+        }
+        
     };
-    function getRandomWalkDistance() {
-        const distances = [300, 450, 525, 650];
+    function setRandomWalkDistance() {
+        const distances = [500, 650, 800];
         return distances[Math.floor(Math.random() * distances.length)]
-    }
+    };
+    function setMovementBoundaries(actor, maxScreenXPosition, maxScreenYPosition) {
+        if (actor.screenYPosition <= 1) {
+            actor.screenYPosition = 1
+        } else if (actor.screenYPosition >= maxScreenYPosition) {
+            actor.screenYPosition = maxScreenYPosition
+        };
+        if (actor.screenXPosition <= 1) {
+            actor.screenXPosition = 1
+        } else if (actor.screenXPosition >= maxScreenXPosition) {
+            actor.screenXPosition = maxScreenXPosition
+        }
+    };
+    function isActorAgainstWall(actor) {
+        if (actor.screenXPosition >= actor.playableArea["x"] ||
+            actor.screenXPosition <= 2 ||
+            actor.screenYPosition >= actor.playableArea["y"] ||
+            actor.screenYPosition <= 2) {
+                return true
+        }
+    };
     function walkRandomly(actor) {
         if (actor.remainingWalkingDistance > 0) {
             switch(actor.currentDirection) {
@@ -79,8 +106,7 @@ window.addEventListener("load", function() {
                 case("down"):
                     actor.screenYPosition += actor.movingSpeed
                     break
-                // HULKS MOVE 4 WAYS, HUMANS MOVE 8 WAYS
-                /* case("upleft"):
+                case("upleft"):
                     actor.screenYPosition -= actor.movingSpeed,
                     actor.screenXPosition -= actor.movingSpeed
                     break
@@ -95,14 +121,44 @@ window.addEventListener("load", function() {
                 case("downright"):
                     actor.screenYPosition += actor.movingSpeed,
                     actor.screenXPosition += actor.movingSpeed
-                    break */
+                    break
             }
             actor.remainingWalkingDistance -= actor.movementRate
         } else {
-            actor.currentDirection = getRandomDirection();
-            actor.remainingWalkingDistance = actor.walkingDistance;
+            actor.currentDirection = setRandomDirection(actor);
+            actor.remainingWalkingDistance = setRandomWalkDistance();
         };
-    }
+    };
+    function turnAwayFromWall(actor) {
+        if (isActorAgainstWall(actor)) {
+            switch(actor.currentDirection) {
+                case("left"):
+                    actor.currentDirection = "right"
+                    break
+                case("right"):
+                    actor.currentDirection = "left"
+                    break;
+                case("up"):
+                    actor.currentDirection = "down"
+                    break
+                case("down"):
+                    actor.currentDirection = "up"
+                    break
+                case("upleft"):
+                    actor.currentDirection = "downright"
+                    break
+                case("upright"):
+                    actor.currentDirection = "downleft"
+                    break
+                case("downleft"):
+                    actor.currentDirection = "upright"
+                    break
+                case("downright"):
+                    actor.currentDirection = "upleft"
+                    break
+            }
+        }
+    };
 
     class InputHandler {
         constructor(game) {
@@ -235,6 +291,10 @@ window.addEventListener("load", function() {
             this.projectileTimer = 0;
             this.projectileDelay = 9;
             this.isAlive = true;
+            this.playableArea = {
+                "x": 990,
+                "y": 742
+            };
             this.spriteCycle = function () {
                 if (currentFrame % this.movementAnimationDelay == 0) {
                     if (this.spritesheetXPosition < 88) {
@@ -279,7 +339,10 @@ window.addEventListener("load", function() {
             this.projectiles.forEach(projectile => projectile.update());
             this.projectiles = this.projectiles.filter(projectile => !projectile.shouldDelete);
             this.projectileTimer --;
-            game.playableArea(this, 990, 742)
+            setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
+            if (isActorAgainstWall(this)) {
+                console.log("A")
+            }
         };
         draw(context) {
             context.drawImage(sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
@@ -293,8 +356,7 @@ window.addEventListener("load", function() {
             this.game = game;
             this.isAlive = true
             this.movementRate = 5;  //  DO  NOT  CHANGE !
-            this.currentDirection = getRandomDirection();
-            this.walkingDistance = getRandomWalkDistance();
+            this.walkingDistance = setRandomWalkDistance();
             this.remainingWalkingDistance = this.walkingDistance
             // screenX and screenY positions defined in game.addEnemy()
         };
@@ -313,6 +375,10 @@ window.addEventListener("load", function() {
             this.adjustedHeight = 48;
             this.spritesheetXPosition = 8;
             this.spritesheetYPosition = 285;
+            this.playableArea = {
+                "x": 982,
+                "y": 738
+            }
             this.movingSpeed = 7; // INCREASES ACCORDING TO WAVE LENGTH ?
             this.movementTimer = 0;
             this.movementInterval = 100 // DECREASES ACCORDING TO WAVE LENGTH
@@ -337,7 +403,7 @@ window.addEventListener("load", function() {
             } else {
                 this.movementTimer += this.movementRate
             }
-            game.playableArea(this, 982, 738)
+            setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
         }
     };
 
@@ -347,13 +413,20 @@ window.addEventListener("load", function() {
             this.width = 26;
             this.adjustedWidth = 47;
             this.height = 32;
+            this.movementType = 1;
+            this.currentDirection = setRandomDirection(this);
             this.adjustedHeight = 57;
             this.spritesheetXPosition = 409;
             this.spritesheetYPosition = 434;
+            this.playableArea = {
+                "x": 968,
+                "y": 728
+            }
             this.movingSpeed = 1; // INCREASES ACCORDING TO WAVE
             this.isHulk = true
         };
         update() {
+            turnAwayFromWall(this);
             walkRandomly(this);
             /* 
             UP: spriteCycle(this, 409, 26, 487, 434)
@@ -361,7 +434,7 @@ window.addEventListener("load", function() {
             LEFT: spriteCycle(this, 409, 26, 487, 398)
             RIGHT: spriteCycle(this, 409, 26, 487, 474)
             */
-            game.playableArea(this, 968, 728)
+            setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
         }
     };
 
@@ -372,8 +445,13 @@ window.addEventListener("load", function() {
             this.movingSpeed = 0.8;
             this.isAlive = true;
             this.wasRescued = false;
-            this.currentDirection = getRandomDirection();
-            this.walkingDistance = getRandomWalkDistance();
+            this.movementType = 2;
+            this.playableArea = {
+                "x": 990,
+                "y": 738
+            }
+            this.currentDirection = setRandomDirection(this);
+            this.walkingDistance = setRandomWalkDistance();
             this.remainingWalkingDistance = this.walkingDistance
             // screenX and screenY positions defined in game.addHuman()
         };
@@ -395,6 +473,7 @@ window.addEventListener("load", function() {
             this.spritesheetYPosition = 369
         };
         update() {
+            turnAwayFromWall(this);
             walkRandomly(this);
             /* 
             UP: spriteCycle(actor, 114, 26, 192, 408)
@@ -402,7 +481,7 @@ window.addEventListener("load", function() {
             LEFT: spriteCycle(actor, 114, 26, 192, 443)
             RIGHT: spriteCycle(actor, 114, 26, 192, 476)
             */
-            game.playableArea(this, 990, 738)
+            setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
         }
     };
 
@@ -435,7 +514,7 @@ window.addEventListener("load", function() {
                         projectile.shouldDelete = true
                     }
                 });
-                if (!everyoneInvincible) {
+                if (!everyoneInvincible) {  // ! ! ! ! !
                     if (this.checkCollision(game.player, game.player.adjustedWidth, game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
                         game.player.isAlive = false
                     }
@@ -455,10 +534,8 @@ window.addEventListener("load", function() {
     };
 
     class Game {
-        constructor(width, height) {
+        constructor() {
             this.keysPressed = [];
-            this.width = width;
-            this.height = height;
             this.player = new Player(this);
             this.enemy = new Enemy(this);
             this.enemies = [];
@@ -467,18 +544,6 @@ window.addEventListener("load", function() {
             this.input = new InputHandler(this);
             this.collision = new CollisionHandler(this);
             this.projectile = new Projectile(this);
-            this.playableArea = function (actor, maxScreenXPosition, maxScreenYPosition) {
-                if (actor.screenYPosition <= 1) {
-                    actor.screenYPosition = 1
-                } else if (actor.screenYPosition >= maxScreenYPosition) {
-                    actor.screenYPosition = maxScreenYPosition
-                };
-                if (actor.screenXPosition <= 1) {
-                    actor.screenXPosition = 1
-                } else if (actor.screenXPosition >= maxScreenXPosition) {
-                    actor.screenXPosition = maxScreenXPosition
-                }
-            };
             this.addEnemy = function(numberEnemies, enemy) {
                 const minimumDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (120 MINUMUM)
                 const minimumDistanceBetweenEnemies = 48;
@@ -580,7 +645,7 @@ window.addEventListener("load", function() {
         }
     };
 
-    const game = new Game(canvas.width, canvas.height);
+    const game = new Game();
     let lastTimeStamp = 0;
     function execute(timeStamp) {
         const deltaTime = timeStamp - lastTimeStamp;
