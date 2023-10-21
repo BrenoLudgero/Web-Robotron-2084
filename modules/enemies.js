@@ -1,6 +1,6 @@
 export {Grunt, Hulk}
 import {Enemy} from "./actors.js";
-import {RNG, spriteCycle} from "./global_functions.js"
+import {RNG, spriteCycle, setMovementBoundaries, turnAwayFromWall, walkRandomly} from "./global_functions.js"
 
 class Hulk extends Enemy {
     constructor(game) {
@@ -11,19 +11,35 @@ class Hulk extends Enemy {
         this.adjustedHeight = 57;
         this.spritesheetXPosition = 409;
         this.spritesheetYPosition = 434;
+        this.movementAnimationDelay = 7;
         this.playableArea = {
-            "x": 968,
+            "x": 963,
             "y": 728
         }
-        this.movementSpeed = 0.8; // INCREASES ACCORDING TO WAVE
+        this.movementSpeed = 5; // INCREASES ACCORDING TO WAVE
         this.isHulk = true
+    };
+    update() {
+        setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
+        if (this.game.currentFrame % this.movementAnimationDelay == 0) {
+            turnAwayFromWall(this);
+            walkRandomly(this);
+            switch(this.currentDirection) {
+                case("left"):
+                    spriteCycle(this, 409, 26, 487, 398)
+                    break
+                case("right"):
+                    spriteCycle(this, 409, 26, 487, 474)
+                    break;
+                case("up"):
+                    spriteCycle(this, 409, 26, 487, 434)
+                    break
+                case("down"):
+                    spriteCycle(this, 409, 26, 487, 434)
+                    break
+            }
+        }
     }
-    /* 
-    UP: spriteCycle(this, 409, 26, 487, 434)
-    DOWN: spriteCycle(this, 409, 26, 487, 434)
-    LEFT: spriteCycle(this, 409, 26, 487, 398)
-    RIGHT: spriteCycle(this, 409, 26, 487, 474)
-    */
 };
 
 class Grunt extends Enemy {
@@ -36,7 +52,7 @@ class Grunt extends Enemy {
         this.spritesheetXPosition = 8;
         this.spritesheetYPosition = 285;
         this.playableArea = {
-            "x": 982,
+            "x": 977,
             "y": 738
         }
         this.movementSpeed = 7; // INCREASES ACCORDING TO WAVE LENGTH ?
