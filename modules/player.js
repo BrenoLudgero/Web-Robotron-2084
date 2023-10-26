@@ -1,6 +1,6 @@
-export {Player}
-import {Actor} from "./actors.js"
-import {Projectile} from "./projectile.js"
+export {Player};
+import {Actor} from "./models/actor.js";
+import {Projectile} from "./models/projectile.js";
 import {setMovementBoundaries} from "./global_functions.js";
 
 class Player extends Actor {

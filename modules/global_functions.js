@@ -1,4 +1,4 @@
-export {RNG, spriteCycle, setMovementBoundaries, setRandomDirection, walkRandomly, isActorAgainstWall, turnAwayFromWall}
+export {RNG, spriteCycle, setMovementBoundaries, setRandomDirection, walkRandomly, isActorAgainstWall, turnAwayFromWall};
 
 function RNG(min, max) {
     return Math.floor(Math.random() * (max - min)) + 1

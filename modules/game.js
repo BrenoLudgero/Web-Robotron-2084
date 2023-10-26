@@ -1,12 +1,14 @@
-export {Game}
-import {RNG} from "./global_functions.js"
+export {Game};
+import {RNG} from "./global_functions.js";
 import {Player} from "./player.js";
-import {Projectile} from "./projectile.js";
-import {Enemy, Human} from "./actors.js";
-import {Mommy} from "./humans.js";
-import {Grunt, Hulk} from "./enemies.js"
-import {InputHandler} from "./input_handler.js"
-import {CollisionHandler} from "./collision_handler.js"
+import {Projectile} from "./models/projectile.js";
+import {Enemy} from "./models/enemy.js";
+import {Human} from "./models/human.js";
+import {Mommy} from "./humans/mommy.js";
+import {Grunt} from "./enemies/grunt.js";
+import {Hulk} from "./enemies/hulk.js";
+import {InputHandler} from "./handlers/input_handler.js";
+import {CollisionHandler} from "./handlers/collision_handler.js";
 
 class Game {
     constructor(canvas, ctx) {

@@ -1,6 +1,6 @@
-export {Mommy}
-import {Human} from "./actors.js";
-import {spriteCycle, setMovementBoundaries, turnAwayFromWall, walkRandomly} from "./global_functions.js"
+export {Mommy};
+import {Human} from "../models/human.js";
+import {spriteCycle, setMovementBoundaries, turnAwayFromWall, walkRandomly} from "../global_functions.js";
 
 class Mommy extends Human {
     constructor(game) {

@@ -1,4 +1,4 @@
-export {InputHandler}
+export {InputHandler};
 
 class InputHandler {
     constructor(game) {

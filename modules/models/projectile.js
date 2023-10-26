@@ -1,4 +1,4 @@
-export {Projectile}
+export {Projectile};
 
 class Projectile {
     constructor(game, screenXPosition, screenYPosition, left, right, up, down) {

@@ -1,4 +1,4 @@
-export {CollisionHandler}
+export {CollisionHandler};
 
 class CollisionHandler {
     constructor(game) {

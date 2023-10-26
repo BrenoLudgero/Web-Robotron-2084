@@ -3,6 +3,7 @@
 // Manufactured and Published by Williams Electronics, Inc.
 // Copyrights: Williams Electronics, Inc. / Williams Electronics Games, Inc. / Midway Amusement Games, LLC / Lawrence DeMar & Eugene Jarvis
 // Sprites ripped by Sean Riddle's program (https://seanriddle.com/ripper.html)
+// Robotron font by André Nossek (http://www.thealmightyguru.com/GameFonts/Series-Robotron.html)
 // Reprogrammed in JavaScript by Breno Ludgero (https://www.linkedin.com/in/breno-ludgero/)
 // Based on the blue label ROM revision with default game settings
 
