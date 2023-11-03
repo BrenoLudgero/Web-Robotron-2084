@@ -1,6 +1,6 @@
 export {Hulk};
 import {Enemy} from "../models/enemy.js";
-import {spriteCycle, setMovementBoundaries, turnAwayFromWall, walkRandomly} from "../global_functions.js";
+import {spriteCycle, setMovementBoundaries, moveAwayFromWall, walkRandomly} from "../global_functions.js";
 
 class Hulk extends Enemy {
     constructor(game) {
@@ -22,7 +22,7 @@ class Hulk extends Enemy {
     update() {
         setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
         if (this.game.currentFrame % this.movementAnimationDelay == 0) {
-            turnAwayFromWall(this);
+            moveAwayFromWall(this);
             walkRandomly(this);
             switch(this.currentDirection) {
                 case("left"):

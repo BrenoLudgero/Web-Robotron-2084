@@ -1,4 +1,4 @@
-export {RNG, spriteCycle, setMovementBoundaries, setRandomDirection, walkRandomly, isActorAgainstWall, turnAwayFromWall};
+export {RNG, spriteCycle, setMovementBoundaries, setRandomDirection, walkRandomly, isActorAgainstWall, moveAwayFromWall};
 
 function RNG(min, max) {
     return Math.floor(Math.random() * (max - min)) + 1
@@ -78,37 +78,12 @@ function isActorAgainstWall(actor) {
     if (actor.screenXPosition >= actor.playableArea["x"] ||
         actor.screenXPosition <= 5 ||
         actor.screenYPosition >= actor.playableArea["y"] ||
-        actor.screenYPosition <= 2) {
+        actor.screenYPosition <= 5) {
             return true
     }
 };
-function turnAwayFromWall(actor) {
+function moveAwayFromWall(actor) {
     if (isActorAgainstWall(actor)) {
-        switch(actor.currentDirection) {
-            case("left"):
-                actor.currentDirection = "right"
-                break
-            case("right"):
-                actor.currentDirection = "left"
-                break;
-            case("up"):
-                actor.currentDirection = "down"
-                break
-            case("down"):
-                actor.currentDirection = "up"
-                break
-            case("upleft"):
-                actor.currentDirection = "downright"
-                break
-            case("upright"):
-                actor.currentDirection = "downleft"
-                break
-            case("downleft"):
-                actor.currentDirection = "upright"
-                break
-            case("downright"):
-                actor.currentDirection = "upleft"
-                break
-        }
+        actor.currentDirection = setRandomDirection(actor)
     }
 }

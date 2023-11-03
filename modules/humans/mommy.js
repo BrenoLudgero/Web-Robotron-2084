@@ -1,6 +1,6 @@
 export {Mommy};
 import {Human} from "../models/human.js";
-import {spriteCycle, setMovementBoundaries, turnAwayFromWall, walkRandomly} from "../global_functions.js";
+import {spriteCycle, setMovementBoundaries, moveAwayFromWall, walkRandomly} from "../global_functions.js";
 
 class Mommy extends Human {
     constructor(game) {
@@ -21,7 +21,7 @@ class Mommy extends Human {
     update () {
         setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
         if (this.game.currentFrame % this.movementAnimationDelay == 0) {
-            turnAwayFromWall(this);
+            moveAwayFromWall(this);
             walkRandomly(this);
             switch(this.currentDirection) {
                 case("left"):

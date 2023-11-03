@@ -13,6 +13,7 @@ class Actor {
         this.screenYPosition;
         this.movementSpeed;
         this.movementAnimationDelay;
+        this.movementType; // 0: Stationary, 1: 4-way movement, 2: 8-way movement
         this.projectiles = [];
         this.projectileTimer;
         this.projectileDelay;

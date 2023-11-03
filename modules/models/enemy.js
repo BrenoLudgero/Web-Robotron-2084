@@ -1,6 +1,6 @@
 export {Enemy};
 import {Actor} from "../models/actor.js";
-import {setMovementBoundaries, turnAwayFromWall, walkRandomly, setRandomDirection} from "../global_functions.js";
+import {setMovementBoundaries, moveAwayFromWall, walkRandomly, setRandomDirection} from "../global_functions.js";
 
 class Enemy extends Actor {
     constructor(game) {
@@ -16,7 +16,7 @@ class Enemy extends Actor {
         // screenX and screenY positions defined in game.addEnemy()
     };
     update() {
-        turnAwayFromWall(this);
+        moveAwayFromWall(this);
         walkRandomly(this);
         setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
     }
