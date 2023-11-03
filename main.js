@@ -40,17 +40,21 @@ window.addEventListener("load", function() {
     canvas.height = 786;
     const game = new Game(canvas, ctx);
     let lastTimeStamp = 0;
+    const targetFrameRate = 60;
+    const frameInterval = 1000 / targetFrameRate;
     function execute(timeStamp) {
         const deltaTime = timeStamp - lastTimeStamp;
-        lastTimeStamp = timeStamp;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        game.update(deltaTime);
-        game.draw(ctx);
-        game.currentFrame ++;
+        if (deltaTime >= frameInterval) {
+            lastTimeStamp = timeStamp;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            game.update(deltaTime);
+            game.draw(ctx);
+            game.currentFrame++
+        }
         requestAnimationFrame(execute)
     };
+    requestAnimationFrame(execute);
     game.spawnEnemies()
-    execute(0)
     console.log("Humans: " + game.humans.length)
     console.log("Enemies: " + game.enemies.length)
 })

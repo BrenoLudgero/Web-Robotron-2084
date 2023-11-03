@@ -11,12 +11,12 @@ class Hulk extends Enemy {
         this.adjustedHeight = 57;
         this.spritesheetXPosition = 409;
         this.spritesheetYPosition = 434;
-        this.movementAnimationDelay = 7;
+        this.movementAnimationDelay = 5;
         this.playableArea = {
             "x": 963,
             "y": 728
         }
-        this.movementSpeed = 5; // INCREASES ACCORDING TO WAVE
+        this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.isHulk = true
     };
     update() {

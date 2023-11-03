@@ -15,11 +15,11 @@ class Player extends Actor {
         this.spritesheetYPosition = 371;
         this.screenXPosition = game.canvas.width /2 - this.width;
         this.screenYPosition = game.canvas.height /2 - this.height;
-        this.movementSpeed = 3.5;
-        this.movementAnimationDelay = 4;
+        this.movementSpeed = 6;
+        this.movementAnimationDelay = 1;
         this.projectiles = [];
         this.projectileTimer = 0;
-        this.projectileDelay = 9;
+        this.projectileDelay = 4;
         this.movementBoundaries = {
             "x": 990,
             "y": 742
@@ -58,7 +58,7 @@ class Player extends Actor {
         };
         this.shoot = function(screenXPosition, screenYPosition, left, right, up, down) {
             if (this.projectileTimer <= 0) {
-                this.projectiles.push(new Projectile(game, screenXPosition, screenYPosition, left, right, up, down)), 
+                this.projectiles.push(new Projectile(game, screenXPosition, screenYPosition, 20, 0.7, left, right, up, down)),
                 this.projectileTimer = this.projectileDelay
             }
         }

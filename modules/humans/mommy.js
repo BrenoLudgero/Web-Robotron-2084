@@ -12,7 +12,7 @@ class Mommy extends Human {
         this.adjustedHeight = 50;
         this.spritesheetXPosition = 114;
         this.spritesheetYPosition = 369;
-        this.movementAnimationDelay = 7;
+        this.movementAnimationDelay = 6;
         this.playableArea = {
             "x": 990,
             "y": 738

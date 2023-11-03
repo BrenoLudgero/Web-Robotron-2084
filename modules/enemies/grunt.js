@@ -17,7 +17,7 @@ class Grunt extends Enemy {
         }
         this.movementSpeed = 7; // INCREASES ACCORDING TO WAVE LENGTH ?
         this.movementTimer = 0;
-        this.movementInterval = 100 // DECREASES ACCORDING TO WAVE LENGTH
+        this.movementInterval = 30 // DECREASES ACCORDING TO WAVE LENGTH
     };
     update() {
         let randomNumber = RNG(1, 3);

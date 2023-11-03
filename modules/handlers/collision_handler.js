@@ -18,14 +18,16 @@ class CollisionHandler {
             this.game.player.projectiles.forEach(projectile => {
                 if (this.checkCollision(projectile, projectile.width, projectile.height, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
                     if (!enemy.isHulk) {
+                        if (!this.everyoneInvincible) {  //  !  !  !  !  !
                         enemy.isAlive = false
+                        }
                     } else {
                         // Calculate knockback direction based on projectile direction
                         const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
                         const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
                         // Apply knockback
-                        enemy.screenXPosition += knockbackXDirection * 10;
-                        enemy.screenYPosition += knockbackYDirection * 10
+                        enemy.screenXPosition += knockbackXDirection * 6;
+                        enemy.screenYPosition += knockbackYDirection * 6
                     };
                     projectile.shouldDelete = true;
                 }

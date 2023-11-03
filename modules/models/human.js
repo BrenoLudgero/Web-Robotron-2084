@@ -8,7 +8,7 @@ class Human extends Actor {
         this.wasRescued = false;
         this.movementType = 2;
         this.movementRate = 4;
-        this.movementSpeed = 3;
+        this.movementSpeed = 4.5;
         this.walkDistance;
         this.remainingWalkingDistance = this.walkDistance;
         this.currentDirection = setRandomDirection(this)

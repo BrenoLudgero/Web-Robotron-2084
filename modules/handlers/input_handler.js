@@ -20,8 +20,8 @@ class InputHandler {
                 game.collision.everyoneInvincible = !game.collision.everyoneInvincible,
                 console.log("INVINCIBILITY: " + game.collision.everyoneInvincible)
             }
-        })
-        /*; window.addEventListener("mousedown", e => {
+        })/*;
+        window.addEventListener("mousedown", e => {
             console.log("CLICK")
         });
         window.addEventListener("mouseup", e => {
@@ -41,23 +41,23 @@ class InputHandler {
             this.game.player.move(true, false)
         };
         if (this.game.keysPressed.includes("ArrowUp") && !this.game.keysPressed.includes("ArrowLeft") && !this.game.keysPressed.includes("ArrowRight")) {
-            this.game.player.shoot(this.game.player.screenXPosition + this.game.player.adjustedWidth / 2, this.game.player.screenYPosition - 4, false, false, true, false)
+            this.game.player.shoot(this.game.player.screenXPosition + (this.game.player.adjustedWidth / 2) - 1, this.game.player.screenYPosition + 8, false, false, true, false)
         } else if (this.game.keysPressed.includes("ArrowUp") && this.game.keysPressed.includes("ArrowLeft")) {
-            this.game.player.shoot(this.game.player.screenXPosition - 4, this.game.player.screenYPosition - 4, true, false, true, false)
+            this.game.player.shoot(this.game.player.screenXPosition + 8, this.game.player.screenYPosition + 8, true, false, true, false)
         } else if (this.game.keysPressed.includes("ArrowUp") && this.game.keysPressed.includes("ArrowRight")) {
-            this.game.player.shoot(this.game.player.screenXPosition + this.game.player.adjustedWidth + 4, this.game.player.screenYPosition - 4, false, true, true, false)
+            this.game.player.shoot(this.game.player.screenXPosition + this.game.player.adjustedWidth - 12, this.game.player.screenYPosition + 10, false, true, true, false)
         };
         if (this.game.keysPressed.includes("ArrowDown") && !this.game.keysPressed.includes("ArrowLeft") && !this.game.keysPressed.includes("ArrowRight")) {
-            this.game.player.shoot(this.game.player.screenXPosition + this.game.player.adjustedWidth / 2, this.game.player.screenYPosition + this.game.player.adjustedHeight, false, false, false, true)
+            this.game.player.shoot(this.game.player.screenXPosition + (this.game.player.adjustedWidth / 2) - 1, this.game.player.screenYPosition + this.game.player.adjustedHeight - 12, false, false, false, true)
         } else if (this.game.keysPressed.includes("ArrowDown") && this.game.keysPressed.includes("ArrowRight")) {
-            this.game.player.shoot(this.game.player.screenXPosition  + this.game.player.adjustedWidth + 3, this.game.player.screenYPosition + this.game.player.adjustedHeight, false, true, false, true)
+            this.game.player.shoot(this.game.player.screenXPosition  + this.game.player.adjustedWidth - 12, this.game.player.screenYPosition + this.game.player.adjustedHeight - 10, false, true, false, true)
         } else if (this.game.keysPressed.includes("ArrowDown") && this.game.keysPressed.includes("ArrowLeft")) {
-            this.game.player.shoot(this.game.player.screenXPosition - 4, this.game.player.screenYPosition + this.game.player.adjustedHeight, true, false, false, true)
+            this.game.player.shoot(this.game.player.screenXPosition + 8, this.game.player.screenYPosition + this.game.player.adjustedHeight - 10, true, false, false, true)
         };
         if (this.game.keysPressed.includes("ArrowLeft") && !this.game.keysPressed.includes("ArrowDown")  && !this.game.keysPressed.includes("ArrowUp")) {
-            this.game.player.shoot(this.game.player.screenXPosition - 4, this.game.player.screenYPosition + this.game.player.adjustedHeight / 2, true, false, false, false)
+            this.game.player.shoot(this.game.player.screenXPosition + 8, this.game.player.screenYPosition + this.game.player.adjustedHeight / 2, true, false, false, false)
         } else if (this.game.keysPressed.includes("ArrowRight") && !this.game.keysPressed.includes("ArrowDown")  && !this.game.keysPressed.includes("ArrowUp")) {
-            this.game.player.shoot(this.game.player.screenXPosition + this.game.player.adjustedWidth + 3, this.game.player.screenYPosition + this.game.player.adjustedHeight / 2, false, true, false, false)
+            this.game.player.shoot(this.game.player.screenXPosition + this.game.player.adjustedWidth - 12, this.game.player.screenYPosition + this.game.player.adjustedHeight / 2, false, true, false, false)
         }
     }
 }
