@@ -8,10 +8,10 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
-REFACTOR CODE
+RIP YOUR OWN SPRITESHEET
+SET INDIVIDUAL WALK DISTANCES ?
 REFINE MOMMY, HULK BEHAVIOR
 ADD MINIMUM DISTANCE HULK TO HULK, GRUNT TO GRUNT ETC
-RIP YOUR OWN SPRITESHEET (NO MORE DIMENSION ADJUSTMENT)
 SPLIT SPRITES INTO MULTIPLE IMAGES
 UPDATE SPRITE CYCLE
 ADJUST ENEMIES HITBOXES
@@ -55,6 +55,5 @@ window.addEventListener("load", function() {
     };
     requestAnimationFrame(execute);
     game.spawnEnemies()
-    console.log("Humans: " + game.humans.length)
-    console.log("Enemies: " + game.enemies.length)
+    game.logActorCount()
 })

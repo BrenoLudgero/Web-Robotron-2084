@@ -2,53 +2,63 @@ export {CollisionHandler};
 
 class CollisionHandler {
     constructor(game) {
-        this.game = game;
-        this.everyoneInvincible = false;  //  !  !  !  !  !
-        this.checkCollision = function (actorA, widthActorA, heightActorA, actorB, widthActorB, heightActorB) {
-            return (
-                actorA.screenXPosition <= actorB.screenXPosition + widthActorB &&
-                actorA.screenXPosition + widthActorA >= actorB.screenXPosition &&
-                actorA.screenYPosition <= actorB.screenYPosition + heightActorB &&
-                actorA.screenYPosition + heightActorA >= actorB.screenYPosition
-            )
-        }
+        this.game = game
     };
     update() {
-        this.game.enemies.forEach (enemy => {
-            this.game.player.projectiles.forEach(projectile => {
-                if (this.checkCollision(projectile, projectile.width, projectile.height, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                    if (!enemy.isHulk) {
-                        if (!this.everyoneInvincible) {  //  !  !  !  !  !
-                        enemy.isAlive = false
-                        }
-                    } else {
-                        // Calculate knockback direction based on projectile direction
-                        const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
-                        const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
-                        // Apply knockback
-                        enemy.screenXPosition += knockbackXDirection * 6;
-                        enemy.screenYPosition += knockbackYDirection * 6
-                    };
-                    projectile.shouldDelete = true;
-                }
+        const {enemies, player, humans, actorInvincibility} = this.game;
+        if (!actorInvincibility) {  //  !  !  !  !  !
+            this.checkAllCollisions(enemies, player, humans)
+        }
+    };
+    checkAllCollisions(enemies, player, humans) {
+        enemies.forEach((enemy) => {
+            this.checkPlayerEnemyCollision(player, enemy);
+            player.projectiles.forEach((projectile) => {
+                this.checkProjectileEnemyCollision(projectile, enemy);
             });
-            if (!this.everyoneInvincible) {  //  !  !  !  !  !
-                if (this.checkCollision(this.game.player, this.game.player.adjustedWidth, this.game.player.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                    this.game.player.isAlive = false
-                }
-                this.game.humans.forEach (human => {
-                    if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, enemy, enemy.adjustedWidth, enemy.adjustedHeight)) {
-                        human.isAlive = false
-                    }
-                })
-            }
-        });
-        this.game.humans.forEach (human => {
-            if (!this.everyoneInvincible) {  //  !  !  !  !  !
-                if (this.checkCollision(human, human.adjustedWidth, human.adjustedHeight, this.game.player, this.game.player.adjustedWidth, this.game.player.adjustedHeight)) {
-                    human.wasRescued = true
-                }
-            }
+            humans.forEach((human) => {
+                this.checkHumanEnemyCollision(human, enemy);
+                this.checkPlayerHumanCollision(player, human)
+            })
         })
+    };
+    checkSingleCollision(actorA, actorB) {  // BROKEN. RIP YOUR OWN SPRITESHEET
+        return (
+            actorA.screenXPosition <= actorB.screenXPosition + actorB.width &&
+            actorA.screenXPosition + actorA.width >= actorB.screenXPosition &&
+            actorA.screenYPosition <= actorB.screenYPosition + actorB.height &&
+            actorA.screenYPosition + actorA.height >= actorB.screenYPosition
+        )
+    };
+    checkPlayerEnemyCollision(player, enemy) {
+        if (this.checkSingleCollision(player, enemy)) {
+            player.isAlive = false
+        }
+    };
+    checkPlayerHumanCollision(player, human) {
+        if (this.checkSingleCollision(human, player)) {
+            human.wasRescued = true
+        }
+    };
+    checkHumanEnemyCollision(human, enemy) {
+        if (this.checkSingleCollision(human, enemy)) {
+            human.isAlive = false
+        }
+    };
+    checkProjectileEnemyCollision(projectile, enemy) {
+        if (this.checkSingleCollision(projectile, enemy)) {
+            if (!enemy.isHulk) {
+                enemy.isAlive = false
+            } else {
+                this.knockbackHulk(projectile, enemy)
+            }
+            projectile.shouldDelete = true
+        }
+    };
+    knockbackHulk(projectile, enemy) {
+        const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
+        const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
+        enemy.screenXPosition += knockbackXDirection * enemy.knockbackForce;
+        enemy.screenYPosition += knockbackYDirection * enemy.knockbackForce
     }
 }

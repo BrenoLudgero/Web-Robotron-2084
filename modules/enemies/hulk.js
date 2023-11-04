@@ -1,6 +1,6 @@
 export {Hulk};
 import {Enemy} from "../models/enemy.js";
-import {spriteCycle, setMovementBoundaries, moveAwayFromWall, walkRandomly} from "../global_functions.js";
+import {cycleSprite} from "../global_functions.js";
 
 class Hulk extends Enemy {
     constructor(game) {
@@ -11,33 +11,27 @@ class Hulk extends Enemy {
         this.adjustedHeight = 57;
         this.spritesheetXPosition = 409;
         this.spritesheetYPosition = 434;
-        this.movementAnimationDelay = 5;
-        this.playableArea = {
-            "x": 963,
-            "y": 728
-        }
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
-        this.isHulk = true
+        this.movementAnimationDelay = 5;
+        this.isHulk = true;
+        this.knockbackForce = 6
     };
     update() {
-        setMovementBoundaries(this, this.playableArea["x"], this.playableArea["y"])
         if (this.game.currentFrame % this.movementAnimationDelay == 0) {
-            moveAwayFromWall(this);
-            walkRandomly(this);
-            switch(this.currentDirection) {
-                case("left"):
-                    spriteCycle(this, 409, 26, 487, 398)
-                    break
-                case("right"):
-                    spriteCycle(this, 409, 26, 487, 474)
-                    break;
-                case("up"):
-                    spriteCycle(this, 409, 26, 487, 434)
-                    break
-                case("down"):
-                    spriteCycle(this, 409, 26, 487, 434)
-                    break
-            }
+            this.moveRandomly();
+            this.animate()
+        }
+    };
+    animate() {
+        switch(this.currentDirection) {
+            case("left"):
+                cycleSprite(this, 409, 26, 487, 398); break
+            case("right"):
+                cycleSprite(this, 409, 26, 487, 474); break
+            case("up"):
+                cycleSprite(this, 409, 26, 487, 434); break
+            case("down"):
+                cycleSprite(this, 409, 26, 487, 434); break
         }
     }
 }

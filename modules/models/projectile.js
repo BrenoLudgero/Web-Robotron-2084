@@ -18,61 +18,60 @@ class Projectile {
         this.shouldDelete = false
     };
     update() {
-        if (this.screenXPosition > this.game.canvas.width + 10 || this.screenXPosition < -10 || this.screenYPosition > this.game.canvas.height + 10 || this.screenYPosition < -10) {
-            this.shouldDelete = true
+        if (this.isOutOfBounds()) {
+            this.shouldDelete = true  // Deleted in Player.update()
         };
-        if (this.shotUp && !this.shotLeft && !this.shotRight) {
-            this.shootUp();
-        } else if (this.shotUp && this.shotLeft) {
-            this.shootUpLeft();
-        } else if (this.shotUp && this.shotRight) {
-            this.shootUpRight();
-        } else if (this.shotLeft && !this.shotUp && !this.shotDown) {
-            this.shootLeft();
-        } else if (this.shotRight && !this.shotUp && !this.shotDown) {
-            this.shootRight();
-        } else if (this.shotDown && this.shotLeft) {
-            this.shootDownLeft();
-        } else if (this.shotDown && !this.shotLeft && !this.shotRight) {
-            this.shootDown();
-        } else if (this.shotDown && this.shotRight) {
-            this.shootDownRight();
-        }
+        this.setProjectileDirection()
     };
     draw(context) {
-        if (this.shotUp && !this.shotLeft && !this.shotRight) {
-            for (let i = 0; i < this.size + 5; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition --, this.width, this.height)
-            }
-        } else if (this.shotUp && this.shotLeft) {
-            for (let i = 0; i < this.size; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition --, this.screenYPosition --, this.width, this.height)
-            }
-        } else if (this.shotUp && this.shotRight) {
-            for (let i = 0; i < this.size; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition ++, this.screenYPosition --, this.width, this.height)
-            }
-        } else if (this.shotLeft && !this.shotUp && !this.shotDown) {
-            for (let i = 0; i < this.size + 5; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition --, this.screenYPosition, this.width, this.height)
-            }
-        } else if (this.shotRight && !this.shotUp && !this.shotDown) {
-            for (let i = 0; i < this.size + 5; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition ++, this.screenYPosition, this.width, this.height)
-            }
-        } else if (this.shotDown && this.shotLeft) {
-            for (let i = 0; i < this.size; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition --, this.screenYPosition ++, this.width, this.height)
-            }
-        } else if (this.shotDown && !this.shotLeft && !this.shotRight) {
-            for (let i = 0; i < this.size + 5; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition ++, this.width, this.height)
-            }
-        } else if (this.shotDown && this.shotRight) {
-            for (let i = 0; i < this.size; i ++) {
-                context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition ++, this.screenYPosition ++, this.width, this.height)
+        switch (true) {
+            case this.shotUp && !this.shotLeft && !this.shotRight:
+                this.drawProjectile(context, 0, -1); break
+            case this.shotUp && this.shotLeft:
+                this.drawProjectile(context, -1, -1); break
+            case this.shotUp && this.shotRight:
+                this.drawProjectile(context, 1, -1); break
+            case this.shotLeft && !this.shotUp && !this.shotDown:
+                this.drawProjectile(context, -1, 0); break
+            case this.shotRight && !this.shotUp && !this.shotDown:
+                this.drawProjectile(context, 1, 0); break
+            case this.shotDown && this.shotLeft:
+                this.drawProjectile(context, -1, 1); break
+            case this.shotDown && !this.shotLeft && !this.shotRight:
+                this.drawProjectile(context, 0, 1); break
+            case this.shotDown && this.shotRight:
+                this.drawProjectile(context, 1, 1); break
+        }
+    };
+    setProjectileDirection() {
+        const directions = ["Up", "Down", "Left", "Right"];
+        for (const dir of directions) {
+            if (this[`shot${dir}`]) {
+                this[`shoot${dir}`]()
             }
         }
+    };
+    drawProjectile(context, xDirection, yDirection) {
+        const {game, spritesheetXPosition, spritesheetYPosition, width, height} = this;
+        for (let i = 0; i < this.size; i++) {
+            context.drawImage(
+                game.sprites,
+                spritesheetXPosition,
+                spritesheetYPosition,
+                width,
+                height,
+                (this.screenXPosition += xDirection * this.speed),
+                (this.screenYPosition += yDirection * this.speed),
+                width,
+                height
+            )
+        }
+    };
+    isOutOfBounds() {
+        return this.screenXPosition > this.game.canvas.width + 10 || 
+        this.screenXPosition < -10 || 
+        this.screenYPosition > this.game.canvas.height + 10 || 
+        this.screenYPosition < -10
     };
     shootUp() {
         for (let i = 0; i < this.size; i++) {
