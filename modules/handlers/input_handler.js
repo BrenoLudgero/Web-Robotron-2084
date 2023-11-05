@@ -58,23 +58,23 @@ class InputHandler {
         const playerWidth = player.width * 1.8;
         const playerHeight = player.height * 1.8;
         if (keysPressed.includes("ArrowUp") && !keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition + ((playerWidth / 2) - 1), player.screenYPosition + 5, false, false, true, false)
+            player.shoot(player.screenXPosition + ((playerWidth / 2) - 1), player.screenYPosition + 13, false, false, true, false)
         } else if (keysPressed.includes("ArrowUp") && keysPressed.includes("ArrowLeft")) {
-            player.shoot((player.screenXPosition + 23) + playerWidth, (player.screenYPosition + 5) + playerHeight, true, false, true, false)
+            player.shoot(player.screenXPosition + 14, player.screenYPosition + 14, true, false, true, false)
         } else if (keysPressed.includes("ArrowUp") && keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition - playerWidth, (player.screenYPosition + 5) + playerHeight, false, true, true, false)
+            player.shoot(player.screenXPosition + 10, player.screenYPosition + 14, false, true, true, false)
         };
         if (keysPressed.includes("ArrowDown") && !keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition + ((playerWidth / 2) - 1), player.screenYPosition - 5, false, false, false, true)
+            player.shoot(player.screenXPosition + ((playerWidth / 2) - 1), player.screenYPosition + 28, false, false, false, true)
         } else if (keysPressed.includes("ArrowDown") && keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition - playerWidth, player.screenYPosition - 5, false, true, false, true)
+            player.shoot(player.screenXPosition + 10, player.screenYPosition + playerWidth, false, true, false, true)
         } else if (keysPressed.includes("ArrowDown") && keysPressed.includes("ArrowLeft")) {
-            player.shoot((player.screenXPosition + 21) + playerWidth, player.screenYPosition - 5, true, false, false, true)
+            player.shoot(player.screenXPosition + 14, player.screenYPosition + playerWidth, true, false, false, true)
         };
         if (keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowDown")  && !keysPressed.includes("ArrowUp")) {
-            player.shoot((player.screenXPosition + 5) + playerHeight, player.screenYPosition + playerHeight / 2, true, false, false, false)
+            player.shoot(player.screenXPosition + 14, player.screenYPosition + (playerHeight / 2), true, false, false, false)
         } else if (keysPressed.includes("ArrowRight") && !keysPressed.includes("ArrowDown")  && !keysPressed.includes("ArrowUp")) {
-            player.shoot(player.screenXPosition - playerWidth, player.screenYPosition + playerHeight / 2, false, true, false, false)
+            player.shoot(player.screenXPosition + 11, player.screenYPosition + (playerHeight / 2), false, true, false, false)
         }
     };
     toggleHitboxes() {

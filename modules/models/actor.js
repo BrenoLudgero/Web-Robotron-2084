@@ -33,13 +33,13 @@ class Actor {
             "x": this.game.canvas.width - (this.width * 1.8),
             "y": this.game.canvas.height - (this.height * 1.8)
         }
-        if (this.screenYPosition <= 1) {
-            this.screenYPosition = 1
+        if (this.screenYPosition <= 2) {
+            this.screenYPosition = 2
         } else if (this.screenYPosition >= movementBoundaries["y"]) {
             this.screenYPosition = movementBoundaries["y"]
         };
-        if (this.screenXPosition <= 1) {
-            this.screenXPosition = 1
+        if (this.screenXPosition <= 2) {
+            this.screenXPosition = 2
         } else if (this.screenXPosition >= movementBoundaries["x"]) {
             this.screenXPosition = movementBoundaries["x"]
         };
@@ -48,9 +48,9 @@ class Actor {
     isActorAgainstWall() {
         const movementBoundaries = this.setMovementBoundaries();
         if (this.screenXPosition >= movementBoundaries["x"] ||
-            this.screenXPosition <= 5 ||
+            this.screenXPosition <= 2 ||
             this.screenYPosition >= movementBoundaries["y"] ||
-            this.screenYPosition <= 5) {
+            this.screenYPosition <= 2) {
                 return true
         }
     };
