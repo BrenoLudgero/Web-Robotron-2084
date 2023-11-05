@@ -4,11 +4,11 @@ class Actor {
     constructor(game) {
         this.game = game;
         this.width;
-        this.adjustedWidth;
         this.height;
-        this.adjustedHeight;
-        this.spritesheetXPosition;
-        this.spritesheetYPosition;
+        this.sprites = new Image();
+        this.sprites.src;
+        this.spritesheetXPosition = 0;
+        this.spritesheetYPosition = 0;
         this.screenXPosition;
         this.screenYPosition;
         this.movementSpeed;
@@ -24,23 +24,23 @@ class Actor {
     };
     draw(context) {
         this.setMovementBoundaries();
-        context.drawImage(this.game.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.adjustedWidth, this.adjustedHeight);
+        context.drawImage(this.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.width * 1.8, this.height * 1.8);
         this.projectiles.forEach(projectile => projectile.draw(context));
         this.game.drawHitboxes(this)
     };
     setMovementBoundaries() {
         const movementBoundaries = {
-            "x": this.game.canvas.width - this.adjustedWidth,
-            "y": this.game.canvas.height - this.adjustedHeight
+            "x": this.game.canvas.width - (this.width * 1.8),
+            "y": this.game.canvas.height - (this.height * 1.8)
         }
         if (this.screenYPosition <= 1) {
             this.screenYPosition = 1
-        } else if (this.screenYPosition > movementBoundaries["y"]) {
+        } else if (this.screenYPosition >= movementBoundaries["y"]) {
             this.screenYPosition = movementBoundaries["y"]
         };
         if (this.screenXPosition <= 1) {
             this.screenXPosition = 1
-        } else if (this.screenXPosition > movementBoundaries["x"]) {
+        } else if (this.screenXPosition >= movementBoundaries["x"]) {
             this.screenXPosition = movementBoundaries["x"]
         };
         return movementBoundaries

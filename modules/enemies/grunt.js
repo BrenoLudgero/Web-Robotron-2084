@@ -6,11 +6,8 @@ class Grunt extends Enemy {
     constructor(game) {
         super(game);
         this.width = 18;
-        this.adjustedWidth = 32;
         this.height = 27;
-        this.adjustedHeight = 48;
-        this.spritesheetXPosition = 8;
-        this.spritesheetYPosition = 285;
+        this.sprites.src = "../../../images/enemies/grunt.png";
         this.movementSpeed = 7; // INCREASES ACCORDING TO WAVE LENGTH ?
         this.movementTimer = 0;
         this.movementInterval = 30 // DECREASES ACCORDING TO WAVE LENGTH
@@ -39,7 +36,7 @@ class Grunt extends Enemy {
         let randomNumber = RNG(1, 3);
         if (randomNumber === 1) {
             this.chasePlayer();
-            cycleSprite(this, 8, 30, 98, 285)
+            cycleSprite(this, 20, 0)
         }
     }
 }

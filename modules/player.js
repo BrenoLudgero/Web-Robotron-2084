@@ -7,13 +7,10 @@ class Player extends Actor {
         super(game);
         this.game = game;
         this.width = 15;
-        this.adjustedWidth = 25;
         this.height = 24;
-        this.adjustedHeight = 43;
-        this.spritesheetXPosition = 10;
-        this.spritesheetYPosition = 371;
-        this.screenXPosition = (game.canvas.width / 2) - this.width;
-        this.screenYPosition = (game.canvas.height / 2) - this.height;
+        this.sprites.src = "../images/player.png";
+        this.screenXPosition = (game.canvas.width / 2) - (this.width * 1.8);
+        this.screenYPosition = (game.canvas.height / 2) - (this.height * 1.8);
         this.movementSpeed = 6;
         this.movementAnimationDelay = 1;
         this.projectileTimer = 0;
@@ -28,24 +25,20 @@ class Player extends Actor {
     move(movingHorizontally, movingVertically) {
         const {keysPressed} = this.game;
         if (movingHorizontally && movingVertically) {
-            this.spritesheetYPosition = 478;
             this.screenXPosition += this.movementSpeed;
-            this.cycleSprite()
+            this.cyclePlayerSprite(75)
         } else if (movingHorizontally && !movingVertically) {
-            this.spritesheetYPosition = 445;
             this.screenXPosition -= this.movementSpeed;
-            this.cycleSprite()
+            this.cyclePlayerSprite(51)
         } else if (!movingHorizontally && movingVertically) {
             this.screenYPosition -= this.movementSpeed;
             if (!keysPressed.includes("d") && !keysPressed.includes("a") && !keysPressed.includes("s")) {
-                this.spritesheetYPosition = 409;
-                this.cycleSprite()
+                this.cyclePlayerSprite(26)
             }
         } else if (!movingHorizontally && !movingVertically) {
             this.screenYPosition += this.movementSpeed;
             if (!keysPressed.includes("d") && !keysPressed.includes("a") && !keysPressed.includes("w")) {
-                this.spritesheetYPosition = 371;
-                this.cycleSprite()
+                this.cyclePlayerSprite(0)
             }
         }
     };
@@ -55,12 +48,13 @@ class Player extends Actor {
             this.projectileTimer = this.projectileDelay
         }
     };
-    cycleSprite() {
+    cyclePlayerSprite(spritesheetYPosition) {
+        this.spritesheetYPosition = spritesheetYPosition;
         if (this.game.currentFrame % this.movementAnimationDelay == 0) {
-            if (this.spritesheetXPosition < 88) {
-                this.spritesheetXPosition += 26
+            if (this.spritesheetXPosition < (this.sprites.width - this.width)) {
+                this.spritesheetXPosition += 16
             } else {
-                this.spritesheetXPosition = 10
+                this.spritesheetXPosition = 0
             }
         }
     };

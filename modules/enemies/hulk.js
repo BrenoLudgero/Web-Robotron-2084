@@ -6,11 +6,8 @@ class Hulk extends Enemy {
     constructor(game) {
         super(game);
         this.width = 26;
-        this.adjustedWidth = 47;
         this.height = 32;
-        this.adjustedHeight = 57;
-        this.spritesheetXPosition = 409;
-        this.spritesheetYPosition = 434;
+        this.sprites.src = "../../../images/enemies/hulk.png";
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 5;
         this.isHulk = true;
@@ -25,13 +22,12 @@ class Hulk extends Enemy {
     animate() {
         switch(this.currentDirection) {
             case("left"):
-                cycleSprite(this, 409, 26, 487, 398); break
+                cycleSprite(this,28, 33); break
             case("right"):
-                cycleSprite(this, 409, 26, 487, 474); break
+                cycleSprite(this,28, 65); break
             case("up"):
-                cycleSprite(this, 409, 26, 487, 434); break
             case("down"):
-                cycleSprite(this, 409, 26, 487, 434); break
+                cycleSprite(this,28, 0); break
         }
     }
 }

@@ -15,8 +15,6 @@ class Game {
         this.canvas = canvas;
         this.ctx = ctx;
         this.currentFrame = 0;
-        this.sprites = new Image();
-        this.sprites.src = "img/sprites.png";
         this.canvas.width = 1016;
         this.canvas.height = 786;
         this.player = new Player(this);
@@ -29,7 +27,7 @@ class Game {
         this.collision = new CollisionHandler(this);
         this.projectile = new Projectile(this);
         this.shouldDrawHitboxes = false;
-        this.actorInvincibility = true  //  !  !  !  !  !
+        this.actorInvincibility = false  //  !  !  !  !  !
     };
     update() {
         if (this.player.isAlive) {
@@ -53,7 +51,7 @@ class Game {
     drawHitboxes(actor) {
         if (this.shouldDrawHitboxes) {
             this.ctx.beginPath();
-            this.ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.adjustedWidth, actor.adjustedHeight);
+            this.ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.width * 1.8, actor.height * 1.8);
             this.ctx.strokeStyle = "red";
             this.ctx.stroke()
         }
@@ -76,8 +74,8 @@ class Game {
             const newEnemy = new enemyType(this);
             let safeToSpawn = false;
             while (!safeToSpawn) {
-                newEnemy.screenXPosition = RNG(1, this.canvas.width - newEnemy.adjustedWidth);
-                newEnemy.screenYPosition = RNG(1, this.canvas.height - newEnemy.adjustedHeight);
+                newEnemy.screenXPosition = RNG(1, this.canvas.width - (newEnemy.width * 1.8));
+                newEnemy.screenYPosition = RNG(1, this.canvas.height - (newEnemy.height * 1.8));
                 const playerDistance = this.calculateDistance(newEnemy, this.player);
                 let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                 let isSafeFromEnemies = this.isSafeFromOtherActors(newEnemy, this.enemies, minimumDistanceBetweenEnemies);
@@ -96,8 +94,8 @@ class Game {
             const newHuman = new humanType(this);
             let safeToSpawn = false;
             while (!safeToSpawn) {
-                newHuman.screenXPosition = RNG(1, this.canvas.width - newHuman.adjustedWidth);
-                newHuman.screenYPosition = RNG(1, this.canvas.height - newHuman.adjustedHeight);
+                newHuman.screenXPosition = RNG(1, this.canvas.width - (newHuman.width * 1.8));
+                newHuman.screenYPosition = RNG(1, this.canvas.height - (newHuman.height * 1.8));
                 const playerDistance = this.calculateDistance(newHuman, this.player);
                 let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                 let isSafeFromHumans = this.isSafeFromOtherActors(newHuman, this.humans, minimumDistanceBetweenHumans);

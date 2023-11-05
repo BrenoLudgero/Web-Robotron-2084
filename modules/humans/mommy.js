@@ -7,11 +7,8 @@ class Mommy extends Human {
         super(game);
         this.game = game;
         this.width = 14;
-        this.adjustedWidth = 25;
         this.height = 28;
-        this.adjustedHeight = 50;
-        this.spritesheetXPosition = 114;
-        this.spritesheetYPosition = 369;
+        this.sprites.src = "../../../images/humans/mommy.png";
         this.movementAnimationDelay = 6
     };
     update() {
@@ -25,15 +22,15 @@ class Mommy extends Human {
             case("left"):
             case("upleft"):
             case("downleft"):
-                cycleSprite(this, 114, 26, 192, 443); break
+                cycleSprite(this, 16, 59); break
             case("right"):
             case("upright"):
             case("downright"):
-                cycleSprite(this, 114, 26, 192, 476); break
+                cycleSprite(this, 16, 88); break
             case("up"):
-                cycleSprite(this, 114, 26, 192, 408); break
+                cycleSprite(this, 16, 30); break
             case("down"):
-                cycleSprite(this, 114, 26, 192, 369); break
+                cycleSprite(this, 16, 0); break
         }
     }
 }

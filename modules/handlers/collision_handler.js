@@ -22,12 +22,12 @@ class CollisionHandler {
             })
         })
     };
-    checkSingleCollision(actorA, actorB) {  // BROKEN. RIP YOUR OWN SPRITESHEET
+    checkSingleCollision(actorA, actorB) {
         return (
-            actorA.screenXPosition <= actorB.screenXPosition + actorB.width &&
-            actorA.screenXPosition + actorA.width >= actorB.screenXPosition &&
-            actorA.screenYPosition <= actorB.screenYPosition + actorB.height &&
-            actorA.screenYPosition + actorA.height >= actorB.screenYPosition
+            actorA.screenXPosition <= actorB.screenXPosition + (actorB.width * 1.8) &&
+            actorA.screenXPosition + (actorA.width * 1.8) >= actorB.screenXPosition &&
+            actorA.screenYPosition <= actorB.screenYPosition + (actorB.height * 1.8) &&
+            actorA.screenYPosition + (actorA.height * 1.8) >= actorB.screenYPosition
         )
     };
     checkPlayerEnemyCollision(player, enemy) {

@@ -1,12 +1,14 @@
 export {Projectile};
 
 class Projectile {
-    constructor(game, screenXPosition, screenYPosition, size, speed, left, right, up, down) {
+    constructor(game, screenXPosition, screenYPosition, length, speed, left, right, up, down) {
         this.game = game;
-        this.width = 14;
-        this.height = 14;
+        this.width = 2;
+        this.height = 2;
+        this.sprite = new Image();
+        this.sprite.src = "../images/projectile.png";
         this.spritesheetXPosition = 0;
-        this.spritesheetYPosition = 510;
+        this.spritesheetYPosition = 0;
         this.screenXPosition = screenXPosition;
         this.screenYPosition = screenYPosition;
         this.shotLeft = left;
@@ -14,7 +16,7 @@ class Projectile {
         this.shotUp = up;
         this.shotDown = down;
         this.speed = speed;
-        this.size = size;
+        this.length = length;
         this.shouldDelete = false
     };
     update() {
@@ -52,10 +54,10 @@ class Projectile {
         }
     };
     drawProjectile(context, xDirection, yDirection) {
-        const {game, spritesheetXPosition, spritesheetYPosition, width, height} = this;
-        for (let i = 0; i < this.size; i++) {
+        const {sprite, spritesheetXPosition, spritesheetYPosition, width, height} = this;
+        for (let i = 0; i < this.length; i++) {
             context.drawImage(
-                game.sprites,
+                sprite,
                 spritesheetXPosition,
                 spritesheetYPosition,
                 width,
@@ -74,45 +76,45 @@ class Projectile {
         this.screenYPosition < -10
     };
     shootUp() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenYPosition -= this.speed
         }
     };
     shootUpLeft() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenXPosition -= this.speed;
             this.screenYPosition -= this.speed
         }
     };
     shootUpRight() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenXPosition += this.speed;
             this.screenYPosition -= this.speed
         }
     };
     shootLeft() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenXPosition -= this.speed
         }
     };
     shootRight() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenXPosition += this.speed
         }
     };
     shootDownLeft() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenXPosition -= this.speed;
             this.screenYPosition += this.speed
         }
     };
     shootDown() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenYPosition += this.speed
         }
     };
     shootDownRight() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.length; i++) {
             this.screenXPosition += this.speed;
             this.screenYPosition += this.speed
         }
