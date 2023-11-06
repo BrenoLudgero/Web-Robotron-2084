@@ -4,15 +4,14 @@ import {Projectile} from "./models/projectile.js";
 
 class Player extends Actor {
     constructor(game) {
-        super(game);
+        super(game, 15, 24);
         this.game = game;
-        this.width = 15;
-        this.height = 24;
         this.sprites.src = "../images/player.png";
-        this.screenXPosition = (game.canvas.width / 2) - (this.width * 1.8);
-        this.screenYPosition = (game.canvas.height / 2) - (this.height * 1.8);
+        this.screenXPosition = (game.canvas.width / 2) - this.width;
+        this.screenYPosition = (game.canvas.height / 2) - this.height;
         this.movementSpeed = 6;
         this.movementAnimationDelay = 1;
+        this.projectileSpeed = 50;
         this.projectileTimer = 0;
         this.projectileDelay = 4;
         this.projectiles = []
@@ -42,9 +41,11 @@ class Player extends Actor {
             }
         }
     };
-    shoot(screenXPosition, screenYPosition, left, right, up, down) {
+    shoot(left, right, up, down) {
+        const playerXPosition = this.screenXPosition + 11;
+        const playerYPosition = this.screenYPosition;
         if (this.projectileTimer <= 0) {
-            this.projectiles.push(new Projectile(this.game, screenXPosition, screenYPosition, 30, 0.6, left, right, up, down));
+            this.projectiles.push(new Projectile(this.game, playerXPosition, playerYPosition, this.projectileSpeed, left, right, up, down));
             this.projectileTimer = this.projectileDelay
         }
     };

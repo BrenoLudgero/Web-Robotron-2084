@@ -4,10 +4,8 @@ import {cycleSprite} from "../global_functions.js";
 
 class Mommy extends Human {
     constructor(game) {
-        super(game);
+        super(game, 14, 28);
         this.game = game;
-        this.width = 14;
-        this.height = 28;
         this.sprites.src = "../../../images/humans/mommy.png";
         this.movementAnimationDelay = 6
     };

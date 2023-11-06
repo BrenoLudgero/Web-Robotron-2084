@@ -2,8 +2,8 @@ export {Human};
 import {Actor} from "../models/actor.js";
 
 class Human extends Actor {
-    constructor(game) {
-        super(game);
+    constructor(game, originalWidth, originalHeight) {
+        super(game, originalWidth, originalHeight);
         this.wasRescued = false;
         this.movementType = 2;
         this.movementRate = 4;

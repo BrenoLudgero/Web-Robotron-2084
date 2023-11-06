@@ -1,10 +1,12 @@
 export {Actor};
 
 class Actor {
-    constructor(game) {
+    constructor(game, originalWidth, originalHeight) {
         this.game = game;
-        this.width;
-        this.height;
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
+        this.width = this.originalWidth * 1.8;
+        this.height = this.originalHeight * 1.8;
         this.sprites = new Image();
         this.sprites.src;
         this.spritesheetXPosition = 0;
@@ -24,14 +26,14 @@ class Actor {
     };
     draw(context) {
         this.setMovementBoundaries();
-        context.drawImage(this.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.width, this.height, this.screenXPosition, this.screenYPosition, this.width * 1.8, this.height * 1.8);
-        this.projectiles.forEach(projectile => projectile.draw(context));
-        this.game.drawHitboxes(this)
+        context.drawImage(this.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.originalWidth, this.originalHeight, this.screenXPosition, this.screenYPosition, this.width, this.height);
+        this.game.drawHitboxes(this);
+        this.projectiles.forEach(projectile => projectile.draw(context))
     };
     setMovementBoundaries() {
         const movementBoundaries = {
-            "x": this.game.canvas.width - (this.width * 1.8),
-            "y": this.game.canvas.height - (this.height * 1.8)
+            "x": this.game.canvas.width - this.width,
+            "y": this.game.canvas.height - this.height
         }
         if (this.screenYPosition <= 2) {
             this.screenYPosition = 2

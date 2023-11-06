@@ -4,9 +4,7 @@ import {RNG, cycleSprite} from "../global_functions.js";
 
 class Grunt extends Enemy {
     constructor(game) {
-        super(game);
-        this.width = 18;
-        this.height = 27;
+        super(game, 18, 27);
         this.sprites.src = "../../../images/enemies/grunt.png";
         this.movementSpeed = 7; // INCREASES ACCORDING TO WAVE LENGTH ?
         this.movementTimer = 0;
@@ -21,12 +19,13 @@ class Grunt extends Enemy {
         }
     };
     chasePlayer() {
-        if (this.screenXPosition > this.game.player.screenXPosition) {
+        const {player} = this.game;
+        if (this.screenXPosition > player.screenXPosition) {
             this.screenXPosition -= this.movementSpeed
         } else {
             this.screenXPosition += this.movementSpeed
         };
-        if (this.screenYPosition > this.game.player.screenYPosition) {
+        if (this.screenYPosition > player.screenYPosition) {
             this.screenYPosition -= this.movementSpeed
         } else {
             this.screenYPosition += this.movementSpeed

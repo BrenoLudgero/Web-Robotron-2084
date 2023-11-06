@@ -1,10 +1,10 @@
 export {Projectile};
 
 class Projectile {
-    constructor(game, screenXPosition, screenYPosition, length, speed, left, right, up, down) {
+    constructor(game, screenXPosition, screenYPosition, speed, left, right, up, down) {
         this.game = game;
-        this.width = 2;
-        this.height = 2;
+        this.width = 3;
+        this.height = 45;
         this.sprite = new Image();
         this.sprite.src = "../images/projectile.png";
         this.spritesheetXPosition = 0;
@@ -16,107 +16,85 @@ class Projectile {
         this.shotUp = up;
         this.shotDown = down;
         this.speed = speed;
-        this.length = length;
-        this.shouldDelete = false
+        this.rotation = 0;  // Rotates the sprite depending on the shot direction
+        this.shouldDelete = false;
+        this.knockbackForce = 6  // For Hulk collision
     };
     update() {
+        this.shootProjectile()
         if (this.isOutOfBounds()) {
             this.shouldDelete = true  // Deleted in Player.update()
-        };
-        this.setProjectileDirection()
+        }
     };
     draw(context) {
-        switch (true) {
-            case this.shotUp && !this.shotLeft && !this.shotRight:
-                this.drawProjectile(context, 0, -1); break
-            case this.shotUp && this.shotLeft:
-                this.drawProjectile(context, -1, -1); break
-            case this.shotUp && this.shotRight:
-                this.drawProjectile(context, 1, -1); break
-            case this.shotLeft && !this.shotUp && !this.shotDown:
-                this.drawProjectile(context, -1, 0); break
-            case this.shotRight && !this.shotUp && !this.shotDown:
-                this.drawProjectile(context, 1, 0); break
-            case this.shotDown && this.shotLeft:
-                this.drawProjectile(context, -1, 1); break
-            case this.shotDown && !this.shotLeft && !this.shotRight:
-                this.drawProjectile(context, 0, 1); break
-            case this.shotDown && this.shotRight:
-                this.drawProjectile(context, 1, 1); break
-        }
+        const {sprite, width, height} = this;
+        context.save();
+        context.translate(this.screenXPosition + (width / 2), this.screenYPosition + (height / 2));
+        context.rotate(this.rotation);
+        context.drawImage(sprite, -width / 2, -height / 2, width, height);
+        context.restore();
+        this.game.drawHitboxes(this)
     };
-    setProjectileDirection() {
-        const directions = ["Up", "Down", "Left", "Right"];
-        for (const dir of directions) {
-            if (this[`shot${dir}`]) {
-                this[`shoot${dir}`]()
-            }
-        }
-    };
-    drawProjectile(context, xDirection, yDirection) {
-        const {sprite, spritesheetXPosition, spritesheetYPosition, width, height} = this;
-        for (let i = 0; i < this.length; i++) {
-            context.drawImage(
-                sprite,
-                spritesheetXPosition,
-                spritesheetYPosition,
-                width,
-                height,
-                (this.screenXPosition += xDirection * this.speed),
-                (this.screenYPosition += yDirection * this.speed),
-                width,
-                height
-            )
+    shootProjectile() {
+        if (this.shotUp && this.shotLeft) {
+            this.shootUpLeft()
+        } else if (this.shotUp && this.shotRight) {
+            this.shootUpRight()
+        } else if (this.shotDown && this.shotLeft) {
+            this.shootDownLeft()
+        } else if (this.shotDown && this.shotRight) {
+            this.shootDownRight()
+        } else if (this.shotUp) {
+            this.shootUp()
+        } else if (this.shotDown) {
+            this.shootDown()
+        } else if (this.shotLeft) {
+            this.shootLeft()
+        } else if (this.shotRight) {
+            this.shootRight()
         }
     };
     isOutOfBounds() {
-        return this.screenXPosition > this.game.canvas.width + 10 || 
+        const {canvas} = this.game;
+        return this.screenXPosition > canvas.width + 10 || 
         this.screenXPosition < -10 || 
-        this.screenYPosition > this.game.canvas.height + 10 || 
+        this.screenYPosition > canvas.height + 10 || 
         this.screenYPosition < -10
     };
     shootUp() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenYPosition -= this.speed
-        }
+        this.rotation = 0;
+        this.screenYPosition -= this.speed
     };
     shootUpLeft() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenXPosition -= this.speed;
-            this.screenYPosition -= this.speed
-        }
+        this.rotation = -Math.PI / 4;
+        this.screenXPosition -= this.speed;
+        this.screenYPosition -= this.speed
     };
     shootUpRight() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenXPosition += this.speed;
-            this.screenYPosition -= this.speed
-        }
+        this.rotation = Math.PI / 4;
+        this.screenXPosition += this.speed;
+        this.screenYPosition -= this.speed
     };
     shootLeft() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenXPosition -= this.speed
-        }
+        this.rotation = Math.PI / 2;
+        this.screenXPosition -= this.speed
     };
     shootRight() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenXPosition += this.speed
-        }
+        this.rotation = Math.PI / 2;
+        this.screenXPosition += this.speed
     };
     shootDownLeft() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenXPosition -= this.speed;
-            this.screenYPosition += this.speed
-        }
+        this.rotation = 3 * (-Math.PI / 4);
+        this.screenXPosition -= this.speed;
+        this.screenYPosition += this.speed
     };
     shootDown() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenYPosition += this.speed
-        }
+        this.rotation = 0;
+        this.screenYPosition += this.speed
     };
     shootDownRight() {
-        for (let i = 0; i < this.length; i++) {
-            this.screenXPosition += this.speed;
-            this.screenYPosition += this.speed
-        }
+        this.rotation = 3 * (Math.PI / 4);
+        this.screenXPosition += this.speed;
+        this.screenYPosition += this.speed
     }
 }

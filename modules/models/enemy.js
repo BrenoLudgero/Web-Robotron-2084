@@ -2,8 +2,8 @@ export {Enemy};
 import {Actor} from "../models/actor.js";
 
 class Enemy extends Actor {
-    constructor(game) {
-        super(game);
+    constructor(game, originalWidth, originalHeight) {
+        super(game, originalWidth, originalHeight);
         this.isHulk = false;
         this.movementType = 1;
         this.movementTimer;

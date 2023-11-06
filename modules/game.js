@@ -26,15 +26,19 @@ class Game {
         this.keysPressed = [];
         this.collision = new CollisionHandler(this);
         this.projectile = new Projectile(this);
-        this.shouldDrawHitboxes = false;
-        this.actorInvincibility = false  //  !  !  !  !  !
+            //     DEBUG     !  !  !  !  !
+            this.shouldDrawHitboxes = true;
+            this.actorInvincibility = false
+            this.shouldUpdateActors = true
     };
     update() {
         if (this.player.isAlive) {
-            this.collision.update();
             this.player.update();
-            this.updateActors(this.enemies);
-            this.updateActors(this.humans);
+            if (this.shouldUpdateActors) {
+                this.updateActors(this.enemies);
+                this.updateActors(this.humans);
+            }
+            this.collision.update();
             this.removeDeadOrRescuedActors()
         }
     };
@@ -51,9 +55,20 @@ class Game {
     drawHitboxes(actor) {
         if (this.shouldDrawHitboxes) {
             this.ctx.beginPath();
-            this.ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.width * 1.8, actor.height * 1.8);
+            if (actor.rotation !== undefined) {  // Projectiles only
+                const halfWidth = actor.width / 2;
+                const halfHeight = actor.height / 2;
+                const centerX = actor.screenXPosition + halfWidth;
+                const centerY = actor.screenYPosition + halfHeight;
+                this.ctx.translate(centerX, centerY);
+                this.ctx.rotate(actor.rotation);
+                this.ctx.rect(-halfWidth, -halfHeight, actor.width, actor.height)
+            } else {
+                this.ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.width, actor.height)
+            };
             this.ctx.strokeStyle = "red";
-            this.ctx.stroke()
+            this.ctx.stroke();
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0)  // Reset the context transformation
         }
     };
     updateActors(actors) {
@@ -74,8 +89,8 @@ class Game {
             const newEnemy = new enemyType(this);
             let safeToSpawn = false;
             while (!safeToSpawn) {
-                newEnemy.screenXPosition = RNG(1, this.canvas.width - (newEnemy.width * 1.8));
-                newEnemy.screenYPosition = RNG(1, this.canvas.height - (newEnemy.height * 1.8));
+                newEnemy.screenXPosition = RNG(1, this.canvas.width - newEnemy.width);
+                newEnemy.screenYPosition = RNG(1, this.canvas.height - newEnemy.height);
                 const playerDistance = this.calculateDistance(newEnemy, this.player);
                 let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                 let isSafeFromEnemies = this.isSafeFromOtherActors(newEnemy, this.enemies, minimumDistanceBetweenEnemies);
@@ -94,8 +109,8 @@ class Game {
             const newHuman = new humanType(this);
             let safeToSpawn = false;
             while (!safeToSpawn) {
-                newHuman.screenXPosition = RNG(1, this.canvas.width - (newHuman.width * 1.8));
-                newHuman.screenYPosition = RNG(1, this.canvas.height - (newHuman.height * 1.8));
+                newHuman.screenXPosition = RNG(1, this.canvas.width - newHuman.width);
+                newHuman.screenYPosition = RNG(1, this.canvas.height - newHuman.height);
                 const playerDistance = this.calculateDistance(newHuman, this.player);
                 let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
                 let isSafeFromHumans = this.isSafeFromOtherActors(newHuman, this.humans, minimumDistanceBetweenHumans);
@@ -125,7 +140,7 @@ class Game {
         this.addHumans(5, Mommy);
         this.addEnemies(8, Hulk);
         this.addEnemies(12, Grunt)
-    };
+    }
     logActorCount() {  //  !  !  !  !  !
         console.log("Humans: " + this.humans.length);
         console.log("Enemies: " + this.enemies.length);

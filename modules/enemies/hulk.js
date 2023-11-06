@@ -4,14 +4,11 @@ import {cycleSprite} from "../global_functions.js";
 
 class Hulk extends Enemy {
     constructor(game) {
-        super(game);
-        this.width = 26;
-        this.height = 32;
+        super(game, 26, 32);
         this.sprites.src = "../../../images/enemies/hulk.png";
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 5;
-        this.isHulk = true;
-        this.knockbackForce = 6
+        this.isHulk = true
     };
     update() {
         if (this.game.currentFrame % this.movementAnimationDelay == 0) {

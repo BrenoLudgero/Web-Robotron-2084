@@ -40,6 +40,9 @@ class InputHandler {
         if (event.key == "i") {  //  !  !  !  !  !
             this.toggleInvincibility()
         }
+        if (event.key == "u") {  //  !  !  !  !  !
+            this.toggleActorUpdates()
+        }
     };
     readMovementKeys(keysPressed, player) {
         if (keysPressed.includes("w")) {
@@ -55,34 +58,37 @@ class InputHandler {
         }
     };
     readShootingKeys(keysPressed, player) {
-        const playerWidth = player.width * 1.8;
-        const playerHeight = player.height * 1.8;
         if (keysPressed.includes("ArrowUp") && !keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition + ((playerWidth / 2) - 1), player.screenYPosition + 13, false, false, true, false)
+            player.shoot(false, false, true, false)  // Sets Projectile shotLeft, shotRight, shotUp, shotDown
         } else if (keysPressed.includes("ArrowUp") && keysPressed.includes("ArrowLeft")) {
-            player.shoot(player.screenXPosition + 14, player.screenYPosition + 14, true, false, true, false)
+            player.shoot(true, false, true, false)
         } else if (keysPressed.includes("ArrowUp") && keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition + 10, player.screenYPosition + 14, false, true, true, false)
+            player.shoot(false, true, true, false)
         };
         if (keysPressed.includes("ArrowDown") && !keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition + ((playerWidth / 2) - 1), player.screenYPosition + 28, false, false, false, true)
+            player.shoot(false, false, false, true)
         } else if (keysPressed.includes("ArrowDown") && keysPressed.includes("ArrowRight")) {
-            player.shoot(player.screenXPosition + 10, player.screenYPosition + playerWidth, false, true, false, true)
+            player.shoot(false, true, false, true)
         } else if (keysPressed.includes("ArrowDown") && keysPressed.includes("ArrowLeft")) {
-            player.shoot(player.screenXPosition + 14, player.screenYPosition + playerWidth, true, false, false, true)
+            player.shoot(true, false, false, true)
         };
         if (keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowDown")  && !keysPressed.includes("ArrowUp")) {
-            player.shoot(player.screenXPosition + 14, player.screenYPosition + (playerHeight / 2), true, false, false, false)
+            player.shoot(true, false, false, false)
         } else if (keysPressed.includes("ArrowRight") && !keysPressed.includes("ArrowDown")  && !keysPressed.includes("ArrowUp")) {
-            player.shoot(player.screenXPosition + 11, player.screenYPosition + (playerHeight / 2), false, true, false, false)
+            player.shoot(false, true, false, false)
         }
     };
     toggleHitboxes() {
         this.game.shouldDrawHitboxes = !this.game.shouldDrawHitboxes
-    };
+    }
     toggleInvincibility() {  //  !  !  !  !  !
         const {game} = this;
         game.actorInvincibility = !game.actorInvincibility;
         console.log("INVINCIBILITY: " + game.actorInvincibility)
+    }
+    toggleActorUpdates() {  //  !  !  !  !  !
+        const {game} = this;
+        game.shouldUpdateActors = !game.shouldUpdateActors;
+        console.log("UPDATING ACTORS: " + game.shouldUpdateActors)
     }
 }
