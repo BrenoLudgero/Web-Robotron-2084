@@ -103,9 +103,9 @@ class Game {
     };
     // REFACTOR
     addEnemies(numberEnemies, enemyType) {
-        let minDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
-        const minDistanceFromHumans = 68;
-        const minDistanceBetweenEnemies = 48;
+        let minDistanceFromPlayer = 180; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
+        const minDistanceFromHumans = 70;
+        const minDistanceBetweenEnemies = 60;
         for (let i = 0; i < numberEnemies; i++) {
             let isSafeToSpawn = false;
             const newEnemy = new enemyType(this);
@@ -128,7 +128,7 @@ class Game {
     // REFACTOR
     addHumans(numberHumans, humanType) {
         const minDistanceFromPlayer = 100;
-        const minDistanceBetweenHumans = 120;
+        const minDistanceBetweenHumans = 125;
         for (let i = 0; i < numberHumans; i++) {
             let isSafeToSpawn = false;
             const newHuman = new humanType(this);

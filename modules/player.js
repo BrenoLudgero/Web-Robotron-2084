@@ -11,7 +11,7 @@ class Player extends Actor {
         this.screenYPosition = (game.canvas.height / 2) - this.height;
         this.movementSpeed = 6;
         this.movementAnimationDelay = 1;
-        this.projectileSpeed = 50;
+        this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 4
     };

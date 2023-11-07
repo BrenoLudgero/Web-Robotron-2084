@@ -12,13 +12,22 @@
 
     <body>
         <div id="container">
-            <div id="info">
-                <p id="lives">OOOOOOOOOOOOO</p>
-                <p id="wave">WAVE XXX</p>
-                <p id="score">0123456789</p>
+            <div id="top-info">
+                <div id="score-lives-container">
+                    <p id="score">0123456789</p>
+                    <div id="lives">
+                        <img id="life" src="./images/life_indicator.png" alt="Life Indicator">
+                        <img id="life" src="./images/life_indicator.png" alt="Life Indicator">
+                        <img id="life" src="./images/life_indicator.png" alt="Life Indicator">
+                    </div>
+                </div>
             </div>
 
             <canvas></canvas>
+
+            <div id="bottom-info">
+                <p id="wave">WAVE 001</p>
+            </div>
 
         </div>
         <script type="module" src="main.js"></script>

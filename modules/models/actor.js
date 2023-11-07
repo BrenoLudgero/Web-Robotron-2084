@@ -81,7 +81,7 @@ class Actor {
         return eightDirections[Math.floor(Math.random() * eightDirections.length)]
     };
     setRandomWalkDistance() {
-        const distances = [350, 500, 650, 800];
+        const distances = [60, 120, 220, 350, 600];
         return distances[Math.floor(Math.random() * distances.length)]
     };
     moveToRandomDirection() {
