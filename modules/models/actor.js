@@ -3,30 +3,31 @@ export {Actor};
 class Actor {
     constructor(game, originalWidth, originalHeight) {
         this.game = game;
+        this.isAlive = true;
+        this.sprites = new Image();
+        this.spritesheetXPosition = 0;
+        this.spritesheetYPosition = 0;
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
         this.width = this.originalWidth * 1.8;
         this.height = this.originalHeight * 1.8;
-        this.sprites = new Image();
-        this.sprites.src;
-        this.spritesheetXPosition = 0;
-        this.spritesheetYPosition = 0;
-        this.screenXPosition;
-        this.screenYPosition;
-        this.movementSpeed;
-        this.movementAnimationDelay;
-        this.movementType; // 0: Stationary, 1: 4-way movement, 2: 8-way movement
-        this.projectiles = [];
-        this.projectileTimer;
-        this.projectileDelay;
-        this.walkDistance;
         this.remainingWalkingDistance = this.walkDistance;
         this.currentDirection = this.setRandomDirection();
-        this.isAlive = true
+        this.projectiles = []
     };
     draw(context) {
         this.setMovementBoundaries();
-        context.drawImage(this.sprites, this.spritesheetXPosition, this.spritesheetYPosition, this.originalWidth, this.originalHeight, this.screenXPosition, this.screenYPosition, this.width, this.height);
+        context.drawImage(
+            this.sprites, 
+            this.spritesheetXPosition, 
+            this.spritesheetYPosition, 
+            this.originalWidth, 
+            this.originalHeight, 
+            this.screenXPosition, 
+            this.screenYPosition, 
+            this.width, 
+            this.height
+        );
         this.game.drawHitboxes(this);
         this.projectiles.forEach(projectile => projectile.draw(context))
     };
@@ -49,12 +50,13 @@ class Actor {
     };
     isActorAgainstWall() {
         const movementBoundaries = this.setMovementBoundaries();
-        if (this.screenXPosition >= movementBoundaries["x"] ||
-            this.screenXPosition <= 2 ||
-            this.screenYPosition >= movementBoundaries["y"] ||
-            this.screenYPosition <= 2) {
+        if (this.screenXPosition >= movementBoundaries["x"] 
+            || this.screenXPosition <= 2 
+            || this.screenYPosition >= movementBoundaries["y"] 
+            || this.screenYPosition <= 2) {
                 return true
-        }
+        };
+        return false
     };
     moveAwayFromWall() {
         if (this.isActorAgainstWall()) {
@@ -66,37 +68,37 @@ class Actor {
         const eightDirections = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
         if (this.movementType == 1) {
             return fourDirections[Math.floor(Math.random() * fourDirections.length)]
-        } else if (this.movementType == 2) {
-            return eightDirections[Math.floor(Math.random() * eightDirections.length)]
-        }
+        };
+        return eightDirections[Math.floor(Math.random() * eightDirections.length)]
     };
     setRandomWalkDistance() {
         const distances = [350, 500, 650, 800];
         return distances[Math.floor(Math.random() * distances.length)]
     };
     moveToRandomDirection() {
+        const {movementSpeed} = this;
         if (this.remainingWalkingDistance > 0) {
             switch(this.currentDirection) {
                 case("left"):
-                    this.screenXPosition -= this.movementSpeed; break
+                    this.screenXPosition -= movementSpeed; break
                 case("right"):
-                    this.screenXPosition += this.movementSpeed; break
+                    this.screenXPosition += movementSpeed; break
                 case("up"):
-                    this.screenYPosition -= this.movementSpeed; break
+                    this.screenYPosition -= movementSpeed; break
                 case("down"):
-                    this.screenYPosition += this.movementSpeed; break
+                    this.screenYPosition += movementSpeed; break
                 case("upleft"):
-                    this.screenYPosition -= this.movementSpeed;
-                    this.screenXPosition -= this.movementSpeed; break
+                    this.screenYPosition -= movementSpeed;
+                    this.screenXPosition -= movementSpeed; break
                 case("upright"):
-                    this.screenYPosition -= this.movementSpeed;
-                    this.screenXPosition += this.movementSpeed; break
+                    this.screenYPosition -= movementSpeed;
+                    this.screenXPosition += movementSpeed; break
                 case("downleft"):
-                    this.screenYPosition += this.movementSpeed;
-                    this.screenXPosition -= this.movementSpeed; break
+                    this.screenYPosition += movementSpeed;
+                    this.screenXPosition -= movementSpeed; break
                 case("downright"):
-                    this.screenYPosition += this.movementSpeed;
-                    this.screenXPosition += this.movementSpeed; break
+                    this.screenYPosition += movementSpeed;
+                    this.screenXPosition += movementSpeed; break
             }
             this.remainingWalkingDistance -= this.movementRate
         } else {

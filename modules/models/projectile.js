@@ -16,22 +16,22 @@ class Projectile {
         this.shotUp = up;
         this.shotDown = down;
         this.speed = speed;
-        this.rotation = 0;  // Rotates the sprite depending on the shot direction
-        this.shouldDelete = false;
-        this.knockbackForce = 6  // For Hulk collision
+        this.rotation = 0; // Rotates the sprite depending on the shot direction
+        this.knockbackForce = 6; // For Hulk collision
+        this.shouldDelete = false
     };
     update() {
         this.shootProjectile()
         if (this.isOutOfBounds()) {
-            this.shouldDelete = true  // Deleted in Player.update()
+            this.shouldDelete = true // Deleted in Player.update()
         }
     };
     draw(context) {
-        const {sprite, width, height} = this;
+        const {width, height} = this;
         context.save();
         context.translate(this.screenXPosition + (width / 2), this.screenYPosition + (height / 2));
         context.rotate(this.rotation);
-        context.drawImage(sprite, -width / 2, -height / 2, width, height);
+        context.drawImage(this.sprite, -width / 2, -height / 2, width, height);
         context.restore();
         this.game.drawHitboxes(this)
     };
@@ -56,10 +56,12 @@ class Projectile {
     };
     isOutOfBounds() {
         const {canvas} = this.game;
-        return this.screenXPosition > canvas.width + 10 || 
-        this.screenXPosition < -10 || 
-        this.screenYPosition > canvas.height + 10 || 
-        this.screenYPosition < -10
+        return (
+            this.screenXPosition > canvas.width + 10 
+            || this.screenXPosition < -10 
+            || this.screenYPosition > canvas.height + 10 
+            || this.screenYPosition < -10
+        )
     };
     shootUp() {
         this.rotation = 0;

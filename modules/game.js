@@ -11,12 +11,12 @@ import {InputHandler} from "./handlers/input_handler.js";
 import {CollisionHandler} from "./handlers/collision_handler.js";
 
 class Game {
-    constructor(canvas, ctx) {
+    constructor(canvas, context) {
+        this.ctx = context;
         this.canvas = canvas;
-        this.ctx = ctx;
-        this.currentFrame = 0;
         this.canvas.width = 1016;
         this.canvas.height = 786;
+        this.currentFrame = 0;
         this.player = new Player(this);
         this.enemy = new Enemy(this);
         this.enemies = [];
@@ -25,9 +25,9 @@ class Game {
         this.input = new InputHandler(this);
         this.keysPressed = [];
         this.collision = new CollisionHandler(this);
-        this.projectile = new Projectile(this);
+        this.projectile = new Projectile(this)
             //     DEBUG     !  !  !  !  !
-            this.shouldDrawHitboxes = true;
+            this.shouldDrawHitboxes = false
             this.actorInvincibility = false
             this.shouldUpdateActors = true
     };
@@ -55,7 +55,7 @@ class Game {
     drawHitboxes(actor) {
         if (this.shouldDrawHitboxes) {
             this.ctx.beginPath();
-            if (actor.rotation !== undefined) {  // Projectiles only
+            if (actor.rotation !== undefined) { // Projectiles only
                 const halfWidth = actor.width / 2;
                 const halfHeight = actor.height / 2;
                 const centerX = actor.screenXPosition + halfWidth;
@@ -68,7 +68,7 @@ class Game {
             };
             this.ctx.strokeStyle = "red";
             this.ctx.stroke();
-            this.ctx.setTransform(1, 0, 0, 1, 0, 0)  // Reset the context transformation
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0) // Resets the context transformation
         }
     };
     updateActors(actors) {
@@ -81,46 +81,6 @@ class Game {
         const distanceY = actor2.screenYPosition - actor1.screenYPosition;
         return Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     };
-    addEnemies(numberEnemies, enemyType) {
-        let minimumDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (120 MINIMUM)
-        const minimumDistanceBetweenEnemies = 48;
-        const minimumDistanceFromHumans = 68;
-        for (let i = 0; i < numberEnemies; i++) {
-            const newEnemy = new enemyType(this);
-            let safeToSpawn = false;
-            while (!safeToSpawn) {
-                newEnemy.screenXPosition = RNG(1, this.canvas.width - newEnemy.width);
-                newEnemy.screenYPosition = RNG(1, this.canvas.height - newEnemy.height);
-                const playerDistance = this.calculateDistance(newEnemy, this.player);
-                let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
-                let isSafeFromEnemies = this.isSafeFromOtherActors(newEnemy, this.enemies, minimumDistanceBetweenEnemies);
-                let isSafeFromHumans = this.isSafeFromOtherActors(newEnemy, this.humans, minimumDistanceFromHumans);
-                if (isSafeFromPlayer && isSafeFromEnemies && isSafeFromHumans) {
-                    this.enemies.push(newEnemy);
-                    safeToSpawn = true
-                }
-            }
-        }
-    };
-    addHumans(numberHumans, humanType) {
-        const minimumDistanceFromPlayer = 100;
-        const minimumDistanceBetweenHumans = 120;
-        for (let i = 0; i < numberHumans; i++) {
-            const newHuman = new humanType(this);
-            let safeToSpawn = false;
-            while (!safeToSpawn) {
-                newHuman.screenXPosition = RNG(1, this.canvas.width - newHuman.width);
-                newHuman.screenYPosition = RNG(1, this.canvas.height - newHuman.height);
-                const playerDistance = this.calculateDistance(newHuman, this.player);
-                let isSafeFromPlayer = playerDistance >= minimumDistanceFromPlayer;
-                let isSafeFromHumans = this.isSafeFromOtherActors(newHuman, this.humans, minimumDistanceBetweenHumans);
-                if (isSafeFromPlayer && isSafeFromHumans) {
-                    this.humans.push(newHuman);
-                    safeToSpawn = true
-                }
-            }
-        }
-    };
     isSafeFromOtherActors(actor, actors, minDistance) {
         for (let j = 0; j < actors.length; j++) {
             const otherActor = actors[j];
@@ -130,6 +90,52 @@ class Game {
             }
         }
         return true
+    };
+    // REFACTOR
+    addEnemies(numberEnemies, enemyType) {
+        let minDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (120 MINIMUM)
+        const minDistanceFromHumans = 68;
+        const minDistanceBetweenEnemies = 48;
+        for (let i = 0; i < numberEnemies; i++) {
+            let isSafeToSpawn = false;
+            const newEnemy = new enemyType(this);
+            let maxScreenXPosition = this.canvas.width - newEnemy.width;
+            let maxScreenYPosition = this.canvas.height - newEnemy.height;
+            while (!isSafeToSpawn) {
+                newEnemy.screenXPosition = RNG(1, maxScreenXPosition);
+                newEnemy.screenYPosition = RNG(1, maxScreenYPosition);
+                let playerDistance = this.calculateDistance(newEnemy, this.player);
+                let isSafeFromPlayer = playerDistance >= minDistanceFromPlayer;
+                let isSafeFromEnemies = this.isSafeFromOtherActors(newEnemy, this.enemies, minDistanceBetweenEnemies);
+                let isSafeFromHumans = this.isSafeFromOtherActors(newEnemy, this.humans, minDistanceFromHumans);
+                if (isSafeFromPlayer && isSafeFromEnemies && isSafeFromHumans) {
+                    this.enemies.push(newEnemy);
+                    isSafeToSpawn = true
+                }
+            }
+        }
+    };
+    // REFACTOR
+    addHumans(numberHumans, humanType) {
+        const minDistanceFromPlayer = 100;
+        const minDistanceBetweenHumans = 120;
+        for (let i = 0; i < numberHumans; i++) {
+            let isSafeToSpawn = false;
+            const newHuman = new humanType(this);
+            let maxScreenXPosition = this.canvas.width - newHuman.width;
+            let maxScreenYPosition = this.canvas.height - newHuman.height;
+            while (!isSafeToSpawn) {
+                newHuman.screenXPosition = RNG(1, maxScreenXPosition);
+                newHuman.screenYPosition = RNG(1, maxScreenYPosition);
+                let playerDistance = this.calculateDistance(newHuman, this.player);
+                let isSafeFromPlayer = playerDistance >= minDistanceFromPlayer;
+                let isSafeFromHumans = this.isSafeFromOtherActors(newHuman, this.humans, minDistanceBetweenHumans);
+                if (isSafeFromPlayer && isSafeFromHumans) {
+                    this.humans.push(newHuman);
+                    isSafeToSpawn = true
+                }
+            }
+        }
     };
     removeDeadOrRescuedActors() {
         this.enemies = this.enemies.filter(enemy => enemy.isAlive);
@@ -141,7 +147,7 @@ class Game {
         this.addEnemies(8, Hulk);
         this.addEnemies(12, Grunt)
     }
-    logActorCount() {  //  !  !  !  !  !
+    logActorCount() { //  !  !  !  !  !
         console.log("Humans: " + this.humans.length);
         console.log("Enemies: " + this.enemies.length);
         console.log("")

@@ -33,62 +33,108 @@ class InputHandler {
         const keyIndex = keysPressed.indexOf(event.key);
         if (keyIndex > -1) {
             keysPressed.splice(keyIndex, 1)
-        };
-        if (event.key == "h") {
-            this.toggleHitboxes()
-        };
-        if (event.key == "i") {  //  !  !  !  !  !
-            this.toggleInvincibility()
         }
-        if (event.key == "u") {  //  !  !  !  !  !
-            this.toggleActorUpdates()
-        }
+        this.readDebugKeys(event) //  !  !  !  !  !
     };
-    readMovementKeys(keysPressed, player) {
-        if (keysPressed.includes("w")) {
-            player.move(false, true)
-        };
-        if (keysPressed.includes("s")) {
-            player.move(false, false)
-        };
-        if (keysPressed.includes("d")) {
-            player.move(true, true)
-        } else if (keysPressed.includes("a")) {
-            player.move(true, false)
-        }
+    readMovementKeys(keysPressed, player) {     // (left, right, up, down)
+        if (keysPressed.includes("w")) player.move(false, false, true, false, keysPressed);
+        if (keysPressed.includes("s")) player.move(false, false, false, true, keysPressed);
+        if (keysPressed.includes("d")) player.move(false, true, false, false);
+        if (keysPressed.includes("a")) player.move(true, false, false, false)
     };
     readShootingKeys(keysPressed, player) {
-        if (keysPressed.includes("ArrowUp") && !keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowRight")) {
-            player.shoot(false, false, true, false)  // Sets Projectile shotLeft, shotRight, shotUp, shotDown
-        } else if (keysPressed.includes("ArrowUp") && keysPressed.includes("ArrowLeft")) {
+        if (this.pressingUpOnly(keysPressed)) {
+            player.shoot(false, false, true, false) // (left, right, up, down)
+        } else if (this.pressingUpAndLeft(keysPressed)) {
             player.shoot(true, false, true, false)
-        } else if (keysPressed.includes("ArrowUp") && keysPressed.includes("ArrowRight")) {
+        } else if (this.pressingUpAndRight(keysPressed)) {
             player.shoot(false, true, true, false)
         };
-        if (keysPressed.includes("ArrowDown") && !keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowRight")) {
+        if (this.pressingDownOnly(keysPressed)) {
             player.shoot(false, false, false, true)
-        } else if (keysPressed.includes("ArrowDown") && keysPressed.includes("ArrowRight")) {
+        } else if (this.pressingDownAndRight(keysPressed)) {
             player.shoot(false, true, false, true)
-        } else if (keysPressed.includes("ArrowDown") && keysPressed.includes("ArrowLeft")) {
+        } else if (this.pressingDownAndLeft(keysPressed)) {
             player.shoot(true, false, false, true)
         };
-        if (keysPressed.includes("ArrowLeft") && !keysPressed.includes("ArrowDown")  && !keysPressed.includes("ArrowUp")) {
+        if (this.pressingLeftOnly(keysPressed)) {
             player.shoot(true, false, false, false)
-        } else if (keysPressed.includes("ArrowRight") && !keysPressed.includes("ArrowDown")  && !keysPressed.includes("ArrowUp")) {
+        } else if (this.pressingRightOnly(keysPressed)) {
             player.shoot(false, true, false, false)
         }
     };
-    toggleHitboxes() {
-        this.game.shouldDrawHitboxes = !this.game.shouldDrawHitboxes
-    }
-    toggleInvincibility() {  //  !  !  !  !  !
-        const {game} = this;
-        game.actorInvincibility = !game.actorInvincibility;
-        console.log("INVINCIBILITY: " + game.actorInvincibility)
-    }
-    toggleActorUpdates() {  //  !  !  !  !  !
-        const {game} = this;
-        game.shouldUpdateActors = !game.shouldUpdateActors;
-        console.log("UPDATING ACTORS: " + game.shouldUpdateActors)
-    }
+    pressingUpOnly(keysPressed) {
+        return (
+            keysPressed.includes("ArrowUp") 
+            && !keysPressed.includes("ArrowLeft") 
+            && !keysPressed.includes("ArrowRight")
+        )
+    };
+    pressingUpAndLeft(keysPressed) {
+        return (
+            keysPressed.includes("ArrowUp") 
+            && keysPressed.includes("ArrowLeft")
+        )
+    };
+    pressingUpAndRight(keysPressed) {
+        return (
+            keysPressed.includes("ArrowUp") 
+            && keysPressed.includes("ArrowRight")
+        )
+    };
+    pressingDownOnly(keysPressed) {
+        return (
+            keysPressed.includes("ArrowDown") 
+            && !keysPressed.includes("ArrowLeft") 
+            && !keysPressed.includes("ArrowRight")
+        )
+    };
+    pressingDownAndRight(keysPressed) {
+        return (
+            keysPressed.includes("ArrowDown") 
+            && keysPressed.includes("ArrowRight")
+        )
+    };
+    pressingDownAndLeft(keysPressed) {
+        return (
+            keysPressed.includes("ArrowDown") 
+            && keysPressed.includes("ArrowLeft")
+        )
+    };
+    pressingLeftOnly(keysPressed) {
+        return (
+            keysPressed.includes("ArrowLeft") 
+            && !keysPressed.includes("ArrowDown") 
+            && !keysPressed.includes("ArrowUp")
+        )
+    };
+    pressingRightOnly(keysPressed) {
+        return (
+            keysPressed.includes("ArrowRight") 
+            && !keysPressed.includes("ArrowDown") 
+            && !keysPressed.includes("ArrowUp")
+        )
+    } //     DEBUG     !  !  !  !  !
+        readDebugKeys(event) {
+            switch (event.key) {
+                case "h":
+                    this.toggleHitboxes(); break
+                case "i":
+                    this.toggleInvincibility(); break
+                case "u":
+                    this.toggleActorUpdates(); break
+            }
+        }
+        toggleHitboxes() {
+            this.game.shouldDrawHitboxes = !this.game.shouldDrawHitboxes;
+            console.log("DRAW HITBOXES: " + this.game.actorInvincibility)
+        }
+        toggleInvincibility() {
+            this.game.actorInvincibility = !this.game.actorInvincibility;
+            console.log("INVINCIBILITY: " + this.game.actorInvincibility)
+        }
+        toggleActorUpdates() {
+            this.game.shouldUpdateActors = !this.game.shouldUpdateActors;
+            console.log("UPDATING ACTORS: " + this.game.shouldUpdateActors)
+        }
 }

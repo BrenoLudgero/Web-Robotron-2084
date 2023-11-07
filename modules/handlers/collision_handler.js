@@ -6,7 +6,7 @@ class CollisionHandler {
     };
     update() {
         const {enemies, player, humans, actorInvincibility} = this.game;
-        if (!actorInvincibility) {  //  !  !  !  !  !
+        if (!actorInvincibility) { //  !  !  !  !  !
             this.checkAllCollisions(player, enemies, humans)
         }
     };
@@ -17,21 +17,21 @@ class CollisionHandler {
     };
     checkSingleCollision(actorA, actorB) {
         const actorBHitbox = this.getHitbox(actorB);
-        if (actorA.rotation !== undefined) {  // Projectiles only
+        if (actorA.rotation !== undefined) { // Projectiles only
             const actorARotatedHitbox = this.getRotatedHitbox(actorA);
             return (
-                actorARotatedHitbox.right >= actorBHitbox.left &&
-                actorARotatedHitbox.left <= actorBHitbox.right &&
-                actorARotatedHitbox.bottom >= actorBHitbox.top &&
-                actorARotatedHitbox.top <= actorBHitbox.bottom
+                actorARotatedHitbox.right >= actorBHitbox.left 
+                && actorARotatedHitbox.left <= actorBHitbox.right 
+                && actorARotatedHitbox.bottom >= actorBHitbox.top 
+                && actorARotatedHitbox.top <= actorBHitbox.bottom
             )
         } else {
             const actorAHitbox = this.getHitbox(actorA)
             return (
-                actorAHitbox.right >= actorBHitbox.left &&
-                actorAHitbox.left <= actorBHitbox.right &&
-                actorAHitbox.bottom >= actorBHitbox.top &&
-                actorAHitbox.top <= actorBHitbox.bottom
+                actorAHitbox.right >= actorBHitbox.left 
+                && actorAHitbox.left <= actorBHitbox.right 
+                && actorAHitbox.bottom >= actorBHitbox.top 
+                && actorAHitbox.top <= actorBHitbox.bottom
             )
         }
     };

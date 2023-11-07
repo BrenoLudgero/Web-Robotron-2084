@@ -8,8 +8,8 @@ function cycleSprite(actor, increment, spritesheetYPosition) {
     const maxSpritesheetXPosition = (actor.sprites.width - actor.width);
     actor.spritesheetYPosition = spritesheetYPosition;
     if (actor.spritesheetXPosition < maxSpritesheetXPosition) {
-        actor.spritesheetXPosition += increment
-    } else {
-        actor.spritesheetXPosition = initialSpritesheetXPosition
+        actor.spritesheetXPosition += increment;
+        return
     }
+    actor.spritesheetXPosition = initialSpritesheetXPosition
 }

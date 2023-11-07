@@ -13,33 +13,18 @@ class Player extends Actor {
         this.movementAnimationDelay = 1;
         this.projectileSpeed = 50;
         this.projectileTimer = 0;
-        this.projectileDelay = 4;
-        this.projectiles = []
+        this.projectileDelay = 4
     };
     update() {
         this.game.input.update();
         this.updateProjectiles();
         this.projectileTimer --
     };
-    move(movingHorizontally, movingVertically) {
-        const {keysPressed} = this.game;
-        if (movingHorizontally && movingVertically) {
-            this.screenXPosition += this.movementSpeed;
-            this.cyclePlayerSprite(75)
-        } else if (movingHorizontally && !movingVertically) {
-            this.screenXPosition -= this.movementSpeed;
-            this.cyclePlayerSprite(51)
-        } else if (!movingHorizontally && movingVertically) {
-            this.screenYPosition -= this.movementSpeed;
-            if (!keysPressed.includes("d") && !keysPressed.includes("a") && !keysPressed.includes("s")) {
-                this.cyclePlayerSprite(26)
-            }
-        } else if (!movingHorizontally && !movingVertically) {
-            this.screenYPosition += this.movementSpeed;
-            if (!keysPressed.includes("d") && !keysPressed.includes("a") && !keysPressed.includes("w")) {
-                this.cyclePlayerSprite(0)
-            }
-        }
+    move(left, right, up, down, keysPressed) {
+        if (up) this.moveUp(keysPressed);
+        if (down) this.moveDown(keysPressed);
+        if (left) this.moveLeft();
+        if (right) this.moveRight();
     };
     shoot(left, right, up, down) {
         const playerXPosition = this.screenXPosition + 11;
@@ -62,5 +47,35 @@ class Player extends Actor {
     updateProjectiles() {
         this.projectiles.forEach(projectile => projectile.update());
         this.projectiles = this.projectiles.filter(projectile => !projectile.shouldDelete)
+    };
+    moveLeft() {
+        this.screenXPosition -= this.movementSpeed;
+        this.cyclePlayerSprite(51)
+    };
+    moveRight() {
+        this.screenXPosition += this.movementSpeed;
+        this.cyclePlayerSprite(75)
+    };
+    moveUp(keysPressed) {
+        this.screenYPosition -= this.movementSpeed;
+        if (this.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
+    };
+    moveDown(keysPressed) {
+        this.screenYPosition += this.movementSpeed;
+        if (this.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
+    };
+    pressingWOnly(keysPressed) {
+        return (
+            !keysPressed.includes("d") 
+            && !keysPressed.includes("a") 
+            && !keysPressed.includes("s")
+        )
+    };
+    pressingSOnly(keysPressed) {
+        return (
+            !keysPressed.includes("d") 
+            && !keysPressed.includes("a") 
+            && !keysPressed.includes("w")
+        )
     }
 }
