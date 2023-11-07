@@ -4,7 +4,7 @@ class Projectile {
     constructor(game, screenXPosition, screenYPosition, speed, left, right, up, down) {
         this.game = game;
         this.width = 3;
-        this.height = 45;
+        this.height = 20;
         this.sprite = new Image();
         this.sprite.src = "../images/projectile.png";
         this.spritesheetXPosition = 0;

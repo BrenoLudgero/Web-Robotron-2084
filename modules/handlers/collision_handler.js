@@ -74,6 +74,7 @@ class CollisionHandler {
             enemies.forEach((enemy) => {
                 if (this.checkSingleCollision(human, enemy)) {
                     human.isAlive = false;
+                    console.log("! HUMAN DIED !")
                 }
             })
         })

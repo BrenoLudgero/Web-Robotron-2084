@@ -7,10 +7,9 @@ class Actor {
         this.sprites = new Image();
         this.spritesheetXPosition = 0;
         this.spritesheetYPosition = 0;
-        this.originalWidth = originalWidth;
-        this.originalHeight = originalHeight;
-        this.width = this.originalWidth * 1.8;
-        this.height = this.originalHeight * 1.8;
+        this.width;
+        this.height;
+        this.setScaledDimentions(originalWidth, originalHeight, 1.5)
         this.remainingWalkingDistance = this.walkDistance;
         this.currentDirection = this.setRandomDirection();
         this.projectiles = []
@@ -31,10 +30,20 @@ class Actor {
         this.game.drawHitboxes(this);
         this.projectiles.forEach(projectile => projectile.draw(context))
     };
+    setScaledDimentions(originalWidth, originalHeight, scaleFactor) {
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
+        const aspectRatio = originalWidth / originalHeight;
+        const newWidth = Math.round(originalWidth * scaleFactor);
+        const newHeight = Math.round(newWidth / aspectRatio);
+        this.width = Math.round(originalWidth * scaleFactor);
+        this.height = newHeight
+    };
     setMovementBoundaries() {
+        const {canvas} = this.game;
         const movementBoundaries = {
-            "x": this.game.canvas.width - this.width,
-            "y": this.game.canvas.height - this.height
+            "x": canvas.width - this.width,
+            "y": canvas.height - this.height
         }
         if (this.screenYPosition <= 2) {
             this.screenYPosition = 2

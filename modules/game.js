@@ -14,8 +14,9 @@ class Game {
     constructor(canvas, context) {
         this.ctx = context;
         this.canvas = canvas;
-        this.canvas.width = 1016;
-        this.canvas.height = 786;
+        this.canvas.width;
+        this.canvas.height;
+        this.setCanvasScaledResolution(3);
         this.currentFrame = 0;
         this.player = new Player(this);
         this.enemy = new Enemy(this);
@@ -51,6 +52,15 @@ class Game {
         actors.forEach(actor => {
             actor.draw(context)
         })
+    };
+    setCanvasScaledResolution(scaleFactor) {
+        const originalWidth = 292;
+        const originalHeight = 240;
+        const aspectRatio = originalWidth / originalHeight;
+        const newWidth = Math.round(originalWidth * scaleFactor);
+        const newHeight = Math.round(newWidth / aspectRatio);
+        this.canvas.width = Math.round(originalWidth * scaleFactor);
+        this.canvas.height = newHeight
     };
     drawHitboxes(actor) {
         if (this.shouldDrawHitboxes) {
@@ -93,7 +103,7 @@ class Game {
     };
     // REFACTOR
     addEnemies(numberEnemies, enemyType) {
-        let minDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (120 MINIMUM)
+        let minDistanceFromPlayer = 200; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         const minDistanceFromHumans = 68;
         const minDistanceBetweenEnemies = 48;
         for (let i = 0; i < numberEnemies; i++) {
@@ -137,15 +147,15 @@ class Game {
             }
         }
     };
-    removeDeadOrRescuedActors() {
-        this.enemies = this.enemies.filter(enemy => enemy.isAlive);
-        this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
-    };
     spawnEnemies() {
         // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE (for now)
         this.addHumans(5, Mommy);
         this.addEnemies(8, Hulk);
         this.addEnemies(12, Grunt)
+    };
+    removeDeadOrRescuedActors() {
+        this.enemies = this.enemies.filter(enemy => enemy.isAlive);
+        this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
     }
     logActorCount() { //  !  !  !  !  !
         console.log("Humans: " + this.humans.length);
