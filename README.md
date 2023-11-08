@@ -1,10 +1,14 @@
-# Web Robotron: 2084
+# Web Robotron: 2084 (Work In Progress)
 A faithful recreation of the classic arcade game
 
-# Usage
+## Usage
 Download the source code and open "index.html" with the Live Server extension in VS Code
 
-# Controls
+## Gameplay
+Shoot the enemies and rescue the humans to rack as many points as you can!
+Clear the screen of vulnerable enemies to advance to the next wave
+
+## Controls
 | Keyboard Key | Description |
 | ------------ | ----------- |
 | W  | Move up |
@@ -16,10 +20,10 @@ Download the source code and open "index.html" with the Live Server extension in
 | Arrow Down  | Shoot down |
 | Arrow Right  | Shoot right |
 
-# Known Issues
+## Known Issues
 You can't move if Caps Lock is turned on
 
-# Debugging Shortcuts
+## Debugging Shortcuts
 | Keyboard Key | Description |
 | ------------ | ----------- |
 | H  | Draws all collision hitboxes |
