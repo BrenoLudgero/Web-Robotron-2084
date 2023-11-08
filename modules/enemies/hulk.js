@@ -7,11 +7,11 @@ class Hulk extends Enemy {
         super(game, 26, 32);
         this.sprites.src = "../../../images/enemies/hulk.png";
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
-        this.movementAnimationDelay = 5;
+        this.movementAnimationDelay = 9;
         this.isHulk = true
     };
     update() {
-        if (this.game.currentFrame % this.movementAnimationDelay == 0) {
+        if (this.game.globalCounter % this.movementAnimationDelay == 0) {
             this.moveRandomly();
             this.animate()
         }

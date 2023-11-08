@@ -5,8 +5,8 @@ class CollisionHandler {
         this.game = game
     };
     update() {
-        const {enemies, player, humans, actorInvincibility} = this.game;
-        if (!actorInvincibility) { //  !  !  !  !  !
+        const {enemies, player, humans, debuggerr} = this.game;
+        if (!debuggerr.actorInvincibility) {
             this.checkAllCollisions(player, enemies, humans)
         }
     };

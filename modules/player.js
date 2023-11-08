@@ -9,11 +9,11 @@ class Player extends Actor {
         this.sprites.src = "../images/player.png";
         this.screenXPosition = (game.canvas.width / 2) - this.width;
         this.screenYPosition = (game.canvas.height / 2) - this.height;
-        this.movementSpeed = 6;
-        this.movementAnimationDelay = 1;
+        this.movementSpeed = 3.8;
+        this.movementAnimationDelay = 2;
         this.projectileSpeed = 25;
         this.projectileTimer = 0;
-        this.projectileDelay = 4
+        this.projectileDelay = 7
     };
     update() {
         this.game.input.update();
@@ -26,9 +26,9 @@ class Player extends Actor {
         if (left) this.moveLeft();
         if (right) this.moveRight();
     };
-    shoot(left, right, up, down) {
-        const playerXPosition = this.screenXPosition + 11;
-        const playerYPosition = this.screenYPosition;
+    shoot(left, right, up, down, yOffset) {
+        const playerXPosition = this.screenXPosition + 9;
+        const playerYPosition = this.screenYPosition + yOffset;
         if (this.projectileTimer <= 0) {
             this.projectiles.push(new Projectile(this.game, playerXPosition, playerYPosition, this.projectileSpeed, left, right, up, down));
             this.projectileTimer = this.projectileDelay
@@ -36,7 +36,7 @@ class Player extends Actor {
     };
     cyclePlayerSprite(spritesheetYPosition) {
         this.spritesheetYPosition = spritesheetYPosition;
-        if (this.game.currentFrame % this.movementAnimationDelay == 0) {
+        if (this.game.globalCounter % this.movementAnimationDelay == 0) {
             if (this.spritesheetXPosition < (this.sprites.width - this.width)) {
                 this.spritesheetXPosition += 16
             } else {

@@ -1,6 +1,6 @@
 export {Projectile};
 
-class Projectile {
+class Projectile { // Initialized in Player.shoot()
     constructor(game, screenXPosition, screenYPosition, speed, left, right, up, down) {
         this.game = game;
         this.width = 3;
@@ -27,13 +27,13 @@ class Projectile {
         }
     };
     draw(context) {
-        const {width, height} = this;
+        const {width, height, game} = this;
         context.save();
         context.translate(this.screenXPosition + (width / 2), this.screenYPosition + (height / 2));
         context.rotate(this.rotation);
         context.drawImage(this.sprite, -width / 2, -height / 2, width, height);
         context.restore();
-        this.game.drawHitboxes(this)
+        game.debuggerr.drawHitboxes(this, context)
     };
     shootProjectile() {
         if (this.shotUp && this.shotLeft) {

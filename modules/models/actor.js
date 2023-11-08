@@ -27,8 +27,8 @@ class Actor {
             this.width, 
             this.height
         );
-        this.game.drawHitboxes(this);
-        this.projectiles.forEach(projectile => projectile.draw(context))
+        this.projectiles.forEach(projectile => projectile.draw(context));
+        this.game.debuggerr.drawHitboxes(this, context)
     };
     setScaledDimentions(originalWidth, originalHeight, scaleFactor) {
         this.originalWidth = originalWidth;
@@ -81,9 +81,10 @@ class Actor {
         return eightDirections[Math.floor(Math.random() * eightDirections.length)]
     };
     setRandomWalkDistance() {
-        const distances = [60, 120, 220, 350, 600];
+        const distances = [16, 18, 20, 22, 25, 30, 35, 40];
         return distances[Math.floor(Math.random() * distances.length)]
     };
+    // Moves to a random direction for a random distance
     moveToRandomDirection() {
         const {movementSpeed} = this;
         if (this.remainingWalkingDistance > 0) {
@@ -109,7 +110,7 @@ class Actor {
                     this.screenYPosition += movementSpeed;
                     this.screenXPosition += movementSpeed; break
             }
-            this.remainingWalkingDistance -= this.movementRate
+            this.remainingWalkingDistance--
         } else {
             this.currentDirection = this.setRandomDirection();
             this.remainingWalkingDistance = this.setRandomWalkDistance();

@@ -29,14 +29,14 @@ class InputHandler {
         }
     };
     handleKeyUp(event) {
-        const {keysPressed} = this.game;
+        const {keysPressed, debuggerr} = this.game;
         const keyIndex = keysPressed.indexOf(event.key);
         if (keyIndex > -1) {
             keysPressed.splice(keyIndex, 1)
         }
-        this.readDebugKeys(event) //  !  !  !  !  !
+        debuggerr.readDebugKeys(event)
     };
-    readMovementKeys(keysPressed, player) {     // (left, right, up, down)
+    readMovementKeys(keysPressed, player) { //    (left,  right,  up,  down)
         if (keysPressed.includes("w")) player.move(false, false, true, false, keysPressed);
         if (keysPressed.includes("s")) player.move(false, false, false, true, keysPressed);
         if (keysPressed.includes("d")) player.move(false, true, false, false);
@@ -44,23 +44,28 @@ class InputHandler {
     };
     readShootingKeys(keysPressed, player) {
         if (this.pressingUpOnly(keysPressed)) {
-            player.shoot(false, false, true, false) // (left, right, up, down)
+            player.shoot(false, false, true, false, 0)
+            //           (left, right,  up,  down, yDrawOffset)
         } else if (this.pressingUpAndLeft(keysPressed)) {
-            player.shoot(true, false, true, false)
-        } else if (this.pressingUpAndRight(keysPressed)) {
-            player.shoot(false, true, true, false)
+            player.shoot(true, false, true, false, 0)
+        } 
+        else if (this.pressingUpAndRight(keysPressed)) {
+            player.shoot(false, true, true, false, 0)
         };
         if (this.pressingDownOnly(keysPressed)) {
-            player.shoot(false, false, false, true)
-        } else if (this.pressingDownAndRight(keysPressed)) {
-            player.shoot(false, true, false, true)
-        } else if (this.pressingDownAndLeft(keysPressed)) {
-            player.shoot(true, false, false, true)
+            player.shoot(false, false, false, true, 16)
+        } 
+        else if (this.pressingDownAndRight(keysPressed)) {
+            player.shoot(false, true, false, true, 16)
+        } 
+        else if (this.pressingDownAndLeft(keysPressed)) {
+            player.shoot(true, false, false, true, 16)
         };
         if (this.pressingLeftOnly(keysPressed)) {
-            player.shoot(true, false, false, false)
-        } else if (this.pressingRightOnly(keysPressed)) {
-            player.shoot(false, true, false, false)
+            player.shoot(true, false, false, false, 9)
+        } 
+        else if (this.pressingRightOnly(keysPressed)) {
+            player.shoot(false, true, false, false, 9)
         }
     };
     pressingUpOnly(keysPressed) {
@@ -114,27 +119,5 @@ class InputHandler {
             && !keysPressed.includes("ArrowDown") 
             && !keysPressed.includes("ArrowUp")
         )
-    } //     DEBUG     !  !  !  !  !
-        readDebugKeys(event) {
-            switch (event.key) {
-                case "h":
-                    this.toggleHitboxes(); break
-                case "i":
-                    this.toggleInvincibility(); break
-                case "u":
-                    this.toggleActorUpdates(); break
-            }
-        }
-        toggleHitboxes() {
-            this.game.shouldDrawHitboxes = !this.game.shouldDrawHitboxes;
-            console.log("DRAW HITBOXES: " + this.game.actorInvincibility)
-        }
-        toggleInvincibility() {
-            this.game.actorInvincibility = !this.game.actorInvincibility;
-            console.log("INVINCIBILITY: " + this.game.actorInvincibility)
-        }
-        toggleActorUpdates() {
-            this.game.shouldUpdateActors = !this.game.shouldUpdateActors;
-            console.log("UPDATING ACTORS: " + this.game.shouldUpdateActors)
-        }
+    }
 }

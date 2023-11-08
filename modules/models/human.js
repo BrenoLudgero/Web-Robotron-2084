@@ -6,8 +6,7 @@ class Human extends Actor {
         super(game, originalWidth, originalHeight);
         this.wasRescued = false;
         this.movementType = 2; // 8-way movement
-        this.movementRate = 4;
-        this.movementSpeed = 4.5
+        this.movementSpeed = 4
         // screenX and screenY positions defined in game.addHuman()
     }
 }

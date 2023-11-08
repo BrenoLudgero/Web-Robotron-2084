@@ -1,7 +1,6 @@
 export {Game};
 import {RNG} from "./global_functions.js";
 import {Player} from "./player.js";
-import {Projectile} from "./models/projectile.js";
 import {Enemy} from "./models/enemy.js";
 import {Human} from "./models/human.js";
 import {Mommy} from "./humans/mommy.js";
@@ -9,6 +8,7 @@ import {Grunt} from "./enemies/grunt.js";
 import {Hulk} from "./enemies/hulk.js";
 import {InputHandler} from "./handlers/input_handler.js";
 import {CollisionHandler} from "./handlers/collision_handler.js";
+import {Debugger} from "./debugger.js";
 
 class Game {
     constructor(canvas, context) {
@@ -17,7 +17,7 @@ class Game {
         this.canvas.width;
         this.canvas.height;
         this.setCanvasScaledResolution(3);
-        this.currentFrame = 0;
+        this.globalCounter = 0;
         this.player = new Player(this);
         this.enemy = new Enemy(this);
         this.enemies = [];
@@ -26,18 +26,14 @@ class Game {
         this.input = new InputHandler(this);
         this.keysPressed = [];
         this.collision = new CollisionHandler(this);
-        this.projectile = new Projectile(this)
-            //     DEBUG     !  !  !  !  !
-            this.shouldDrawHitboxes = false
-            this.actorInvincibility = false
-            this.shouldUpdateActors = true
+        this.debuggerr = new Debugger(this)
     };
     update() {
         if (this.player.isAlive) {
             this.player.update();
-            if (this.shouldUpdateActors) {
+            if (this.debuggerr.shouldUpdateActors) {
                 this.updateActors(this.enemies);
-                this.updateActors(this.humans);
+                this.updateActors(this.humans)
             }
             this.collision.update();
             this.removeDeadOrRescuedActors()
@@ -48,11 +44,6 @@ class Game {
         this.drawActors(this.enemies, context);
         this.drawActors(this.humans, context)
     };
-    drawActors(actors, context) {
-        actors.forEach(actor => {
-            actor.draw(context)
-        })
-    };
     setCanvasScaledResolution(scaleFactor) {
         const originalWidth = 292;
         const originalHeight = 240;
@@ -62,24 +53,11 @@ class Game {
         this.canvas.width = Math.round(originalWidth * scaleFactor);
         this.canvas.height = newHeight
     };
-    drawHitboxes(actor) {
-        if (this.shouldDrawHitboxes) {
-            this.ctx.beginPath();
-            if (actor.rotation !== undefined) { // Projectiles only
-                const halfWidth = actor.width / 2;
-                const halfHeight = actor.height / 2;
-                const centerX = actor.screenXPosition + halfWidth;
-                const centerY = actor.screenYPosition + halfHeight;
-                this.ctx.translate(centerX, centerY);
-                this.ctx.rotate(actor.rotation);
-                this.ctx.rect(-halfWidth, -halfHeight, actor.width, actor.height)
-            } else {
-                this.ctx.rect(actor.screenXPosition, actor.screenYPosition, actor.width, actor.height)
-            };
-            this.ctx.strokeStyle = "red";
-            this.ctx.stroke();
-            this.ctx.setTransform(1, 0, 0, 1, 0, 0) // Resets the context transformation
-        }
+    drawActors(actors, context) {
+        actors.forEach(actor => {
+            actor.draw(context);
+            this.debuggerr.drawHitboxes(actor, context)
+        })
     };
     updateActors(actors) {
         actors.forEach(actor => {
@@ -149,17 +127,12 @@ class Game {
     };
     spawnEnemies() {
         // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE (for now)
-        this.addHumans(5, Mommy);
-        this.addEnemies(8, Hulk);
-        this.addEnemies(12, Grunt)
+        this.addHumans(8, Mommy);
+        this.addEnemies(5, Hulk);
+        this.addEnemies(15, Grunt)
     };
     removeDeadOrRescuedActors() {
         this.enemies = this.enemies.filter(enemy => enemy.isAlive);
         this.humans = this.humans.filter(human => human.isAlive && !human.wasRescued)
-    }
-    logActorCount() { //  !  !  !  !  !
-        console.log("Humans: " + this.humans.length);
-        console.log("Enemies: " + this.enemies.length);
-        console.log("")
     }
 }

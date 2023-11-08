@@ -6,16 +6,16 @@ class Grunt extends Enemy {
     constructor(game) {
         super(game, 18, 27);
         this.sprites.src = "../../../images/enemies/grunt.png";
-        this.movementSpeed = 7; // INCREASES ACCORDING TO WAVE ELAPSED TIME (LATE)
+        this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE ELAPSED TIME (LATER)
         this.movementTimer = 0;
-        this.movementInterval = 30 // DECREASES ACCORDING TO WAVE ELAPSED TIME
+        this.movementInterval = 20 // DECREASES ACCORDING TO WAVE ELAPSED TIME
     };
     update() {
         if (this.movementTimer > this.movementInterval) {
             this.moveAtRandomIntervals();
             this.movementTimer = 0
         } else {
-            this.movementTimer += this.movementRate
+            this.movementTimer++
         }
     };
     chasePlayer() {

@@ -8,8 +8,8 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
-SET INDIVIDUAL WALK DISTANCES ?
-ADJUST ENEMIES HITBOXES (DYNAMIC HITBOX BASED ON SPRITE CYCLE)
+ENEMIES ARE KILLED EXCLUSIVELY BY HULKS
+ADJUST HITBOXES (DYNAMIC HITBOX BASED ON SPRITE CYCLE)
 ADD MINIMUM DISTANCE HULK TO HULK, GRUNT TO GRUNT ETC
 COMMENT CODE
 IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
@@ -26,28 +26,30 @@ ADD MOUSE FIRE SUPPORT */
 
 import {Game} from "./modules/game.js";
 
-window.addEventListener("load", function() {
+window.addEventListener("load", () => {
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
-    canvas.width = 1016;
-    canvas.height = 786;
     const game = new Game(canvas, ctx);
-    let lastTimeStamp = 0;
-    const targetFrameRate = 60; // Game updates 60 times per second
-    const frameInterval = 1000 / targetFrameRate;
-    function execute(timeStamp) {
-        const deltaTime = timeStamp - lastTimeStamp;
-        if (deltaTime >= frameInterval) {
-            lastTimeStamp = timeStamp;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            game.update(deltaTime);
-            game.draw(ctx);
-            game.currentFrame++
+
+    const updateRate = 1000 / 60; // 60 times per second
+    let last = performance.now();
+    let lag = 0;
+    function runGame() {
+        let current = performance.now();
+        const elapsed = current - last;
+        last = current;
+        lag += elapsed;
+        while (lag >= updateRate) {
+            game.update(updateRate);
+            lag -= updateRate;
+            game.globalCounter++
         }
-        requestAnimationFrame(execute)
-    };
-    requestAnimationFrame(execute);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.draw(ctx);
+        requestAnimationFrame(runGame)
+    }
+    runGame();
     game.spawnEnemies()
-    game.logActorCount()
+    game.debuggerr.logActorCount()
 })

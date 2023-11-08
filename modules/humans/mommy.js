@@ -7,10 +7,10 @@ class Mommy extends Human {
         super(game, 14, 28);
         this.game = game;
         this.sprites.src = "../../../images/humans/mommy.png";
-        this.movementAnimationDelay = 6
+        this.movementAnimationDelay = 9
     };
     update() {
-        if (this.game.currentFrame % this.movementAnimationDelay == 0) {
+        if (this.game.globalCounter % this.movementAnimationDelay == 0) {
             this.moveRandomly();
             this.animate()
         }
