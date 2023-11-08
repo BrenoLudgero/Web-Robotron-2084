@@ -72,9 +72,11 @@ class CollisionHandler {
                 human.wasRescued = true;
             };
             enemies.forEach((enemy) => {
-                if (this.checkSingleCollision(human, enemy)) {
-                    human.isAlive = false;
-                    console.log("! HUMAN DIED !")
+                if (enemy.isHulk) {
+                    if (this.checkSingleCollision(human, enemy)) {
+                        human.isAlive = false;
+                        console.log("! HUMAN DIED !")
+                    }
                 }
             })
         })
