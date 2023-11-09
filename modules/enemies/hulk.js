@@ -8,6 +8,7 @@ class Hulk extends Enemy {
         this.sprites.src = "../../../images/enemies/hulk.png";
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
+        this.minHumanSpawnDistance = 80;
         this.isHulk = true
     };
     update() {

@@ -20,12 +20,6 @@ class Player extends Actor {
         this.updateProjectiles();
         this.projectileTimer --
     };
-    move(left, right, up, down, keysPressed) {
-        if (up) this.moveUp(keysPressed);
-        if (down) this.moveDown(keysPressed);
-        if (left) this.moveLeft();
-        if (right) this.moveRight();
-    };
     shoot(left, right, up, down, yOffset) {
         const playerXPosition = this.screenXPosition + 9;
         const playerYPosition = this.screenYPosition + yOffset;
@@ -58,24 +52,10 @@ class Player extends Actor {
     };
     moveUp(keysPressed) {
         this.screenYPosition -= this.movementSpeed;
-        if (this.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
+        if (this.game.input.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
     };
     moveDown(keysPressed) {
         this.screenYPosition += this.movementSpeed;
-        if (this.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
-    };
-    pressingWOnly(keysPressed) {
-        return (
-            !keysPressed.includes("d") 
-            && !keysPressed.includes("a") 
-            && !keysPressed.includes("s")
-        )
-    };
-    pressingSOnly(keysPressed) {
-        return (
-            !keysPressed.includes("d") 
-            && !keysPressed.includes("a") 
-            && !keysPressed.includes("w")
-        )
+        if (this.game.input.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
     }
 }

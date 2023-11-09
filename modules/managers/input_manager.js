@@ -1,27 +1,22 @@
-export {InputHandler};
+export {InputManager};
 
-class InputHandler {
+class InputManager {
     constructor(game) {
         this.game = game;
         this.playerControls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
-        window.addEventListener("keydown", (e) => {
-            this.handleKeyDown(e)
-        });
-        window.addEventListener("keyup", (e) => {
-            this.handleKeyUp(e)
-        })/*;
-        window.addEventListener("mousedown", e => {
-            console.log("CLICK")
-        });
-        window.addEventListener("mouseup", e => {
-            console.log("NO CLICK")
-        }) */
+        this.setEventListeners()
     };
     update() {
         const {keysPressed, player} = this.game;
         this.readMovementKeys(keysPressed, player);
         this.readShootingKeys(keysPressed, player)
     };
+    setEventListeners() {
+        window.addEventListener("keydown", (e) => this.handleKeyDown(e));
+        window.addEventListener("keyup", (e) => this.handleKeyUp(e))
+        //window.addEventListener("mousedown", (e) => console.log("CLICK"));
+        //window.addEventListener("mouseup", (e) => console.log("NO CLICK"))
+    }
     handleKeyDown(event) {
         const {keysPressed} = this.game;
         if (this.playerControls.includes(event.key) && !keysPressed.includes(event.key)) {
@@ -36,17 +31,18 @@ class InputHandler {
         }
         debuggerr.readDebugKeys(event)
     };
-    readMovementKeys(keysPressed, player) { //    (left,  right,  up,  down)
-        if (keysPressed.includes("w")) player.move(false, false, true, false, keysPressed);
-        if (keysPressed.includes("s")) player.move(false, false, false, true, keysPressed);
-        if (keysPressed.includes("d")) player.move(false, true, false, false);
-        if (keysPressed.includes("a")) player.move(true, false, false, false)
+    readMovementKeys(keysPressed, player) {
+        if (keysPressed.includes("w")) player.moveUp(keysPressed);
+        if (keysPressed.includes("s")) player.moveDown(keysPressed);
+        if (keysPressed.includes("d")) player.moveRight();
+        else if (keysPressed.includes("a")) player.moveLeft();
     };
     readShootingKeys(keysPressed, player) {
         if (this.pressingUpOnly(keysPressed)) {
+            //          (left,  right,  up,  down, yDrawOffset)
             player.shoot(false, false, true, false, 0)
-            //           (left, right,  up,  down, yDrawOffset)
-        } else if (this.pressingUpAndLeft(keysPressed)) {
+        } 
+        else if (this.pressingUpAndLeft(keysPressed)) {
             player.shoot(true, false, true, false, 0)
         } 
         else if (this.pressingUpAndRight(keysPressed)) {
@@ -118,6 +114,20 @@ class InputHandler {
             keysPressed.includes("ArrowRight") 
             && !keysPressed.includes("ArrowDown") 
             && !keysPressed.includes("ArrowUp")
+        )
+    };
+    pressingWOnly(keysPressed) {
+        return (
+            !keysPressed.includes("d") 
+            && !keysPressed.includes("a") 
+            && !keysPressed.includes("s")
+        )
+    };
+    pressingSOnly(keysPressed) {
+        return (
+            !keysPressed.includes("d") 
+            && !keysPressed.includes("w") 
+            && !keysPressed.includes("a")
         )
     }
 }

@@ -1,6 +1,6 @@
-export {CollisionHandler};
+export {CollisionManager};
 
-class CollisionHandler {
+class CollisionManager {
     constructor(game) {
         this.game = game
     };
