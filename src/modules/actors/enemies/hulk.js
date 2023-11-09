@@ -1,11 +1,11 @@
 export {Hulk};
-import {Enemy} from "../models/enemy.js";
-import {cycleSprite} from "../global_functions.js";
+import {Enemy} from "../../models/enemy.js";
+import {cycleSprite} from "../../helpers/globals.js";
 
 class Hulk extends Enemy {
     constructor(game) {
         super(game, 26, 32);
-        this.sprites.src = "../../../images/enemies/hulk.png";
+        this.sprites.src = game.spritesIndex.hulk;
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
         this.minHumanSpawnDistance = 80;

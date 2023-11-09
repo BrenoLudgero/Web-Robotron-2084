@@ -1,12 +1,12 @@
 export {Projectile};
 
-class Projectile { // Initialized in Player.shoot()
+class Projectile { // Initialized in each actor.shoot()
     constructor(game, screenXPosition, screenYPosition, speed, left, right, up, down) {
         this.game = game;
         this.width = 3;
         this.height = 20;
         this.sprite = new Image();
-        this.sprite.src = "../images/projectile.png";
+        this.sprite.src = game.spritesIndex.projectile;
         this.spritesheetXPosition = 0;
         this.spritesheetYPosition = 0;
         this.screenXPosition = screenXPosition;
@@ -19,11 +19,12 @@ class Projectile { // Initialized in Player.shoot()
         this.rotation = 0; // Rotates the sprite depending on the shot direction
         this.knockbackForce = 6; // For Hulk collision
         this.shouldDelete = false
+        // Speed defined in each actor
     };
     update() {
         this.shootProjectile()
         if (this.isOutOfBounds()) {
-            this.shouldDelete = true // Deleted in Player.update()
+            this.shouldDelete = true
         }
     };
     draw(context) {

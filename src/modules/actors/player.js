@@ -1,17 +1,17 @@
 export {Player};
-import {Actor} from "./models/actor.js";
-import {Projectile} from "./models/projectile.js";
+import {Actor} from "../models/actor.js";
+import {Projectile} from "../models/projectile.js";
 
 class Player extends Actor {
     constructor(game) {
         super(game, 15, 24);
         this.game = game;
-        this.sprites.src = "../images/player.png";
+        this.sprites.src = game.spritesIndex.player;
         this.screenXPosition = (game.canvas.width / 2) - this.width;
         this.screenYPosition = (game.canvas.height / 2) - this.height;
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
-        this.projectileSpeed = 25;
+        this.projectileSpeed = 28;
         this.projectileTimer = 0;
         this.projectileDelay = 7
     };

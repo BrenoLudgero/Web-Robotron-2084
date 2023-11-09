@@ -1,12 +1,11 @@
 export {Mommy};
-import {Human} from "../models/human.js";
-import {cycleSprite} from "../global_functions.js";
+import {Human} from "../../models/human.js";
+import {cycleSprite} from "../../helpers/globals.js";
 
 class Mommy extends Human {
     constructor(game) {
         super(game, 14, 28);
-        this.game = game;
-        this.sprites.src = "../../../images/humans/mommy.png";
+        this.sprites.src = game.spritesIndex.mommy;
         this.movementAnimationDelay = 9
     };
     update() {

@@ -1,14 +1,15 @@
 export {Game};
-import {RNG} from "./global_functions.js";
-import {Player} from "./player.js";
-import {Enemy} from "./models/enemy.js";
-import {Human} from "./models/human.js";
-import {Mommy} from "./humans/mommy.js";
-import {Grunt} from "./enemies/grunt.js";
-import {Hulk} from "./enemies/hulk.js";
-import {InputManager} from "./managers/input_manager.js";
-import {CollisionManager} from "./managers/collision_manager.js";
+import {spritesIndex} from "../helpers/indexes.js";
+import {Player} from "../actors/player.js";
+import {Enemy} from "./enemy.js";
+import {Grunt} from "../actors/enemies/grunt.js";
+import {Hulk} from "../actors/enemies/hulk.js";
+import {Human} from "./human.js";
+import {Mommy} from "../actors/humans/mommy.js";
+import {InputManager} from "../managers/input.js";
+import {CollisionManager} from "../managers/collision.js";
 import {Debugger} from "./debugger.js";
+import {RNG} from "../helpers/globals.js";
 
 class Game {
     constructor(canvas, context) {
@@ -17,6 +18,7 @@ class Game {
         this.canvas.width;
         this.canvas.height;
         this.setCanvasScaledResolution(3);
+        this.spritesIndex = spritesIndex;
         this.globalCounter = 0;
         this.player = new Player(this);
         this.enemy = new Enemy(this);

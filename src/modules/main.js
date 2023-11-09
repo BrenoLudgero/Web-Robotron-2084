@@ -8,8 +8,8 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
-AI CLASS
-UI CLASS
+ACTOR, PROJECTILE MANAGERS
+AI, UI CLASSES
 ADJUST HITBOXES (DYNAMIC HITBOX BASED ON SPRITE CYCLE)
 ADD MINIMUM DISTANCE HULK TO HULK, GRUNT TO GRUNT ETC
 COMMENT CODE
@@ -25,7 +25,7 @@ IMPLEMENT ENEMY WAVES
 FIX CAPS LOCK LACK OF MOVEMENT
 ADD MOUSE FIRE SUPPORT */
 
-import {Game} from "./modules/game.js";
+import {Game} from "./models/game.js";
 
 window.addEventListener("load", () => {
     const canvas = document.querySelector("canvas");
