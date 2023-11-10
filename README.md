@@ -14,41 +14,41 @@ Clear the screen of vulnerable enemies to advance to the next wave
 Destroying enemies grants you points but getting too close will cost you a life!
 
 ### G.R.U.N.T. (100 Points)
-The Ground Roving Unit Network Terminator moves at increasing speeds towards the player
-![Grunt](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/grunt.png "Grunt")
+The Ground Roving Unit Network Terminator moves at increasing speeds towards the player\
+![Grunt](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/grunt.png)
 
 ### Hulk
-Hulks are indestructible and will destroy humans on contact but can be pushed back with your projectiles
-![Hulk](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/hulk.png "Hulk")
+Hulks are indestructible and will destroy humans on contact but can be pushed back with your projectiles\
+![Hulk](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/hulk.png)
 
 ### Spheroids (1,000 Points)
-A Spheroid roams around the screen. Given enough time, it'll create Enforcers
-![Spheroid](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/spheroid.png "Spheroid")
+A Spheroid roams around the screen. Given enough time, it'll create Enforcers\
+![Spheroid](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/spheroid.png)
 
 ### Enforcer (150 Points)
-Enforcers pursue the player while firing Sparks (25 Points)
-![Enforcer](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/enforcer.png "Enforcer")
+Enforcers pursue the player while firing Sparks (25 Points)\
+![Enforcer](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/enforcer.png)
 
 ### Brain (500 Points)
-Brains fire Cruise Missiles (25 Points) that pursue the player. They can chase and convert humans into Progs on contact
-![Brain](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/brain.png "Brain")
+Brains fire Cruise Missiles (25 Points) that pursue the player. They can chase and convert humans into Progs on contact\
+![Brain](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/brain.png)
 
 ### Prog (100 Points)
-Progs (or reprogrammed humans) will relentlessly chase the player
-![Prog](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/prog.png "Prog")
+Progs (or reprogrammed humans) will relentlessly chase the player\
+![Prog](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/prog.png)
 
 ### Quarks (1,000 Points)
-Quarks behave similarly like Spheroids, but will create Tanks
-![Quark](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/quark.png "Quark")
+Quarks behave similarly like Spheroids, but will create Tanks\
+![Quark](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/quark.png)
 
 ### Tank (200 Points)
-Tanks move relatively slowly and fire Bounce Bombs (25 Points) that bounce upon touching a wall
-![Tank](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/tank.png "Tank")
+Tanks move relatively slowly and fire Bounce Bombs (25 Points) that bounce upon touching a wall\
+![Tank](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/tank.png)
 
 ## Humans (1,000 - 5,000 Points)
 Rescuing a human grants 1000 points. Every subsequent rescue grants an additional 1000 points up to 5000\
-Losing a life or advancing to the next wave resets the next rescue bonus to 1000
-![Humans](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/humans.png "Humans")
+Losing a life or advancing to the next wave resets the next rescue bonus to 1000\
+![Humans](https://github.com/BrenoLudgero/Web_Robotron_2084/tree/main/github-images/humans.png)
 
 ### Obstacles
 Obstacles are scattered around the screen and will destroy the player on contact
