@@ -7,8 +7,8 @@ class Player extends Actor {
         super(game, 15, 24);
         this.game = game;
         this.sprites.src = game.spritesIndex.player;
-        this.screenXPosition = (game.canvas.width / 2) - this.width;
-        this.screenYPosition = (game.canvas.height / 2) - this.height;
+        this.screenX = (game.canvas.width / 2) - this.width;
+        this.screenY = (game.canvas.height / 2) - this.height;
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
         this.projectileSpeed = 28;
@@ -21,20 +21,20 @@ class Player extends Actor {
         this.projectileTimer --
     };
     shoot(left, right, up, down, yOffset) {
-        const playerXPosition = this.screenXPosition + 9;
-        const playerYPosition = this.screenYPosition + yOffset;
+        const playerX = this.screenX + 9;
+        const playerY = this.screenY + yOffset;
         if (this.projectileTimer <= 0) {
-            this.projectiles.push(new Projectile(this.game, playerXPosition, playerYPosition, this.projectileSpeed, left, right, up, down));
+            this.projectiles.push(new Projectile(this.game, playerX, playerY, this.projectileSpeed, left, right, up, down));
             this.projectileTimer = this.projectileDelay
         }
     };
-    cyclePlayerSprite(spritesheetYPosition) {
-        this.spritesheetYPosition = spritesheetYPosition;
+    cyclePlayerSprite(spritesheetY) {
+        this.spritesheetY = spritesheetY;
         if (this.game.globalCounter % this.movementAnimationDelay == 0) {
-            if (this.spritesheetXPosition < (this.sprites.width - this.width)) {
-                this.spritesheetXPosition += 16
+            if (this.spritesheetX < (this.sprites.width - this.width)) {
+                this.spritesheetX += 16
             } else {
-                this.spritesheetXPosition = 0
+                this.spritesheetX = 0
             }
         }
     };
@@ -43,19 +43,19 @@ class Player extends Actor {
         this.projectiles = this.projectiles.filter(projectile => !projectile.shouldDelete)
     };
     moveLeft() {
-        this.screenXPosition -= this.movementSpeed;
+        this.screenX -= this.movementSpeed;
         this.cyclePlayerSprite(51)
     };
     moveRight() {
-        this.screenXPosition += this.movementSpeed;
+        this.screenX += this.movementSpeed;
         this.cyclePlayerSprite(75)
     };
     moveUp(keysPressed) {
-        this.screenYPosition -= this.movementSpeed;
+        this.screenY -= this.movementSpeed;
         if (this.game.input.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
     };
     moveDown(keysPressed) {
-        this.screenYPosition += this.movementSpeed;
+        this.screenY += this.movementSpeed;
         if (this.game.input.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
     }
 }

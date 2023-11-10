@@ -8,7 +8,7 @@ class Enemy extends Actor {
         this.movementType = 1; // 4-way movement
         this.minPlayerSpawnDistance = 180; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = this.height;
-        this.minEnemySpawnDistance = 35
+        this.minEnemySpawnDistance = 80 // CHANGES ACCORDING TO WAVE
         // screenX and screenY positions defined in game.addEnemy()
     }
 }

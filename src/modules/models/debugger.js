@@ -35,13 +35,13 @@ class Debugger {
             if (actor.rotation !== undefined) { // Projectiles only
                 const halfWidth = actor.width / 2;
                 const halfHeight = actor.height / 2;
-                const centerX = actor.screenXPosition + halfWidth;
-                const centerY = actor.screenYPosition + halfHeight;
+                const centerX = actor.screenX + halfWidth;
+                const centerY = actor.screenY + halfHeight;
                 context.translate(centerX, centerY);
                 context.rotate(actor.rotation);
                 context.rect(-halfWidth, -halfHeight, actor.width, actor.height)
             } else {
-                context.rect(actor.screenXPosition, actor.screenYPosition, actor.width, actor.height)
+                context.rect(actor.screenX, actor.screenY, actor.width, actor.height)
             };
             context.strokeStyle = "red";
             context.stroke();

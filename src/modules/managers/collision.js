@@ -37,17 +37,17 @@ class CollisionManager {
     };
     getHitbox(actor) {
         return {
-            left: actor.screenXPosition,
-            right: actor.screenXPosition + actor.width,
-            top: actor.screenYPosition,
-            bottom: actor.screenYPosition + actor.height
+            left: actor.screenX,
+            right: actor.screenX + actor.width,
+            top: actor.screenY,
+            bottom: actor.screenY + actor.height
         }
     };
     getRotatedHitbox(projectile) {
         const halfWidth = projectile.width / 2;
         const halfHeight = projectile.height / 2;
-        const centerX = projectile.screenXPosition + halfWidth;
-        const centerY = projectile.screenYPosition + halfHeight;
+        const centerX = projectile.screenX + halfWidth;
+        const centerY = projectile.screenY + halfHeight;
         const rotatedX1 = centerX - halfWidth * Math.abs(Math.cos(projectile.rotation)) - halfHeight * Math.abs(Math.sin(projectile.rotation));
         const rotatedX2 = centerX + halfWidth * Math.abs(Math.cos(projectile.rotation)) + halfHeight * Math.abs(Math.sin(projectile.rotation));
         const rotatedY1 = centerY - halfWidth * Math.abs(Math.sin(projectile.rotation)) - halfHeight * Math.abs(Math.cos(projectile.rotation));
@@ -100,7 +100,7 @@ class CollisionManager {
     knockbackHulk(projectile, enemy) {
         const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
         const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
-        enemy.screenXPosition += knockbackXDirection * projectile.knockbackForce;
-        enemy.screenYPosition += knockbackYDirection * projectile.knockbackForce
+        enemy.screenX += knockbackXDirection * projectile.knockbackForce;
+        enemy.screenY += knockbackYDirection * projectile.knockbackForce
     }
 }

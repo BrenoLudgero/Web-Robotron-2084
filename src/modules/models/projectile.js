@@ -1,16 +1,16 @@
 export {Projectile};
 
-class Projectile { // Initialized in each actor.shoot()
-    constructor(game, screenXPosition, screenYPosition, speed, left, right, up, down) {
+class Projectile { // Initialized by each actor.shoot()
+    constructor(game, screenX, screenY, speed, left, right, up, down) {
         this.game = game;
         this.width = 3;
         this.height = 20;
         this.sprite = new Image();
         this.sprite.src = game.spritesIndex.projectile;
-        this.spritesheetXPosition = 0;
-        this.spritesheetYPosition = 0;
-        this.screenXPosition = screenXPosition;
-        this.screenYPosition = screenYPosition;
+        this.spritesheetX = 0;
+        this.spritesheetY = 0;
+        this.screenX = screenX;
+        this.screenY = screenY;
         this.shotLeft = left;
         this.shotRight = right;
         this.shotUp = up;
@@ -19,7 +19,7 @@ class Projectile { // Initialized in each actor.shoot()
         this.rotation = 0; // Rotates the sprite depending on the shot direction
         this.knockbackForce = 6; // For Hulk collision
         this.shouldDelete = false
-        // Speed defined in each actor
+        // Speed defined by each actor
     };
     update() {
         this.shootProjectile()
@@ -30,7 +30,7 @@ class Projectile { // Initialized in each actor.shoot()
     draw(context) {
         const {width, height, game} = this;
         context.save();
-        context.translate(this.screenXPosition + (width / 2), this.screenYPosition + (height / 2));
+        context.translate(this.screenX + (width / 2), this.screenY + (height / 2));
         context.rotate(this.rotation);
         context.drawImage(this.sprite, -width / 2, -height / 2, width, height);
         context.restore();
@@ -58,46 +58,46 @@ class Projectile { // Initialized in each actor.shoot()
     isOutOfBounds() {
         const {canvas} = this.game;
         return (
-            this.screenXPosition > canvas.width + 10 
-            || this.screenXPosition < -10 
-            || this.screenYPosition > canvas.height + 10 
-            || this.screenYPosition < -10
+            this.screenX > canvas.width + 10 
+            || this.screenX < -10 
+            || this.screenY > canvas.height + 10 
+            || this.screenY < -10
         )
     };
     shootUp() {
         this.rotation = 0;
-        this.screenYPosition -= this.speed
+        this.screenY -= this.speed
     };
     shootUpLeft() {
         this.rotation = -Math.PI / 4;
-        this.screenXPosition -= this.speed;
-        this.screenYPosition -= this.speed
+        this.screenX -= this.speed;
+        this.screenY -= this.speed
     };
     shootUpRight() {
         this.rotation = Math.PI / 4;
-        this.screenXPosition += this.speed;
-        this.screenYPosition -= this.speed
+        this.screenX += this.speed;
+        this.screenY -= this.speed
     };
     shootLeft() {
         this.rotation = Math.PI / 2;
-        this.screenXPosition -= this.speed
+        this.screenX -= this.speed
     };
     shootRight() {
         this.rotation = Math.PI / 2;
-        this.screenXPosition += this.speed
+        this.screenX += this.speed
     };
     shootDownLeft() {
         this.rotation = 3 * (-Math.PI / 4);
-        this.screenXPosition -= this.speed;
-        this.screenYPosition += this.speed
+        this.screenX -= this.speed;
+        this.screenY += this.speed
     };
     shootDown() {
         this.rotation = 0;
-        this.screenYPosition += this.speed
+        this.screenY += this.speed
     };
     shootDownRight() {
         this.rotation = 3 * (Math.PI / 4);
-        this.screenXPosition += this.speed;
-        this.screenYPosition += this.speed
+        this.screenX += this.speed;
+        this.screenY += this.speed
     }
 }

@@ -20,15 +20,15 @@ class Grunt extends Enemy {
     };
     chasePlayer() {
         const {player} = this.game;
-        if (this.screenXPosition > player.screenXPosition) {
-            this.screenXPosition -= this.movementSpeed
+        if (this.screenX > player.screenX) {
+            this.screenX -= this.movementSpeed
         } else {
-            this.screenXPosition += this.movementSpeed
+            this.screenX += this.movementSpeed
         };
-        if (this.screenYPosition > player.screenYPosition) {
-            this.screenYPosition -= this.movementSpeed
+        if (this.screenY > player.screenY) {
+            this.screenY -= this.movementSpeed
         } else {
-            this.screenYPosition += this.movementSpeed
+            this.screenY += this.movementSpeed
         }
     };
     moveAtRandomIntervals() {

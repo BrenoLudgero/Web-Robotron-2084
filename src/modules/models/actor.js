@@ -5,8 +5,8 @@ class Actor {
         this.game = game;
         this.isAlive = true;
         this.sprites = new Image();
-        this.spritesheetXPosition = 0;
-        this.spritesheetYPosition = 0;
+        this.spritesheetX = 0;
+        this.spritesheetY = 0;
         this.width;
         this.height;
         this.setScaledDimentions(originalWidth, originalHeight, 1.5)
@@ -18,18 +18,19 @@ class Actor {
         this.setMovementBoundaries();
         context.drawImage(
             this.sprites, 
-            this.spritesheetXPosition, 
-            this.spritesheetYPosition, 
+            this.spritesheetX, 
+            this.spritesheetY, 
             this.originalWidth, 
             this.originalHeight, 
-            this.screenXPosition, 
-            this.screenYPosition, 
+            this.screenX, 
+            this.screenY, 
             this.width, 
             this.height
         );
         this.projectiles.forEach(projectile => projectile.draw(context));
         this.game.debuggerr.drawHitboxes(this, context)
     };
+    // Scales the sprite size to the scale factor
     setScaledDimentions(originalWidth, originalHeight, scaleFactor) {
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
@@ -45,24 +46,24 @@ class Actor {
             "x": canvas.width - this.width,
             "y": canvas.height - this.height
         }
-        if (this.screenYPosition <= 2) {
-            this.screenYPosition = 2
-        } else if (this.screenYPosition >= movementBoundaries["y"]) {
-            this.screenYPosition = movementBoundaries["y"]
+        if (this.screenY <= 2) {
+            this.screenY = 2
+        } else if (this.screenY >= movementBoundaries["y"]) {
+            this.screenY = movementBoundaries["y"]
         };
-        if (this.screenXPosition <= 2) {
-            this.screenXPosition = 2
-        } else if (this.screenXPosition >= movementBoundaries["x"]) {
-            this.screenXPosition = movementBoundaries["x"]
+        if (this.screenX <= 2) {
+            this.screenX = 2
+        } else if (this.screenX >= movementBoundaries["x"]) {
+            this.screenX = movementBoundaries["x"]
         };
         return movementBoundaries
     };
     isActorAgainstWall() {
         const movementBoundaries = this.setMovementBoundaries();
-        if (this.screenXPosition >= movementBoundaries["x"] 
-            || this.screenXPosition <= 2 
-            || this.screenYPosition >= movementBoundaries["y"] 
-            || this.screenYPosition <= 2) {
+        if (this.screenX >= movementBoundaries["x"] 
+            || this.screenX <= 2 
+            || this.screenY >= movementBoundaries["y"] 
+            || this.screenY <= 2) {
                 return true
         };
         return false
@@ -90,25 +91,25 @@ class Actor {
         if (this.remainingWalkingDistance > 0) {
             switch(this.currentDirection) {
                 case("left"):
-                    this.screenXPosition -= movementSpeed; break
+                    this.screenX -= movementSpeed; break
                 case("right"):
-                    this.screenXPosition += movementSpeed; break
+                    this.screenX += movementSpeed; break
                 case("up"):
-                    this.screenYPosition -= movementSpeed; break
+                    this.screenY -= movementSpeed; break
                 case("down"):
-                    this.screenYPosition += movementSpeed; break
+                    this.screenY += movementSpeed; break
                 case("upleft"):
-                    this.screenYPosition -= movementSpeed;
-                    this.screenXPosition -= movementSpeed; break
+                    this.screenY -= movementSpeed;
+                    this.screenX -= movementSpeed; break
                 case("upright"):
-                    this.screenYPosition -= movementSpeed;
-                    this.screenXPosition += movementSpeed; break
+                    this.screenY -= movementSpeed;
+                    this.screenX += movementSpeed; break
                 case("downleft"):
-                    this.screenYPosition += movementSpeed;
-                    this.screenXPosition -= movementSpeed; break
+                    this.screenY += movementSpeed;
+                    this.screenX -= movementSpeed; break
                 case("downright"):
-                    this.screenYPosition += movementSpeed;
-                    this.screenXPosition += movementSpeed; break
+                    this.screenY += movementSpeed;
+                    this.screenX += movementSpeed; break
             }
             this.remainingWalkingDistance--
         } else {
