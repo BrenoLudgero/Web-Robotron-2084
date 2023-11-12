@@ -39,7 +39,7 @@ Tanks move relatively slowly and fire Bounce Bombs (25 Points) that bounce upon 
 
 ### ![Humans](/github-images/humans.png) Humans (1,000 - 5,000 Points)
 Rescuing a human grants 1000 points. Every subsequent rescue grants an additional 1000 points up to 5000\
-Losing a life or advancing to the next wave resets the next rescue bonus to 1000
+Losing a life or advancing to the next wave resets the next rescue to the initial 1000 points
 
 ### Obstacles
 Obstacles are scattered around the screen and will destroy the player on contact
