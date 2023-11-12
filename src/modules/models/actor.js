@@ -41,10 +41,9 @@ class Actor {
         this.height = newHeight
     };
     setMovementBoundaries() {
-        const {canvas} = this.game;
         const movementBoundaries = {
-            "x": canvas.width - this.width,
-            "y": canvas.height - this.height
+            "x": this.game.canvas.width - this.width,
+            "y": this.game.canvas.height - this.height
         }
         if (this.screenY <= 2) {
             this.screenY = 2

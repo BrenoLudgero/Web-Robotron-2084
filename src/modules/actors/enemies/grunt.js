@@ -19,13 +19,12 @@ class Grunt extends Enemy {
         }
     };
     chasePlayer() {
-        const {player} = this.game;
-        if (this.screenX > player.screenX) {
+        if (this.screenX > this.game.player.screenX) {
             this.screenX -= this.movementSpeed
         } else {
             this.screenX += this.movementSpeed
         };
-        if (this.screenY > player.screenY) {
+        if (this.screenY > this.game.player.screenY) {
             this.screenY -= this.movementSpeed
         } else {
             this.screenY += this.movementSpeed

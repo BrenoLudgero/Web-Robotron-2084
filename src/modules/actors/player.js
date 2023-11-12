@@ -30,7 +30,7 @@ class Player extends Actor {
     };
     cyclePlayerSprite(spritesheetY) {
         this.spritesheetY = spritesheetY;
-        if (this.game.globalCounter % this.movementAnimationDelay == 0) {
+        if (this.game.globalTimer % this.movementAnimationDelay == 0) {
             if (this.spritesheetX < (this.sprites.width - this.width)) {
                 this.spritesheetX += 16
             } else {

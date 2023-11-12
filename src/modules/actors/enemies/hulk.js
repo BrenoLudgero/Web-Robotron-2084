@@ -12,7 +12,7 @@ class Hulk extends Enemy {
         this.isHulk = true
     };
     update() {
-        if (this.game.globalCounter % this.movementAnimationDelay == 0) {
+        if (this.game.globalTimer% this.movementAnimationDelay == 0) {
             this.moveRandomly();
             this.animate()
         }

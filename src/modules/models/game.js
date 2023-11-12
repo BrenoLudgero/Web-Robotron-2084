@@ -16,7 +16,7 @@ class Game {
         this.canvas.height;
         this.setCanvasScaledResolution(3);
         this.spritesIndex = spritesIndex;
-        this.globalCounter = 0;
+        this.globalTimer = 0;
         this.player = new Player(this);
         this.enemy = new Enemy(this);
         this.enemies = [];

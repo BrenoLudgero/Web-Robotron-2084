@@ -32,13 +32,13 @@ class Debugger {
     drawHitboxes(actor, context) {
         if (this.shouldDrawHitboxes) {
             context.beginPath();
-            if (actor.rotation !== undefined) { // Projectiles only
+            if (actor.angle !== undefined) { // Projectiles only
                 const halfWidth = actor.width / 2;
                 const halfHeight = actor.height / 2;
                 const centerX = actor.screenX + halfWidth;
                 const centerY = actor.screenY + halfHeight;
                 context.translate(centerX, centerY);
-                context.rotate(actor.rotation);
+                context.rotate(actor.angle);
                 context.rect(-halfWidth, -halfHeight, actor.width, actor.height)
             } else {
                 context.rect(actor.screenX, actor.screenY, actor.width, actor.height)

@@ -16,7 +16,7 @@ class Projectile { // Initialized by each actor.shoot()
         this.shotUp = up;
         this.shotDown = down;
         this.speed = speed;
-        this.rotation = 0; // Rotates the sprite depending on the shot direction
+        this.angle = 0; // Rotation angle depending on the shot direction
         this.knockbackForce = 6; // For Hulk collision
         this.shouldDelete = false
         // Speed defined by each actor
@@ -28,13 +28,13 @@ class Projectile { // Initialized by each actor.shoot()
         }
     };
     draw(context) {
-        const {width, height, game} = this;
+        const {width, height} = this;
         context.save();
         context.translate(this.screenX + (width / 2), this.screenY + (height / 2));
-        context.rotate(this.rotation);
+        context.rotate(this.angle);
         context.drawImage(this.sprite, -width / 2, -height / 2, width, height);
         context.restore();
-        game.debuggerr.drawHitboxes(this, context)
+        this.game.debuggerr.drawHitboxes(this, context)
     };
     shootProjectile() {
         if (this.shotUp && this.shotLeft) {
@@ -56,47 +56,46 @@ class Projectile { // Initialized by each actor.shoot()
         }
     };
     isOutOfBounds() {
-        const {canvas} = this.game;
         return (
-            this.screenX > canvas.width + 10 
+            this.screenX > this.game.canvas.width + 10 
             || this.screenX < -10 
-            || this.screenY > canvas.height + 10 
+            || this.screenY > this.game.canvas.height + 10 
             || this.screenY < -10
         )
     };
     shootUp() {
-        this.rotation = 0;
+        this.angle = 0;
         this.screenY -= this.speed
     };
     shootUpLeft() {
-        this.rotation = -Math.PI / 4;
+        this.angle = -Math.PI / 4;
         this.screenX -= this.speed;
         this.screenY -= this.speed
     };
     shootUpRight() {
-        this.rotation = Math.PI / 4;
+        this.angle = Math.PI / 4;
         this.screenX += this.speed;
         this.screenY -= this.speed
     };
     shootLeft() {
-        this.rotation = Math.PI / 2;
+        this.angle = Math.PI / 2;
         this.screenX -= this.speed
     };
     shootRight() {
-        this.rotation = Math.PI / 2;
+        this.angle = Math.PI / 2;
         this.screenX += this.speed
     };
     shootDownLeft() {
-        this.rotation = 3 * (-Math.PI / 4);
+        this.angle = 3 * (-Math.PI / 4);
         this.screenX -= this.speed;
         this.screenY += this.speed
     };
     shootDown() {
-        this.rotation = 0;
+        this.angle = 0;
         this.screenY += this.speed
     };
     shootDownRight() {
-        this.rotation = 3 * (Math.PI / 4);
+        this.angle = 3 * (Math.PI / 4);
         this.screenX += this.speed;
         this.screenY += this.speed
     }

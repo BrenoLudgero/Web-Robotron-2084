@@ -46,7 +46,7 @@ window.addEventListener("load", () => {
         while (lag >= updateRate) {
             game.update(updateRate);
             lag -= updateRate;
-            game.globalCounter++
+            game.globalTimer++
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         game.draw(ctx);

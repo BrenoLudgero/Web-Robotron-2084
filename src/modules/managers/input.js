@@ -18,18 +18,16 @@ class InputManager {
         //window.addEventListener("mouseup", (e) => console.log("NO CLICK"))
     }
     handleKeyDown(event) {
-        const {keysPressed} = this.game;
-        if (this.playerControls.includes(event.key) && !keysPressed.includes(event.key)) {
-            keysPressed.push(event.key)
+        if (this.playerControls.includes(event.key) && !this.game.keysPressed.includes(event.key)) {
+            this.game.keysPressed.push(event.key)
         }
     };
     handleKeyUp(event) {
-        const {keysPressed, debuggerr} = this.game;
-        const keyIndex = keysPressed.indexOf(event.key);
+        const keyIndex = this.game.keysPressed.indexOf(event.key);
         if (keyIndex > -1) {
-            keysPressed.splice(keyIndex, 1)
+            this.game.keysPressed.splice(keyIndex, 1)
         }
-        debuggerr.readDebugKeys(event)
+        this.game.debuggerr.readDebugKeys(event)
     };
     readMovementKeys(keysPressed, player) {
         if (keysPressed.includes("w")) player.moveUp(keysPressed);
