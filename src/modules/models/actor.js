@@ -11,8 +11,7 @@ class Actor {
         this.height;
         this.setScaledDimentions(originalWidth, originalHeight, 1.5)
         this.remainingWalkingDistance = this.walkDistance;
-        this.currentDirection = this.setRandomDirection();
-        this.projectiles = []
+        this.currentDirection = this.setRandomDirection()
     };
     draw(context) {
         this.setMovementBoundaries();
@@ -27,7 +26,6 @@ class Actor {
             this.width, 
             this.height
         );
-        this.projectiles.forEach(projectile => projectile.draw(context));
         this.game.debuggerr.drawHitboxes(this, context)
     };
     // Scales the sprite size to the scale factor

@@ -13,9 +13,9 @@ class CollisionManager {
     checkAllCollisions(player, enemies, humans) {
         this.checkPlayerCollisions(player, enemies);
         this.checkHumanCollisions(player, enemies, humans);
-        this.checkProjectileCollisions(player.projectiles, enemies)
+        this.checkProjectileCollisions(this.game.projectileMngr.projectiles, enemies)
     };
-    checkSingleCollision(actorA, actorB) {
+    checkSingleCollision(actorA, actorB) { // Projectile shall always be actorA
         const actorBHitbox = this.getHitbox(actorB);
         if (actorA.angle !== undefined) { // Projectiles only
             const actorARotatedHitbox = this.getRotatedHitbox(actorA);

@@ -17,6 +17,10 @@ class ActorManager {
             this.removeDeadOrRescuedActors(enemies, humans)
         }
     };
+    draw(enemies, humans, context) {
+        this.drawActors(enemies, context);
+        this.drawActors(humans, context)
+    };
     // Checks if actor is safe from every other actor by comparing distances
     isSafeFromOtherActors(actor, actors, minDistance) {
         return actors.every(otherActor => {

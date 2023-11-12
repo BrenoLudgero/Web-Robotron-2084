@@ -1,6 +1,5 @@
 export {Player};
 import {Actor} from "../models/actor.js";
-import {Projectile} from "../models/projectile.js";
 
 class Player extends Actor {
     constructor(game) {
@@ -16,15 +15,14 @@ class Player extends Actor {
         this.projectileDelay = 7
     };
     update() {
-        this.game.input.update();
-        this.updateProjectiles();
+        this.game.inputMngr.update();
         this.projectileTimer --
     };
     shoot(left, right, up, down, yOffset) {
         const playerX = this.screenX + 9;
         const playerY = this.screenY + yOffset;
         if (this.projectileTimer <= 0) {
-            this.projectiles.push(new Projectile(this.game, playerX, playerY, this.projectileSpeed, left, right, up, down));
+            this.game.projectileMngr.createProjectile(playerX, playerY, this.projectileSpeed, left, right, up, down);
             this.projectileTimer = this.projectileDelay
         }
     };
@@ -38,10 +36,6 @@ class Player extends Actor {
             }
         }
     };
-    updateProjectiles() {
-        this.projectiles.forEach(projectile => projectile.update());
-        this.projectiles = this.projectiles.filter(projectile => !projectile.shouldDelete)
-    };
     moveLeft() {
         this.screenX -= this.movementSpeed;
         this.cyclePlayerSprite(51)
@@ -52,10 +46,10 @@ class Player extends Actor {
     };
     moveUp(keysPressed) {
         this.screenY -= this.movementSpeed;
-        if (this.game.input.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
+        if (this.game.inputMngr.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
     };
     moveDown(keysPressed) {
         this.screenY += this.movementSpeed;
-        if (this.game.input.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
+        if (this.game.inputMngr.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
     }
 }

@@ -5,6 +5,7 @@ import {Enemy} from "./enemy.js";
 import {Human} from "./human.js";
 import {ActorManager} from "../managers/actor-mngr.js";
 import {InputManager} from "../managers/input.js";
+import {ProjectileManager} from "../managers/projectile-mngr.js";
 import {CollisionManager} from "../managers/collision.js";
 import {Debugger} from "./debugger.js";
 
@@ -23,20 +24,22 @@ class Game {
         this.human = new Human(this);
         this.humans = [];
         this.actorMngr = new ActorManager(this);
-        this.input = new InputManager(this);
+        this.projectileMngr = new ProjectileManager(this);
+        this.inputMngr = new InputManager(this);
         this.keysPressed = [];
-        this.collision = new CollisionManager(this);
+        this.collisionMngr = new CollisionManager(this);
         this.debuggerr = new Debugger(this)
     };
     update() {
         if (this.player.isAlive) {
             this.actorMngr.update(this.enemies, this.humans);
-            this.collision.update()
+            this.projectileMngr.update();
+            this.collisionMngr.update()
         }
     };
     draw(context) {
-        this.actorMngr.drawActors(this.enemies, context);
-        this.actorMngr.drawActors(this.humans, context)
+        this.actorMngr.draw(this.enemies, this.humans, context);
+        this.projectileMngr.draw(context)
     };
     setCanvasScaledResolution(scaleFactor) {
         const originalWidth = 292;
