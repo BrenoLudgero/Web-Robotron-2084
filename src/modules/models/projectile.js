@@ -57,9 +57,9 @@ class Projectile { // Initialized by each actor.shoot()
     };
     isOutOfBounds() {
         return (
-            this.screenX > this.game.canvas.width + 10 
+            this.screenX > this.game.ui.canvas.width + 10 
             || this.screenX < -10 
-            || this.screenY > this.game.canvas.height + 10 
+            || this.screenY > this.game.ui.canvas.height + 10 
             || this.screenY < -10
         )
     };

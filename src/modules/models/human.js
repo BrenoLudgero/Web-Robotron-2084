@@ -1,12 +1,13 @@
 export {Human};
 import {Actor} from "./actor.js";
 import {cycleSprite} from "../helpers/globals.js";
-import {ArtificialIntelligence} from "./artificial-intelligence.js";
+import {ArtificialIntelligence} from "../managers/ai-mngr.js";
 
 class Human extends Actor {
     constructor(game, originalWidth, originalHeight) {
         super(game, originalWidth, originalHeight);
-        this.AI = new ArtificialIntelligence;
+        this.points = 1000;
+        this.ai = new ArtificialIntelligence;
         this.wasRescued = false;
         this.movementType = 2; // 8-way movement
         this.movementSpeed = 4;
@@ -16,7 +17,7 @@ class Human extends Actor {
     };
     update() {
         if (this.game.globalTimer % this.movementAnimationDelay == 0) {
-            this.AI.moveRandomly(this);
+            this.ai.moveRandomly(this);
             this.animate();
         }
     };

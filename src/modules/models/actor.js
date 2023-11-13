@@ -10,7 +10,6 @@ class Actor {
         this.width;
         this.height;
         this.setScaledDimentions(originalWidth, originalHeight, 1.5)
-        this.remainingWalkingDistance = this.walkDistance
     };
     draw(context) {
         this.setMovementBoundaries();
@@ -27,20 +26,20 @@ class Actor {
         );
         this.game.debuggerr.drawHitboxes(this, context)
     };
-    // Scales the sprite size to the scale factor
+    // Scales the original sprite to the scaleFactor
     setScaledDimentions(originalWidth, originalHeight, scaleFactor) {
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
         const aspectRatio = originalWidth / originalHeight;
         const newWidth = Math.round(originalWidth * scaleFactor);
         const newHeight = Math.round(newWidth / aspectRatio);
-        this.width = Math.round(originalWidth * scaleFactor);
+        this.width = newWidth;
         this.height = newHeight
     };
     setMovementBoundaries() {
         const movementBoundaries = {
-            "x": this.game.canvas.width - this.width,
-            "y": this.game.canvas.height - this.height
+            "x": this.game.ui.canvas.width - this.width,
+            "y": this.game.ui.canvas.height - this.height
         }
         if (this.screenY <= 2) {
             this.screenY = 2

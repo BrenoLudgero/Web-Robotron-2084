@@ -18,6 +18,7 @@ class ActorManager {
         }
     };
     draw(enemies, humans, context) {
+        this.game.player.draw(context);
         this.drawActors(enemies, context);
         this.drawActors(humans, context)
     };
@@ -63,8 +64,8 @@ class ActorManager {
         const {game} = this;
         for (let i = 0; i < numberEnemies; i++) {
             const newEnemy = new enemyType(game);
-            let maxScreenX = game.canvas.width - newEnemy.width;
-            let maxScreenY = game.canvas.height - newEnemy.height;
+            let maxScreenX = game.ui.canvas.width - newEnemy.width;
+            let maxScreenY = game.ui.canvas.height - newEnemy.height;
             if (this.isSafeToSpawnEnemy(newEnemy, maxScreenX, maxScreenY, game)) {
                 game.enemies.push(newEnemy)
             }
@@ -75,8 +76,8 @@ class ActorManager {
         const {game} = this;
         for (let i = 0; i < numberHumans; i++) {
             const newHuman = new humanType(game);
-            let maxScreenX = game.canvas.width - newHuman.width;
-            let maxScreenY = game.canvas.height - newHuman.height;
+            let maxScreenX = game.ui.canvas.width - newHuman.width;
+            let maxScreenY = game.ui.canvas.height - newHuman.height;
             if (this.isSafeToSpawnHuman(newHuman, maxScreenX, maxScreenY, game)) {
                 game.humans.push(newHuman)
             }
@@ -88,10 +89,8 @@ class ActorManager {
         this.addEnemies(15, Grunt)
     };
     drawActors(actors, context) {
-        this.game.player.draw(context);
         actors.forEach(actor => {
-            actor.draw(context);
-            this.game.debuggerr.drawHitboxes(actor, context)
+            actor.draw(context)
         })
     };
     updateActors(actors) {

@@ -13,7 +13,7 @@ class Hulk extends Enemy {
     };
     update() {
         if (this.game.globalTimer % this.movementAnimationDelay == 0) {
-            this.AI.moveRandomly(this);
+            this.ai.moveRandomly(this);
             this.animate()
         }
     };
