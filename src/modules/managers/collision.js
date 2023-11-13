@@ -90,7 +90,7 @@ class CollisionManager {
                     if (!enemy.isHulk) {
                         enemy.isAlive = false
                     } else {
-                        this.knockbackHulk(projectile, enemy);
+                        this.knockbackHulk(projectile, enemy)
                     }
                     projectile.shouldDelete = true
                 }

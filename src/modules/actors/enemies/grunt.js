@@ -1,6 +1,5 @@
 export {Grunt};
 import {Enemy} from "../../models/enemy.js";
-import * as globals from "../../helpers/globals.js";
 
 class Grunt extends Enemy {
     constructor(game) {
@@ -11,30 +10,12 @@ class Grunt extends Enemy {
         this.movementInterval = 20 // DECREASES ACCORDING TO WAVE ELAPSED TIME
     };
     update() {
+        this.AI.moveAwayFromWall(this);
         if (this.movementTimer > this.movementInterval) {
-            this.moveAtRandomIntervals();
+            this.AI.moveAtRandomIntervals(this);
             this.movementTimer = 0
         } else {
             this.movementTimer++
-        }
-    };
-    chasePlayer() {
-        if (this.screenX > this.game.player.screenX) {
-            this.screenX -= this.movementSpeed
-        } else {
-            this.screenX += this.movementSpeed
-        };
-        if (this.screenY > this.game.player.screenY) {
-            this.screenY -= this.movementSpeed
-        } else {
-            this.screenY += this.movementSpeed
-        }
-    };
-    moveAtRandomIntervals() {
-        let randomNumber = globals.RNG(1, 3);
-        if (randomNumber === 1) {
-            this.chasePlayer();
-            globals.cycleSprite(this, 20, 0)
         }
     }
 }

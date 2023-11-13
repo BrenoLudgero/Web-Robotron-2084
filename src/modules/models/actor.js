@@ -10,8 +10,7 @@ class Actor {
         this.width;
         this.height;
         this.setScaledDimentions(originalWidth, originalHeight, 1.5)
-        this.remainingWalkingDistance = this.walkDistance;
-        this.currentDirection = this.setRandomDirection()
+        this.remainingWalkingDistance = this.walkDistance
     };
     draw(context) {
         this.setMovementBoundaries();
@@ -54,68 +53,5 @@ class Actor {
             this.screenX = movementBoundaries["x"]
         };
         return movementBoundaries
-    };
-    isActorAgainstWall() {
-        const movementBoundaries = this.setMovementBoundaries();
-        if (this.screenX >= movementBoundaries["x"] 
-            || this.screenX <= 2 
-            || this.screenY >= movementBoundaries["y"] 
-            || this.screenY <= 2) {
-                return true
-        };
-        return false
-    };
-    moveAwayFromWall() {
-        if (this.isActorAgainstWall()) {
-            this.currentDirection = this.setRandomDirection()
-        }
-    };
-    setRandomDirection() {
-        const fourDirections = ["left", "right", "up", "down"];
-        const eightDirections = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
-        if (this.movementType == 1) {
-            return fourDirections[Math.floor(Math.random() * fourDirections.length)]
-        };
-        return eightDirections[Math.floor(Math.random() * eightDirections.length)]
-    };
-    setRandomWalkDistance() {
-        const distances = [16, 18, 20, 22, 25, 30, 35, 40];
-        return distances[Math.floor(Math.random() * distances.length)]
-    };
-    // Moves to a random direction for a random distance
-    moveToRandomDirection() {
-        const {movementSpeed} = this;
-        if (this.remainingWalkingDistance > 0) {
-            switch(this.currentDirection) {
-                case("left"):
-                    this.screenX -= movementSpeed; break
-                case("right"):
-                    this.screenX += movementSpeed; break
-                case("up"):
-                    this.screenY -= movementSpeed; break
-                case("down"):
-                    this.screenY += movementSpeed; break
-                case("upleft"):
-                    this.screenY -= movementSpeed;
-                    this.screenX -= movementSpeed; break
-                case("upright"):
-                    this.screenY -= movementSpeed;
-                    this.screenX += movementSpeed; break
-                case("downleft"):
-                    this.screenY += movementSpeed;
-                    this.screenX -= movementSpeed; break
-                case("downright"):
-                    this.screenY += movementSpeed;
-                    this.screenX += movementSpeed; break
-            }
-            this.remainingWalkingDistance--
-        } else {
-            this.currentDirection = this.setRandomDirection();
-            this.remainingWalkingDistance = this.setRandomWalkDistance();
-        }
-    };
-    moveRandomly() {
-        this.moveToRandomDirection();
-        this.moveAwayFromWall()
     }
 }
