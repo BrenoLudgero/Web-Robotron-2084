@@ -1,9 +1,8 @@
 export {ActorManager};
-import {RNG} from "../helpers/globals.js";
 import {Grunt} from "../actors/enemies/grunt.js";
 import {Hulk} from "../actors/enemies/hulk.js";
 import {Mommy} from "../actors/humans/mommy.js";
-import {calculateDistance} from "../helpers/globals.js"
+import {RNG, calculateDistance} from "../helpers/globals.js"
 
 class ActorManager {
     constructor(game) {

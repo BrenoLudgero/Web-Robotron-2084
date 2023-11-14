@@ -4,7 +4,6 @@ import {Actor} from "../models/actor.js";
 class Player extends Actor {
     constructor(game) {
         super(game, 15, 24);
-        this.game = game;
         this.sprites.src = game.spritesIndex.player;
         this.screenX = (game.ui.canvas.width / 2) - this.width;
         this.screenY = (game.ui.canvas.height / 2) - this.height;
