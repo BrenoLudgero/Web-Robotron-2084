@@ -1,6 +1,6 @@
 export {Human};
 import {Actor} from "./actor.js";
-import {cycleSprite} from "../helpers/globals.js";
+import {setHitbox, cycleSprite} from "../helpers/globals.js";
 import {ArtificialIntelligence} from "../managers/ai-mngr.js";
 
 class Human extends Actor {
@@ -22,19 +22,25 @@ class Human extends Actor {
         }
     };
     animate() {
-        switch(this.currentDirection) {
-            case("left"):
-            case("upleft"):
-            case("downleft"):
-                cycleSprite(this, 16, 59); break
-            case("right"):
-            case("upright"):
-            case("downright"):
-                cycleSprite(this, 16, 88); break
-            case("up"):
-                cycleSprite(this, 16, 30); break
-            case("down"):
-                cycleSprite(this, 16, 0); break
+        if (this.currentDirection == "up") {
+            setHitbox(this, 2, 2, 0, 1);
+            cycleSprite(this, 16, 30)
+        };
+        if (this.currentDirection == "down") {
+            setHitbox(this, 2, 2, 0, 1);
+            cycleSprite(this, 16, 0);
+        };
+        if (this.currentDirection == "left"
+            || this.currentDirection == "upleft"
+            || this.currentDirection == "downleft") {
+                setHitbox(this, 4, 4, 0, 0);
+                cycleSprite(this, 16, 59);
+        };
+        if (this.currentDirection == "right"
+            || this.currentDirection == "upright"
+            || this.currentDirection == "downright") {
+                setHitbox(this, 4, 4, 0, 2);
+                cycleSprite(this, 16, 88);
         }
     }
 }

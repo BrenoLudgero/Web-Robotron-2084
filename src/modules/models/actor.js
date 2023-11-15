@@ -7,9 +7,12 @@ class Actor {
         this.sprites = new Image();
         this.spritesheetX = 0;
         this.spritesheetY = 0;
-        this.width;
-        this.height;
-        this.setScaledDimentions(originalWidth, originalHeight, 1.5)
+        this.setScaledDimensions(originalWidth, originalHeight, 1.5);
+        // Used in collisionMngr.getHitbox
+        this.hitboxWidth = this.width;
+        this.hitboxHeight = this.height;
+        this.hitboxXOffset = 0;
+        this.hitboxYOffset = 0
     };
     draw(context) {
         this.setMovementBoundaries();
@@ -21,13 +24,13 @@ class Actor {
             this.originalHeight, 
             this.screenX, 
             this.screenY, 
-            this.width, 
-            this.height
+            this.originalWidth * 1.5, // Using this.width causes sprite distortion
+            this.originalHeight * 1.5
         );
         this.game.debuggerr.drawHitboxes(this, context)
     };
     // Scales the original sprite to the scaleFactor
-    setScaledDimentions(originalWidth, originalHeight, scaleFactor) {
+    setScaledDimensions(originalWidth, originalHeight, scaleFactor) {
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
         const aspectRatio = originalWidth / originalHeight;

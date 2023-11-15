@@ -1,6 +1,6 @@
 export {Hulk};
 import {Enemy} from "../../models/enemy.js";
-import {cycleSprite} from "../../helpers/globals.js";
+import {setHitbox, cycleSprite} from "../../helpers/globals.js";
 
 class Hulk extends Enemy {
     constructor(game) {
@@ -20,12 +20,18 @@ class Hulk extends Enemy {
     animate() {
         switch(this.currentDirection) {
             case("left"):
-                cycleSprite(this,28, 33); break
+                setHitbox(this, 14, 12, 0, 0);
+                cycleSprite(this,28, 33);
+                break;
             case("right"):
-                cycleSprite(this,28, 65); break
+                setHitbox(this, 14, 12, 0, 0);
+                cycleSprite(this,28, 65);
+                break;
             case("up"):
             case("down"):
-                cycleSprite(this,28, 0); break
+                setHitbox(this, 0, 8, 0, 0);
+                cycleSprite(this,28, 0);
+                break
         }
     }
 }

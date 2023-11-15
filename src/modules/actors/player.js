@@ -1,5 +1,6 @@
 export {Player};
 import {Actor} from "../models/actor.js";
+import {setHitbox} from "../helpers/globals.js";
 
 class Player extends Actor {
     constructor(game) {
@@ -12,7 +13,8 @@ class Player extends Actor {
         this.movementAnimationDelay = 2;
         this.projectileSpeed = 28;
         this.projectileTimer = 0;
-        this.projectileDelay = 7
+        this.projectileDelay = 7;
+        setHitbox(this, 1, 3, 1, 1)
     };
     update() {
         this.game.inputMngr.update();
@@ -36,20 +38,29 @@ class Player extends Actor {
             }
         }
     };
+    // Functions below called inputMngr.readMovementKeys
     moveLeft() {
         this.screenX -= this.movementSpeed;
+        setHitbox(this, 8, 4, 2, 0);
         this.cyclePlayerSprite(51)
     };
     moveRight() {
         this.screenX += this.movementSpeed;
+        setHitbox(this, 8, 4, 2, 0);
         this.cyclePlayerSprite(75)
     };
     moveUp(keysPressed) {
         this.screenY -= this.movementSpeed;
-        if (this.game.inputMngr.pressingWOnly(keysPressed)) this.cyclePlayerSprite(26)
+        setHitbox(this, 1, 3, 1, 1);
+        if (this.game.inputMngr.pressingWOnly(keysPressed)) {
+            this.cyclePlayerSprite(26)
+        }
     };
     moveDown(keysPressed) {
         this.screenY += this.movementSpeed;
-        if (this.game.inputMngr.pressingSOnly(keysPressed)) this.cyclePlayerSprite(0)
+        setHitbox(this, 1, 3, 1, 1);
+        if (this.game.inputMngr.pressingSOnly(keysPressed)) {
+            this.cyclePlayerSprite(0)
+        }
     }
 }

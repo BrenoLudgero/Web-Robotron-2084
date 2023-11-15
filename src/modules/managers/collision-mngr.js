@@ -35,11 +35,11 @@ class CollisionManager {
         )
     };
     getHitbox(actor) {
-        return {
-            left: actor.screenX,
-            right: actor.screenX + actor.width,
-            top: actor.screenY,
-            bottom: actor.screenY + actor.height
+        return { //    Adjusts the hitbox alignment         Keeps hitbox centered on the sprite
+            left: (actor.screenX - actor.hitboxXOffset) + (actor.width - actor.hitboxWidth) / 2,
+            right: (actor.screenX - actor.hitboxXOffset) + (actor.width + actor.hitboxWidth) / 2,
+            top: (actor.screenY - actor.hitboxYOffset) + (actor.height - actor.hitboxHeight) / 2,
+            bottom: (actor.screenY - actor.hitboxYOffset) + (actor.height + actor.hitboxHeight) / 2
         }
     };
     getRotatedHitbox(projectile) {

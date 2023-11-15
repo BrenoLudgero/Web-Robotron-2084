@@ -41,7 +41,13 @@ class Debugger {
                 context.rotate(actor.angle);
                 context.rect(-halfWidth, -halfHeight, actor.width, actor.height)
             } else {
-                context.rect(actor.screenX, actor.screenY, actor.width, actor.height)
+                // Not 100% accurate due to rect() limitations
+                context.rect(
+                    (actor.screenX - actor.hitboxXOffset) + (actor.width - actor.hitboxWidth) / 2,
+                    (actor.screenY - actor.hitboxYOffset) + (actor.height - actor.hitboxHeight) / 2,
+                    actor.hitboxWidth,
+                    actor.hitboxHeight
+                )
             };
             context.strokeStyle = "red";
             context.stroke();
