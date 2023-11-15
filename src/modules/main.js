@@ -27,9 +27,11 @@ import {Game} from "./models/game.js";
 
 window.addEventListener("load", () => {
     const game = new Game();
-    const updateRate = 1000 / 60; // 60 times per second
+    const updateRate = 1000 / 60; // 60 times per second (1000 milliseconds)
     let last = performance.now();
-    let lag = 0;
+    let lag = 0; // Accumulates time between frames
+    let framesThisSecond = 0;
+    let lastFPSUpdate = performance.now();
     function runGame() {
         let current = performance.now();
         const elapsed = current - last;
@@ -39,10 +41,18 @@ window.addEventListener("load", () => {
             game.update();
             game.draw();
             lag -= updateRate;
-            game.globalTimer++
-        }
+            game.globalTimer++;
+            framesThisSecond++
+        };
+        if (current - lastFPSUpdate >= 1000) {
+            const FPS = Math.round((framesThisSecond * 1000) / (current - lastFPSUpdate));
+            game.ui.updateFPS(FPS);
+            framesThisSecond = 0;
+            lastFPSUpdate = current
+        };
         requestAnimationFrame(runGame)
     }
+    // Called once
     runGame();
     game.actorMngr.spawnActors()
     game.debuggerr.logActorCount()

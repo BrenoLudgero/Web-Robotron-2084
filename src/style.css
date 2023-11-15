@@ -1,22 +1,26 @@
 @font-face {
-    font-family: Robotron;
+    font-family: "Robotron";
     src: url("robotron_font.ttf")
 }
+
 body {
     margin: 0;
     display: flex;
-    padding: 6px 6px;
+    padding: 6px;
     font-family: "Robotron", sans-serif;
     justify-content: space-around;
     background-color: black
 }
-body * {/*  !  !  !  !  ! */
+body * { /*  !  !  !  !  ! */
     user-select: none
 }
-#top-info, #bottom-info {
+
+#top-info, 
+#bottom-info {
     height: 34px;
     display: flex;
-    pointer-events: none
+    pointer-events: none;
+    justify-content: space-between
 }
 #score-lives-container {
     display: flex;
@@ -24,8 +28,10 @@ body * {/*  !  !  !  !  ! */
     align-items: center;
     justify-content: flex-start
 }
-#score, #wave {
-    color: #fff;
+#score, 
+#wave, 
+#fps-container {
+    color: white;
     font-size: 24px
 }
 #score {
@@ -42,9 +48,18 @@ body * {/*  !  !  !  !  ! */
     padding-right: 10px;
     height: inherit
 }
+#fps-container {
+    display: flex;
+    align-items: center;
+    margin-right: 15px
+}
+#fps {
+    margin-right: 5px
+}
 #wave {
     margin: auto
 }
+
 canvas {
     top: 30px;
     margin: auto;

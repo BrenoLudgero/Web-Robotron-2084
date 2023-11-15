@@ -11,7 +11,8 @@ class UserInterface {
         this.ctx.imageSmoothingEnabled = false;
         this.scoreElement = document.getElementById("score");
         this.scoreElement.innerHTML = game.score;
-        this.livesElement = document.getElementById("lives")
+        this.livesElement = document.getElementById("lives");
+        this.fpsElement = document.getElementById("fps-counter")
     };
     update(player) {
         this.updateScore();
@@ -45,6 +46,9 @@ class UserInterface {
                 this.livesElement.appendChild(lifeIndicator)
             }
         }
+    };
+    updateFPS(FPS) {
+        this.fpsElement.innerHTML = FPS
     };
     scoreHasChanged() {
         return this.scoreElement.innerHTML != this.game.score
