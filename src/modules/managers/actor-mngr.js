@@ -13,17 +13,17 @@ class ActorManager {
         if (this.game.debuggerr.shouldUpdateActors) {
             this.updateActors(enemies);
             this.updateActors(humans);
-            this.removeDeadOrRescuedActors(enemies, humans)
+            this.removeDeadOrRescued(enemies, humans)
         }
     };
-    draw(enemies, humans, context) {
+    draw(context) {
         this.game.player.draw(context);
-        this.drawActors(enemies, context);
-        this.drawActors(humans, context)
+        this.drawActors(this.game.enemies, context);
+        this.drawActors(this.game.humans, context)
     };
-    // Checks if actor is safe from every other actor by comparing distances
-    isSafeFromOtherActors(actor, actors, minDistance) {
-        return actors.every(otherActor => {
+    // Checks if actor is in a safe distance from other actors before spawning
+    isSafeFromOtherActors(actor, otherActors, minDistance) {
+        return otherActors.every(otherActor => {
             return calculateDistance(actor, otherActor) >= minDistance
         })
     };
@@ -82,7 +82,8 @@ class ActorManager {
             }
         }
     };
-    spawnActors() { // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
+    // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
+    spawnActors() {
         this.addHumans(8, Mommy);
         this.addEnemies(5, Hulk);
         this.addEnemies(15, Grunt)
@@ -97,7 +98,7 @@ class ActorManager {
             actor.update()
         })
     };
-    removeDeadOrRescuedActors(enemies, humans) {
+    removeDeadOrRescued(enemies, humans) {
         enemies.splice(0, enemies.length, ...enemies.filter(enemy => enemy.isAlive));
         humans.splice(0, humans.length, ...humans.filter(human => human.isAlive && !human.wasRescued))
     }

@@ -1,6 +1,7 @@
 export {Projectile};
 
-class Projectile { // Initialized by each actor.shoot()
+// Instantiated in projectileMngr
+class Projectile {
     constructor(game, screenX, screenY, speed, left, right, up, down) {
         this.game = game;
         this.width = 3;

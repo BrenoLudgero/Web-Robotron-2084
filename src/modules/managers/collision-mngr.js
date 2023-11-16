@@ -2,7 +2,8 @@ export {CollisionManager};
 
 class CollisionManager {
     constructor(game) {
-        this.game = game
+        this.game = game;
+        this.rescueBonus = 0
     };
     update() {
         const {enemies, player, humans, debuggerr} = this.game;
@@ -15,7 +16,8 @@ class CollisionManager {
         this.checkHumanCollisions(player, enemies, humans);
         this.checkProjectileCollisions(this.game.projectileMngr.projectiles, enemies)
     };
-    checkSingleCollision(actorA, actorB) { // Projectile shall always be actorA
+    // Projectile shall always be actorA
+    checkSingleCollision(actorA, actorB) {
         const actorBHitbox = this.getHitbox(actorB);
         if (actorA.angle !== undefined) { // Projectiles only
             const actorARotatedHitbox = this.getRotatedHitbox(actorA);
@@ -34,8 +36,69 @@ class CollisionManager {
             && actorAHitbox.top <= actorBHitbox.bottom
         )
     };
+    checkPlayerCollisions(player, enemies) {
+        for (const enemy of enemies) {
+            if (this.checkSingleCollision(player, enemy)) {
+                player.isAlive = false;
+                player.lives--;
+                this.rescueBonus = 0;
+                break
+            }
+        }
+    };
+    checkHumanCollisions(player, enemies, humans) {
+        for (const human of humans) {
+            if (this.checkSingleCollision(player, human)) {
+                human.wasRescued = true;
+                this.getRecuePoints(human);
+                break
+            }
+        };
+        for (const enemy of enemies) {
+            if (enemy.isHulk) {
+                for (const human of humans) {
+                    if (this.checkSingleCollision(human, enemy)) {
+                        human.isAlive = false;
+                        break
+                    }
+                }
+            }
+        }
+    };
+    checkProjectileCollisions(projectiles, enemies) {
+        for (let i = projectiles.length - 1; i >= 0; i--) {
+            const projectile = projectiles[i];
+            for (let j = enemies.length - 1; j >= 0; j--) {
+                const enemy = enemies[j];
+                if (this.checkSingleCollision(projectile, enemy)) {
+                    // Destroys enemies that are not Hulks
+                    if (!enemy.isHulk) {
+                        enemy.isAlive = false;
+                        this.game.score += enemy.points;
+                    } else {
+                        this.knockbackHulk(projectile, enemy)
+                    }
+                    projectile.shouldDelete = true;
+                    break
+                }
+            }
+        }
+    };
+    // Awards human points + bonus up to 5000 total
+    getRecuePoints(human) {
+        this.game.score += (human.points + this.rescueBonus)
+        if (this.rescueBonus < 4000) {
+            this.rescueBonus += 1000
+        }
+    };
+    knockbackHulk(projectile, enemy) {
+        const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
+        const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
+        enemy.screenX += knockbackXDirection * projectile.knockbackForce;
+        enemy.screenY += knockbackYDirection * projectile.knockbackForce
+    };
     getHitbox(actor) {
-        return { //    Adjusts the hitbox alignment         Keeps hitbox centered on the sprite
+        return { //    Adjusts the hitbox alignment        Keeps hitbox centered on the sprite
             left: (actor.screenX - actor.hitboxXOffset) + (actor.width - actor.hitboxWidth) / 2,
             right: (actor.screenX - actor.hitboxXOffset) + (actor.width + actor.hitboxWidth) / 2,
             top: (actor.screenY - actor.hitboxYOffset) + (actor.height - actor.hitboxHeight) / 2,
@@ -57,57 +120,5 @@ class CollisionManager {
             top: Math.min(rotatedY1, rotatedY2),
             bottom: Math.max(rotatedY1, rotatedY2)
         }
-    };
-    checkPlayerCollisions(player, enemies) {
-        for (const enemy of enemies) {
-            if (this.checkSingleCollision(player, enemy)) {
-                player.isAlive = false;
-                player.lives--;
-                break
-            }
-        }
-    };
-    checkHumanCollisions(player, enemies, humans) {
-        for (const human of humans) {
-            if (this.checkSingleCollision(player, human)) {
-                human.wasRescued = true;
-                this.game.score += human.points;
-                break
-            }
-        };
-        for (const enemy of enemies) {
-            if (enemy.isHulk) {
-                for (const human of humans) {
-                    if (this.checkSingleCollision(human, enemy)) {
-                        human.isAlive = false;
-                        break
-                    }
-                }
-            }
-        }
-    };
-    checkProjectileCollisions(projectiles, enemies) {
-        for (let i = projectiles.length - 1; i >= 0; i--) {
-            const projectile = projectiles[i];
-            for (let j = enemies.length - 1; j >= 0; j--) {
-                const enemy = enemies[j];
-                if (this.checkSingleCollision(projectile, enemy)) {
-                    if (!enemy.isHulk) {
-                        enemy.isAlive = false;
-                        this.game.score += enemy.points;
-                    } else {
-                        this.knockbackHulk(projectile, enemy)
-                    }
-                    projectile.shouldDelete = true;
-                    break
-                }
-            }
-        }
-    };
-    knockbackHulk(projectile, enemy) {
-        const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
-        const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
-        enemy.screenX += knockbackXDirection * projectile.knockbackForce;
-        enemy.screenY += knockbackYDirection * projectile.knockbackForce
     }
 }

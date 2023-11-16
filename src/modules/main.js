@@ -10,7 +10,6 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
-COMMENT CODE
 IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
 REWORK HTML SIZES, RESPONSIVENESS (CHECK PROJECTILE POSITIONS)
 CHECK CROSS-BROWSER SUPPORT
@@ -27,31 +26,35 @@ import {Game} from "./models/game.js";
 
 window.addEventListener("load", () => {
     const game = new Game();
-    const updateRate = 1000 / 60; // 60 times per second (1000 milliseconds)
-    let last = performance.now();
+    // Ensures 60 updates per second despite hardware
+    const frameRate = 1000 / 60; // 1000 milliseconds
     let lag = 0; // Accumulates time between frames
     let framesThisSecond = 0;
+    let lastFrame = performance.now();
     let lastFPSUpdate = performance.now();
+
     function runGame() {
-        let current = performance.now();
-        const elapsed = current - last;
-        last = current;
+        let currentFrame = performance.now();
+        const elapsed = currentFrame - lastFrame;
+        lastFrame = currentFrame;
         lag += elapsed;
-        while (lag >= updateRate) {
+        // Game loop
+        while (lag >= frameRate) {
             game.update();
             game.draw();
-            lag -= updateRate;
+            lag -= frameRate;
             game.globalTimer++;
             framesThisSecond++
         };
-        if (current - lastFPSUpdate >= 1000) {
-            const FPS = Math.round((framesThisSecond * 1000) / (current - lastFPSUpdate));
+        // Updates framerate indicator
+        if (currentFrame - lastFPSUpdate >= 1000) {
+            const FPS = Math.round((framesThisSecond * 1000) / (currentFrame - lastFPSUpdate));
             game.ui.updateFPS(FPS);
             framesThisSecond = 0;
-            lastFPSUpdate = current
+            lastFPSUpdate = currentFrame
         };
         requestAnimationFrame(runGame)
-    }
+    };
     // Called once
     runGame();
     game.actorMngr.spawnActors()

@@ -16,12 +16,14 @@ class InputManager {
         window.addEventListener("keyup", (e) => this.handleKeyUp(e))
         //window.addEventListener("mousedown", (e) => console.log("CLICK"));
         //window.addEventListener("mouseup", (e) => console.log("NO CLICK"))
-    }
+    };
+    // Pushes one instance of each pressed key to keysPressed
     handleKeyDown(event) {
         if (this.playerControls.includes(event.key) && !this.game.keysPressed.includes(event.key)) {
             this.game.keysPressed.push(event.key)
         }
     };
+    // Removes the key from keysPressed
     handleKeyUp(event) {
         const keyIndex = this.game.keysPressed.indexOf(event.key);
         if (keyIndex > -1) {
@@ -30,14 +32,21 @@ class InputManager {
         this.game.debuggerr.readDebugKeys(event)
     };
     readMovementKeys(keysPressed, player) {
-        if (keysPressed.includes("w")) player.moveUp(keysPressed);
-        if (keysPressed.includes("s")) player.moveDown(keysPressed);
-        if (keysPressed.includes("d")) player.moveRight();
-        else if (keysPressed.includes("a")) player.moveLeft();
+        if (keysPressed.includes("w")) {
+            player.moveUp(keysPressed)
+        };
+        if (keysPressed.includes("s")) {
+            player.moveDown(keysPressed)
+        };
+        if (keysPressed.includes("d")) {
+            player.moveRight()
+        } else if (keysPressed.includes("a")) {
+            player.moveLeft()
+        }
     };
     readShootingKeys(keysPressed, player) {
         if (this.pressingUpOnly(keysPressed)) {
-            //          (left,  right,  up,  down, yDrawOffset)
+            //     shoot(left,  right,  up,  down, yDrawOffset)
             player.shoot(false, false, true, false, 0)
         } 
         else if (this.pressingUpAndLeft(keysPressed)) {

@@ -6,7 +6,8 @@ class Enemy extends Actor {
     constructor(game, originalWidth, originalHeight) {
         super(game, originalWidth, originalHeight);
         this.ai = new ArtificialIntelligence(this.game);
-        this.isHulk = false;
+        this.isHulk = false; // Used in collisionMngr.checkProjectileCollisions
+        this.points = 0; // Awarded by collisionMngr.checkProjectileCollisions
         this.movementType = 1; // 4-way movement
         this.minPlayerSpawnDistance = 180; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = this.height;

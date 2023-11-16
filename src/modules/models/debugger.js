@@ -1,5 +1,6 @@
 export {Debugger};
 
+// TEMPORARY
 class Debugger {
     constructor(game) {
         this.game = game;

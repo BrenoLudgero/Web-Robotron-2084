@@ -1,11 +1,12 @@
 export {ArtificialIntelligence};
-import {RNG, cycleSprite} from "../helpers/globals.js";
+import {RNG, cycleSprite, setMovementBoundaries} from "../helpers/globals.js";
 
 class ArtificialIntelligence {
     constructor(game) {
         this.game = game
     };
-    chasePlayer(actor) { // Grunts only
+    // Grunts only
+    chasePlayer(actor) {
         if (actor.screenX > this.game.player.screenX) {
             actor.screenX -= actor.movementSpeed
         } else {
@@ -17,7 +18,8 @@ class ArtificialIntelligence {
             actor.screenY += actor.movementSpeed
         }
     };
-    moveAtRandomIntervals(actor) { // Grunts only
+    // Grunts only
+    moveAtRandomIntervals(actor) {
         let randomNumber = RNG(1, 3);
         if (randomNumber === 1) {
             this.chasePlayer(actor);
@@ -68,7 +70,7 @@ class ArtificialIntelligence {
         }
     };
     isActorAgainstWall(actor) {
-        const movementBoundaries = actor.setMovementBoundaries();
+        const movementBoundaries = setMovementBoundaries(actor);
         if (actor.screenX >= movementBoundaries["x"] 
             || actor.screenX <= 2 
             || actor.screenY >= movementBoundaries["y"] 

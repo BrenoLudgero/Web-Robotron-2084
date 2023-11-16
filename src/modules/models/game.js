@@ -1,16 +1,17 @@
 export {Game};
 import {spritesIndex} from "../helpers/indexes.js";
+import {UserInterface} from "./ui.js";
 import {Player} from "../actors/player.js";
 import {ActorManager} from "../managers/actor-mngr.js";
-import {InputManager} from "../managers/input-mngr.js";
 import {ProjectileManager} from "../managers/projectile-mngr.js";
+import {InputManager} from "../managers/input-mngr.js";
 import {CollisionManager} from "../managers/collision-mngr.js";
-import {UserInterface} from "./ui.js";
 import {Debugger} from "./debugger.js";
 
+// Updates and draws all game elements. Instantiated in main.js
 class Game {
     constructor() {
-        this.score = 0; // Incresed in collisionMngr.check"Actor"Collision
+        this.score = 0; // Updated in collisionMngr.check'Actor'Collision
         this.globalTimer = 0;
         this.spritesIndex = spritesIndex;
         this.ui = new UserInterface(this);
@@ -26,15 +27,16 @@ class Game {
     };
     update() {
         if (this.player.isAlive) {
+            this.inputMngr.update();
             this.actorMngr.update(this.enemies, this.humans);
             this.projectileMngr.update();
             this.collisionMngr.update();
-            this.ui.update(this.player)
+            this.ui.update()
         }
     };
     draw() {
         this.ui.draw();
-        this.actorMngr.draw(this.enemies, this.humans, this.ui.ctx);
+        this.actorMngr.draw(this.ui.ctx);
         this.projectileMngr.draw(this.ui.ctx)
     }
 }

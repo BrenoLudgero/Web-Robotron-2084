@@ -4,8 +4,6 @@ class UserInterface {
     constructor(game) {
         this.game = game;
         this.canvas = document.querySelector("canvas");
-        this.canvas.width;
-        this.canvas.height;
         this.setCanvasScaledResolution(3);
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
@@ -14,13 +12,15 @@ class UserInterface {
         this.livesElement = document.getElementById("lives");
         this.fpsElement = document.getElementById("fps-counter")
     };
-    update(player) {
+    update() {
         this.updateScore();
-        this.updateLives(player)
+        this.updateLives()
     };
+    // Clears the canvas from last frame sprites
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     };
+    // Initializes canvas.width and height with scaled dimensions
     setCanvasScaledResolution(scaleFactor) {
         const originalWidth = 292;
         const originalHeight = 240;
@@ -35,10 +35,10 @@ class UserInterface {
             this.scoreElement.innerHTML = this.game.score
         }
     };
-    updateLives(player) {
+    updateLives() {
         if (this.livesHasChanged()) {
             this.livesElement.innerHTML = "";
-            for (let i = 0; i < player.lives; i++) {
+            for (let i = 0; i < this.game.player.lives; i++) {
                 const lifeIndicator = document.createElement("img");
                 lifeIndicator.src = this.game.spritesIndex.life;
                 lifeIndicator.alt = "Life Indicator";

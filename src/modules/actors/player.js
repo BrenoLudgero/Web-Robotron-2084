@@ -1,6 +1,6 @@
 export {Player};
 import {Actor} from "../models/actor.js";
-import {setHitbox} from "../helpers/globals.js";
+import {setHitbox, setMovementBoundaries} from "../helpers/globals.js";
 
 class Player extends Actor {
     constructor(game) {
@@ -17,10 +17,11 @@ class Player extends Actor {
         setHitbox(this, 1, 3, 1, 1)
     };
     update() {
-        this.game.inputMngr.update();
+        setMovementBoundaries(this);
         this.projectileTimer --
     };
-    shoot(left, right, up, down, yOffset) { // Called in inputMngr.readShootingKeys
+    // Called in inputMngr.readShootingKeys
+    shoot(left, right, up, down, yOffset) {
         const playerX = this.screenX + 9;
         const playerY = this.screenY + yOffset;
         if (this.projectileTimer <= 0) {

@@ -6,7 +6,7 @@ import {ArtificialIntelligence} from "../managers/ai-mngr.js";
 class Human extends Actor {
     constructor(game, originalWidth, originalHeight) {
         super(game, originalWidth, originalHeight);
-        this.points = 1000;
+        this.points = 1000; // Awarded by collisionMngr.checkHumanCollisions
         this.ai = new ArtificialIntelligence;
         this.wasRescued = false;
         this.movementType = 2; // 8-way movement
