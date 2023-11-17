@@ -16,7 +16,7 @@ class UserInterface {
         this.updateScore();
         this.updateLives()
     };
-    // Clears the canvas from last frame sprites
+    // Removes sprites from the previous frame
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     };

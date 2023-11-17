@@ -16,24 +16,24 @@ class CollisionManager {
         this.checkHumanCollisions(player, enemies, humans);
         this.checkProjectileCollisions(this.game.projectileMngr.projectiles, enemies)
     };
-    // Projectile shall always be actorA
-    checkSingleCollision(actorA, actorB) {
-        const actorBHitbox = this.getHitbox(actorB);
-        if (actorA.angle !== undefined) { // Projectiles only
-            const actorARotatedHitbox = this.getRotatedHitbox(actorA);
+    // Checks collision between two actors
+    checkSingleCollision(actor, target) { // Projectile shall always be 'actor'
+        const targetHitbox = this.getHitbox(target);
+        if (actor.angle !== undefined) { // Projectiles only
+            const actorRotatedHitbox = this.getRotatedHitbox(actor);
             return (
-                actorARotatedHitbox.right >= actorBHitbox.left 
-                && actorARotatedHitbox.left <= actorBHitbox.right 
-                && actorARotatedHitbox.bottom >= actorBHitbox.top 
-                && actorARotatedHitbox.top <= actorBHitbox.bottom
+                actorRotatedHitbox.right >= targetHitbox.left 
+                && actorRotatedHitbox.left <= targetHitbox.right 
+                && actorRotatedHitbox.bottom >= targetHitbox.top 
+                && actorRotatedHitbox.top <= targetHitbox.bottom
             )
         };
-        const actorAHitbox = this.getHitbox(actorA)
+        const actorHitbox = this.getHitbox(actor)
         return (
-            actorAHitbox.right >= actorBHitbox.left 
-            && actorAHitbox.left <= actorBHitbox.right 
-            && actorAHitbox.bottom >= actorBHitbox.top 
-            && actorAHitbox.top <= actorBHitbox.bottom
+            actorHitbox.right >= targetHitbox.left 
+            && actorHitbox.left <= targetHitbox.right 
+            && actorHitbox.bottom >= targetHitbox.top 
+            && actorHitbox.top <= targetHitbox.bottom
         )
     };
     checkPlayerCollisions(player, enemies) {
@@ -47,14 +47,21 @@ class CollisionManager {
         }
     };
     checkHumanCollisions(player, enemies, humans) {
+        this.checkHumanPlayerCollision(humans, player);
+        this.checkHumanEnemyCollision(humans, enemies)
+    };
+    checkHumanPlayerCollision(humans, player) {
         for (const human of humans) {
             if (this.checkSingleCollision(player, human)) {
                 human.wasRescued = true;
                 this.getRecuePoints(human);
                 break
             }
-        };
+        }
+    };
+    checkHumanEnemyCollision(humans, enemies) {
         for (const enemy of enemies) {
+            // Destroys humans upon colliding with Hulks
             if (enemy.isHulk) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
@@ -65,11 +72,10 @@ class CollisionManager {
             }
         }
     };
+    // Checks collision between all projectiles and enemies
     checkProjectileCollisions(projectiles, enemies) {
-        for (let i = projectiles.length - 1; i >= 0; i--) {
-            const projectile = projectiles[i];
-            for (let j = enemies.length - 1; j >= 0; j--) {
-                const enemy = enemies[j];
+        for (const projectile of projectiles.reverse()) {
+            for (const enemy of enemies.reverse()) {
                 if (this.checkSingleCollision(projectile, enemy)) {
                     // Destroys enemies that are not Hulks
                     if (!enemy.isHulk) {
@@ -91,11 +97,12 @@ class CollisionManager {
             this.rescueBonus += 1000
         }
     };
-    knockbackHulk(projectile, enemy) {
-        const knockbackXDirection = projectile.shotRight ? 1 : (projectile.shotLeft ? -1 : 0);
-        const knockbackYDirection = projectile.shotDown ? 1 : (projectile.shotUp ? -1 : 0);
-        enemy.screenX += knockbackXDirection * projectile.knockbackForce;
-        enemy.screenY += knockbackYDirection * projectile.knockbackForce
+    knockbackHulk(projectile, hulk) {
+        const {shotRight = false, shotLeft = false, shotDown = false, shotUp = false, knockbackForce} = projectile;
+        const knockbackXDirection = shotRight ? 1 : (shotLeft ? -1 : 0);
+        const knockbackYDirection = shotDown ? 1 : (shotUp ? -1 : 0);
+        hulk.screenX += knockbackXDirection * knockbackForce;
+        hulk.screenY += knockbackYDirection * knockbackForce
     };
     getHitbox(actor) {
         return { //    Adjusts the hitbox alignment        Keeps hitbox centered on the sprite

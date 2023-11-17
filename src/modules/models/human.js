@@ -13,7 +13,7 @@ class Human extends Actor {
         this.movementSpeed = 4;
         this.minPlayerSpawnDistance = 100; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = 150
-        // screenX and screenY positions defined in game.addHuman()
+        // screenX and screenY positions defined in actorMngr.addHuman()
     };
     update() {
         if (this.game.globalTimer % this.movementAnimationDelay == 0) {
