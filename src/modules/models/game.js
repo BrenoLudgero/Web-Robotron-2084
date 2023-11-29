@@ -23,20 +23,20 @@ class Game {
         this.inputMngr = new InputManager(this);
         this.keysPressed = [];
         this.collisionMngr = new CollisionManager(this);
-        this.debuggerr = new Debugger(this)
-    };
+        this.debuggerr = new Debugger(this);
+    }
     update() {
         if (this.player.isAlive) {
             this.inputMngr.update();
             this.actorMngr.update(this.enemies, this.humans);
             this.projectileMngr.update();
             this.collisionMngr.update();
-            this.ui.update()
+            this.ui.update();
         }
-    };
+    }
     draw() {
         this.ui.draw();
         this.actorMngr.draw(this.ui.ctx);
-        this.projectileMngr.draw(this.ui.ctx)
+        this.projectileMngr.draw(this.ui.ctx);
     }
 }

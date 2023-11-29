@@ -12,8 +12,8 @@ class Actor {
         this.hitboxWidth = this.width;
         this.hitboxHeight = this.height;
         this.hitboxXOffset = 0;
-        this.hitboxYOffset = 0
-    };
+        this.hitboxYOffset = 0;
+    }
     draw(context) {
         context.drawImage(
             this.sprites, 
@@ -26,8 +26,8 @@ class Actor {
             this.originalWidth * 1.5, // Using this.width causes sprite distortion
             this.originalHeight * 1.5
         );
-        this.game.debuggerr.drawHitboxes(this, context)
-    };
+        this.game.debuggerr.drawHitboxes(this, context);
+    }
     // Initializes width and height with scaled dimensions
     setScaledDimensions(originalWidth, originalHeight, scaleFactor) {
         this.originalWidth = originalWidth;
@@ -36,6 +36,6 @@ class Actor {
         const newWidth = Math.round(originalWidth * scaleFactor);
         const newHeight = Math.round(newWidth / aspectRatio);
         this.width = newWidth;
-        this.height = newHeight
+        this.height = newHeight;
     }
 }

@@ -10,15 +10,15 @@ class Grunt extends Enemy {
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE ELAPSED TIME (LATER)
         this.movementTimer = 0;
         this.movementInterval = 20; // DECREASES ACCORDING TO WAVE ELAPSED TIME
-        setHitbox(this, 4, 5, 0, 2)
-    };
+        setHitbox(this, 4, 5, 0, 2);
+    }
     update() {
         this.ai.moveAwayFromWall(this);
         if (this.movementTimer > this.movementInterval) {
             this.ai.moveAtRandomIntervals(this);
-            this.movementTimer = 0
+            this.movementTimer = 0;
         } else {
-            this.movementTimer++
+            this.movementTimer++;
         }
     }
 }

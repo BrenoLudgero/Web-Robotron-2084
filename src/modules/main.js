@@ -10,15 +10,14 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
+SCORE MANAGER CLASS
 IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
 REWORK HTML SIZES, RESPONSIVENESS (CHECK PROJECTILE POSITIONS)
 CHECK CROSS-BROWSER SUPPORT
 IMPLEMENT ALL ACTORS & OBSTACLES
 HUMAN, ENEMY INTERACTION WITH OBSTACLES
-REFACTOR CODE
 SPAWN / DEATH ANIMATIONS
 IMPLEMENT WAVES
-IMPLEMENT HUMAN SCORE BONUS
 FIX CAPS LOCK LACK OF MOVEMENT
 ADD MOUSE FIRE SUPPORT */
 
@@ -44,19 +43,19 @@ window.addEventListener("load", () => {
             game.draw();
             lag -= frameRate;
             game.globalTimer++;
-            framesThisSecond++
-        };
+            framesThisSecond++;
+        }
         // Updates framerate indicator
         if (currentFrame - lastFPSUpdate >= 1000) {
             const FPS = Math.round((framesThisSecond * 1000) / (currentFrame - lastFPSUpdate));
             game.ui.updateFPS(FPS);
             framesThisSecond = 0;
-            lastFPSUpdate = currentFrame
-        };
-        requestAnimationFrame(runGame)
-    };
+            lastFPSUpdate = currentFrame;
+        }
+        requestAnimationFrame(runGame);
+    }
     // Called once
     runGame();
-    game.actorMngr.spawnActors()
-    game.debuggerr.logActorCount()
-})
+    game.actorMngr.spawnActors();
+    game.debuggerr.logActorCount();
+});

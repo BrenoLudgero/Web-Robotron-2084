@@ -6,6 +6,6 @@ const spritesIndex = {
     hulk: imgPath + "actors/enemies/hulk.png",
     mommy: imgPath + "actors/humans/mommy.png",
     player: imgPath + "actors/player.png",
-    projectile: imgPath + "projectile.png",
+    playerProjectile: imgPath + "projectiles/player-prjctl.png",
     life: imgPath + "ui/life.png"
 }

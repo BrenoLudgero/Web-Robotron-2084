@@ -10,16 +10,16 @@ class UserInterface {
         this.scoreElement = document.getElementById("score");
         this.scoreElement.innerHTML = game.score;
         this.livesElement = document.getElementById("lives");
-        this.fpsElement = document.getElementById("fps-counter")
-    };
+        this.fpsElement = document.getElementById("fps-counter");
+    }
     update() {
         this.updateScore();
-        this.updateLives()
-    };
+        this.updateLives();
+    }
     // Removes sprites from the previous frame
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    };
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
     // Initializes canvas.width and height with scaled dimensions
     setCanvasScaledResolution(scaleFactor) {
         const originalWidth = 292;
@@ -28,13 +28,13 @@ class UserInterface {
         const newWidth = Math.round(originalWidth * scaleFactor);
         const newHeight = Math.round(newWidth / aspectRatio);
         this.canvas.width = newWidth;
-        this.canvas.height = newHeight
-    };
+        this.canvas.height = newHeight;
+    }
     updateScore() {
         if (this.scoreHasChanged()) {
-            this.scoreElement.innerHTML = this.game.score
+            this.scoreElement.innerHTML = this.game.score;
         }
-    };
+    }
     updateLives() {
         if (this.livesHasChanged()) {
             this.livesElement.innerHTML = "";
@@ -43,17 +43,17 @@ class UserInterface {
                 lifeIndicator.src = this.game.spritesIndex.life;
                 lifeIndicator.alt = "Life Indicator";
                 lifeIndicator.className = "life";
-                this.livesElement.appendChild(lifeIndicator)
+                this.livesElement.appendChild(lifeIndicator);
             }
         }
-    };
+    }
     updateFPS(FPS) {
-        this.fpsElement.innerHTML = FPS
-    };
+        this.fpsElement.innerHTML = FPS;
+    }
     scoreHasChanged() {
-        return this.scoreElement.innerHTML != this.game.score
-    };
+        return this.scoreElement.innerHTML !== this.game.score;
+    }
     livesHasChanged() {
-        return this.livesElement.childElementCount != this.game.player.lives
+        return this.livesElement.childElementCount !== this.game.player.lives;
     }
 }
