@@ -2,69 +2,72 @@
     font-family: "Robotron";
     src: url("robotron_font.ttf")
 }
-
 body {
     margin: 0;
     display: flex;
     padding: 6px;
     font-family: "Robotron", sans-serif;
     justify-content: space-around;
-    background-color: black
+    background-color: black;
 }
 body * { /*  !  !  !  !  ! */
-    user-select: none
+    user-select: none;
 }
 
+/* Top and Bottom UI Info */
 #top-info, 
 #bottom-info {
     height: 34px;
     display: flex;
     pointer-events: none;
-    justify-content: space-between
+    justify-content: space-between;
 }
 #score-lives-container {
     display: flex;
-    margin-left: 15px;
+    margin-left: 12px;
     align-items: center;
-    justify-content: flex-start
 }
 #score, 
 #wave, 
-#fps-container {
+#fps-container, 
+#surplus-lives-indicator {
     color: white;
-    font-size: 24px
+    font-size: 24px;
+    align-self: center;
 }
 #score {
     display: flex;
     justify-content: flex-end;
-    width: 180px;
-    margin-right: 10px
+    width: 138px;
+    margin-right: 20px;
 }
 #lives {
-    height: 90%
+    height: 90%;
+    display: flex;
 }
-.life {
+.life-indicator {
     padding-top: 2px;
     padding-right: 10px;
-    height: inherit
+    height: inherit;
 }
 #fps-container {
     display: flex;
     align-items: center;
-    margin-right: 15px
+    margin-right: 12px;
 }
-#fps {
-    margin-right: 5px
+#fps-string {
+    margin-right: 5px;
 }
 #wave {
-    margin: auto
+    margin: auto;
 }
 
+/* Canvas */
 canvas {
     top: 30px;
     margin: auto;
     display: block;
     /* cursor: crosshair; */
     background-color: black;
-    border: 7px solid rgb(255, 110, 0)
+    border: 7px solid rgb(255, 110, 0);
 }

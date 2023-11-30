@@ -8,13 +8,13 @@ class UserInterface {
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
         this.scoreElement = document.getElementById("score");
-        this.scoreElement.innerHTML = game.score;
+        this.scoreElement.innerHTML = game.scoreMngr.score;
         this.livesElement = document.getElementById("lives");
         this.fpsElement = document.getElementById("fps-counter");
     }
     update() {
-        this.updateScore();
-        this.updateLives();
+        this.updateScoreElement();
+        this.updateLivesElement();
     }
     // Removes sprites from the previous frame
     draw() {
@@ -30,28 +30,63 @@ class UserInterface {
         this.canvas.width = newWidth;
         this.canvas.height = newHeight;
     }
-    updateScore() {
+    updateScoreElement() {
         if (this.scoreHasChanged()) {
-            this.scoreElement.innerHTML = this.game.score;
+            this.scoreElement.innerHTML = this.game.scoreMngr.score;
         }
     }
-    updateLives() {
-        if (this.livesHasChanged()) {
-            this.livesElement.innerHTML = "";
-            for (let i = 0; i < this.game.player.lives; i++) {
-                const lifeIndicator = document.createElement("img");
-                lifeIndicator.src = this.game.spritesIndex.life;
-                lifeIndicator.alt = "Life Indicator";
-                lifeIndicator.className = "life";
-                this.livesElement.appendChild(lifeIndicator);
+    updateLivesElement() {
+        if (!this.livesHasChanged()) {
+            return;
+        }
+        const currentLives = this.game.player.lives;
+        if (this.livesElement.childElementCount < 20) {
+            this.updateLifeIndicators(currentLives);
+        } else {
+            this.updateSurplusLivesIndicator(currentLives);
+        }
+    }
+    updateLifeIndicators(currentLives) {
+        this.livesElement.innerHTML = "";
+        for (let i = 0; i < currentLives; i++) {
+            const lifeIndicator = document.createElement("img");
+            lifeIndicator.src = this.game.spritesIndex.life;
+            lifeIndicator.alt = "Life Indicator";
+            lifeIndicator.className = "life-indicator";
+            this.livesElement.appendChild(lifeIndicator);
+        }
+    }
+    // Creates a string indicating the amount of lives beyond 20
+    updateSurplusLivesIndicator(currentLives) {
+        const surplusLivesCount = currentLives - 20;
+        let surplusLivesIndicator = document.querySelector("#surplus-lives-indicator");
+        if (surplusLivesCount > 0) {
+            if (!surplusLivesIndicator) {
+                this.createSurplusLivesIndicator();
+                surplusLivesIndicator = document.querySelector("#surplus-lives-indicator");
             }
+            if (surplusLivesIndicator && surplusLivesCount !== parseInt(surplusLivesIndicator.innerHTML)) {
+                surplusLivesIndicator.innerHTML = `+${surplusLivesCount}`;
+            }
+        } else {
+            this.removeSurplusLivesIndicator(surplusLivesIndicator);
+        }
+    }
+    createSurplusLivesIndicator() {
+        const surplusLivesIndicator = document.createElement("span");
+        surplusLivesIndicator.id = "surplus-lives-indicator";
+        this.livesElement.appendChild(surplusLivesIndicator);
+    }
+    removeSurplusLivesIndicator(surplusLivesIndicator) {
+        if (surplusLivesIndicator) {
+            surplusLivesIndicator.parentNode.removeChild(surplusLivesIndicator);
         }
     }
     updateFPS(FPS) {
         this.fpsElement.innerHTML = FPS;
     }
     scoreHasChanged() {
-        return this.scoreElement.innerHTML !== this.game.score;
+        return this.scoreElement.innerHTML != this.game.scoreMngr.score;
     }
     livesHasChanged() {
         return this.livesElement.childElementCount !== this.game.player.lives;

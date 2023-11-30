@@ -41,7 +41,7 @@ class Player extends Actor {
             }
         }
     }
-    // Functions below called inputMngr.readMovementKeys
+    // Methods below called inputMngr.readMovementKeys
     moveLeft() {
         this.screenX -= this.movementSpeed;
         setHitbox(this, 8, 4, 2, 0);

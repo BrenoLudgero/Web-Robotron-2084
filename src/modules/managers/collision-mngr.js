@@ -3,7 +3,6 @@ export {CollisionManager};
 class CollisionManager {
     constructor(game) {
         this.game = game;
-        this.rescueBonus = 0;
     }
     update() {
         const {enemies, player, humans, debuggerr} = this.game;
@@ -41,7 +40,7 @@ class CollisionManager {
             if (this.checkSingleCollision(player, enemy)) {
                 player.isAlive = false;
                 player.lives--;
-                this.rescueBonus = 0;
+                this.game.scoreMngr.resetRescueBonus();
                 break;
             }
         }
@@ -54,14 +53,14 @@ class CollisionManager {
         for (const human of humans) {
             if (this.checkSingleCollision(player, human)) {
                 human.wasRescued = true;
-                this.getRecuePoints(human);
+                this.game.scoreMngr.awardRecuePoints(human);
                 break;
             }
         }
     }
     checkHumanEnemyCollision(humans, enemies) {
         for (const enemy of enemies) {
-            // Destroys humans upon colliding with Hulks
+            // Destroys humans when colliding with Hulks
             if (enemy.isHulk) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
@@ -80,7 +79,7 @@ class CollisionManager {
                     // Destroys enemies that are not Hulks
                     if (!enemy.isHulk) {
                         enemy.isAlive = false;
-                        this.game.score += enemy.points;
+                        this.game.scoreMngr.awardEnemyPoints(enemy);
                     } else {
                         this.knockbackHulk(projectile, enemy);
                     }
@@ -88,13 +87,6 @@ class CollisionManager {
                     break;
                 }
             }
-        }
-    }
-    // Awards human points + bonus up to 5000 total
-    getRecuePoints(human) {
-        this.game.score += (human.points + this.rescueBonus);
-        if (this.rescueBonus < 4000) {
-            this.rescueBonus += 1000;
         }
     }
     knockbackHulk(projectile, hulk) {
