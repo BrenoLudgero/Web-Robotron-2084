@@ -1,5 +1,5 @@
 # Web Robotron: 2084 (Work In Progress)
-Robotron: 2084 is a classic arcade game released in 1982\
+Robotron: 2084 is a classic arcade game released in 1982 by Williams Electronics, Inc.\
 This repository aims to faithfully recreate the game with online high score leaderboards
 
 ## Usage
@@ -26,19 +26,20 @@ A Spheroid roams around the screen. Given enough time, it'll create Enforcers
 Enforcers pursue the player while firing Sparks (25 Points)
 
 ### ![Brain](/github-images/brain.png) Brain (500 Points)
-Brains fire Cruise Missiles (25 Points) that pursue the player. They can chase and convert humans into Progs on contact
+Brains fire Cruise Missiles (25 Points) that pursue the player\
+Will chase humans and convert them into Progs on contact
 
 ### ![Prog](/github-images/prog.png) Prog (100 Points)
 Progs (or reprogrammed humans) will relentlessly chase the player
 
 ### ![Quark](/github-images/quark.png) Quarks (1,000 Points)
-Quarks behave similar to Spheroids, but will create Tanks
+Quarks behave similarly to Spheroids, but they will create Tanks
 
 ### ![Tank](/github-images/tank.png) Tank (200 Points)
 Tanks move relatively slowly and fire Bounce Bombs (25 Points) that bounce upon touching a wall
 
 ### ![Humans](/github-images/humans.png) Humans (1,000 - 5,000 Points)
-Rescuing a human grants 1000 points. Every subsequent rescue grants an additional 1000 points up to 5000\
+Rescuing a human grants 1000 points. Every subsequent rescue grants an additional 1000 points up to 5000 total\
 Losing a life or advancing to the next wave resets the next rescue to the initial 1000 points
 
 ### Obstacles
