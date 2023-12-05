@@ -11,12 +11,12 @@
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
 IMPLEMENT SOUNDS FOR EVERY NEW ADDITION
-REWORK HTML SIZES, RESPONSIVENESS (CHECK PROJECTILE POSITIONS)
-CHECK CROSS-BROWSER SUPPORT
 IMPLEMENT ALL ACTORS & OBSTACLES
 HUMAN, ENEMY INTERACTION WITH OBSTACLES
 SPAWN / DEATH ANIMATIONS
 IMPLEMENT WAVES
+REWORK HTML SIZES, RESPONSIVENESS (CHECK PROJECTILE POSITIONS)
+CHECK CROSS-BROWSER SUPPORT
 FIX CAPS LOCK LACK OF MOVEMENT
 ADD MOUSE FIRE SUPPORT */
 
@@ -47,7 +47,7 @@ window.addEventListener("load", () => {
         // Updates framerate indicator
         if (currentFrame - lastFPSUpdate >= 1000) {
             const FPS = Math.round((framesThisSecond * 1000) / (currentFrame - lastFPSUpdate));
-            game.ui.updateFPS(FPS);
+            game.uiMngr.updateFPS(FPS);
             framesThisSecond = 0;
             lastFPSUpdate = currentFrame;
         }

@@ -74,7 +74,7 @@ class CollisionManager {
     // Checks collision between all projectiles and enemies
     checkProjectileCollisions(projectiles, enemies) {
         for (const projectile of projectiles) {
-            for (const enemy of enemies.reverse()) {
+            for (const enemy of enemies) {
                 if (this.checkSingleCollision(projectile, enemy)) {
                     // Destroys enemies that are not Hulks
                     if (!enemy.isHulk) {

@@ -24,6 +24,7 @@ class ScoreManager {
     awardEnemyPoints(enemy) {
         this.score += enemy.points;
     }
+    // Awards an extra life when the score is divisible by 25.000
     awardExtraLife(player) {
         if (this.score >= this.nextExtraLife) {
             player.lives += 1;

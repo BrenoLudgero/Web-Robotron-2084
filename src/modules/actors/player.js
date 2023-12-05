@@ -6,8 +6,8 @@ class Player extends Actor {
     constructor(game) {
         super(game, 15, 24);
         this.sprites.src = game.spritesIndex.player;
-        this.screenX = (game.ui.canvas.width / 2) - this.width;
-        this.screenY = (game.ui.canvas.height / 2) - this.height;
+        this.screenX = (game.uiMngr.canvas.width / 2) - this.width;
+        this.screenY = (game.uiMngr.canvas.height / 2) - this.height;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
@@ -19,7 +19,7 @@ class Player extends Actor {
     }
     update() {
         setMovementBoundaries(this);
-        this.projectileTimer --;
+        this.updateProjectileTimer();
     }
     // Called in inputMngr.readShootingKeys
     shoot(left, right, up, down, yOffset) {
@@ -29,6 +29,11 @@ class Player extends Actor {
         if (this.projectileTimer <= 0) {
             this.game.projectileMngr.createProjectile(this.projectileSprite, playerX, playerY, this.projectileSpeed, left, right, up, down);
             this.projectileTimer = this.projectileDelay;
+        }
+    }
+    updateProjectileTimer() {
+        if (this.projectileTimer > 0) {
+            this.projectileTimer --;
         }
     }
     cyclePlayerSprite(spritesheetY) {

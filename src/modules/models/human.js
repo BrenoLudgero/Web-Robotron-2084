@@ -11,6 +11,7 @@ class Human extends Actor {
         this.wasRescued = false;
         this.movementType = 2; // 8 directions
         this.movementSpeed = 4;
+        this.movementAnimationDelay = 9;
         this.minPlayerSpawnDistance = 100; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = 150;
         // screenX and screenY positions defined in actorMngr.addHuman()

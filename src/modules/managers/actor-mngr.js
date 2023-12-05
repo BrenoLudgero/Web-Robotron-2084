@@ -14,7 +14,7 @@ class ActorManager {
         if (this.game.debuggerr.shouldUpdateActors) {
             this.updateActors(game.enemies);
             this.updateActors(game.humans);
-            this.removeDeadOrRescued(game.enemies, game.humans);
+            this.removeDestroyedOrRescued(game.enemies, game.humans);
         }
     }
     draw(context) {
@@ -23,9 +23,13 @@ class ActorManager {
         this.drawActors(this.game.humans, context);
     }
     isAwayFromOtherActors(actor, otherActors, minDistance) {
-        return otherActors.every(otherActor => {
-            return calculateDistance(actor, otherActor) >= minDistance;
+        let isAway = true;
+        otherActors.forEach(otherActor => {
+            if (calculateDistance(actor, otherActor) < minDistance) {
+                isAway = false;
+            }
         });
+        return isAway;
     }
     // Checks if the newActor is at a sufficient distance from other actors before spawning
     isSafeToSpawnActor(newActor, maxScreenX, maxScreenY) {
@@ -48,10 +52,10 @@ class ActorManager {
         const {game} = this;
         for (let i = 0; i < numberEnemies; i++) {
             const newEnemy = new enemyType(game);
-            let maxScreenX = game.ui.canvas.width - newEnemy.width;
-            let maxScreenY = game.ui.canvas.height - newEnemy.height;
+            let maxScreenX = game.uiMngr.canvas.width - newEnemy.width;
+            let maxScreenY = game.uiMngr.canvas.height - newEnemy.height;
             if (this.isSafeToSpawnActor(newEnemy, maxScreenX, maxScreenY)) {
-                game.enemies.push(newEnemy);
+                game.enemies.add(newEnemy);
             }
         }
     }
@@ -59,10 +63,10 @@ class ActorManager {
         const {game} = this;
         for (let i = 0; i < numberHumans; i++) {
             const newHuman = new humanType(game);
-            let maxScreenX = game.ui.canvas.width - newHuman.width;
-            let maxScreenY = game.ui.canvas.height - newHuman.height;
+            let maxScreenX = game.uiMngr.canvas.width - newHuman.width;
+            let maxScreenY = game.uiMngr.canvas.height - newHuman.height;
             if (this.isSafeToSpawnActor(newHuman, maxScreenX, maxScreenY)) {
-                game.humans.push(newHuman);
+                game.humans.add(newHuman);
             }
         }
     }
@@ -82,14 +86,16 @@ class ActorManager {
             actor.update();
         });
     }
-    removeDeadOrRescued(enemies, humans) {
-        const updateArray = (actors, action) => {
-            const activeActors = actors.filter(action);
-            if (actors.length !== activeActors.length) {
-                actors.splice(0, actors.length, ...activeActors);
+    removeDestroyedOrRescued(enemies, humans) {
+        enemies.forEach(enemy => {
+            if (!enemy.isAlive) {
+                enemies.delete(enemy);
             }
-        };
-        updateArray(enemies, enemy => enemy.isAlive);
-        updateArray(humans, human => human.isAlive && !human.wasRescued);
+        });
+        humans.forEach(human => {
+            if (!human.isAlive || human.wasRescued) {
+                humans.delete(human);
+            }
+        });
     }
 }

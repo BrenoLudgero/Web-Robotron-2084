@@ -1,6 +1,6 @@
 export {Game};
 import {spritesIndex} from "../helpers/indexes.js";
-import {UserInterface} from "./ui.js";
+import {UserInterface} from "../managers/ui-mngr.js";
 import {Player} from "../actors/player.js";
 import {ActorManager} from "../managers/actor-mngr.js";
 import {ProjectileManager} from "../managers/projectile-mngr.js";
@@ -15,10 +15,10 @@ class Game {
         this.globalTimer = 0;
         this.spritesIndex = spritesIndex;
         this.scoreMngr = new ScoreManager(this);
-        this.ui = new UserInterface(this);
+        this.uiMngr = new UserInterface(this);
         this.player = new Player(this);
-        this.enemies = [];
-        this.humans = [];
+        this.enemies = new Set();
+        this.humans = new Set();
         this.actorMngr = new ActorManager(this);
         this.projectileMngr = new ProjectileManager(this);
         this.inputMngr = new InputManager(this);
@@ -33,12 +33,12 @@ class Game {
             this.projectileMngr.update();
             this.collisionMngr.update();
             this.scoreMngr.update();
-            this.ui.update();
+            this.uiMngr.update();
         }
     }
     draw() {
-        this.ui.draw();
-        this.actorMngr.draw(this.ui.ctx);
-        this.projectileMngr.draw(this.ui.ctx);
+        this.uiMngr.draw();
+        this.actorMngr.draw(this.uiMngr.ctx);
+        this.projectileMngr.draw(this.uiMngr.ctx);
     }
 }
