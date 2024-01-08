@@ -21,4 +21,7 @@ class ProjectileManager {
         const projectile = new Projectile(this.game, spriteSrc, screenX, screenY, speed, left, right, up, down);
         this.projectiles.add(projectile);
     }
+    eraseAllProjectiles() {
+        this.projectiles.clear();
+    }
 }

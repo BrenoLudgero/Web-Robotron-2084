@@ -20,16 +20,16 @@ class Hulk extends Enemy {
     animate() {
         switch(this.currentDirection) {
             case("left"):
-                setHitbox(this, 14, 15, 0, -4);
+                setHitbox(this, 16, 16, -1, -4);
                 cycleSprite(this,28, 33);
                 break;
             case("right"):
-                setHitbox(this, 14, 15, 0, -4);
+                setHitbox(this, 16, 16, 0, -4);
                 cycleSprite(this,28, 65);
                 break;
             case("up"):
             case("down"):
-                setHitbox(this, 0, 12, 0, -3);
+                setHitbox(this, 0, 14, 0, -2);
                 cycleSprite(this,28, 0);
                 break;
         }

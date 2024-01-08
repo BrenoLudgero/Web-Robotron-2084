@@ -11,7 +11,7 @@ class ActorManager {
     update() {
         const {game} = this;
         game.player.update();
-        if (this.game.debuggerr.shouldUpdateActors) {
+        if (game.debuggerr.shouldUpdateActors) {
             this.updateActors(game.enemies);
             this.updateActors(game.humans);
             this.removeDestroyedOrRescued(game.enemies, game.humans);
@@ -72,9 +72,9 @@ class ActorManager {
     }
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
-        this.addHumans(15, Mommy);
+        this.addHumans(10, Mommy);
         this.addEnemies(5, Hulk);
-        this.addEnemies(10, Grunt);
+        this.addEnemies(40, Grunt);
     }
     drawActors(actors, context) {
         actors.forEach(actor => {

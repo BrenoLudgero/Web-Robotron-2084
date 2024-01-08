@@ -9,7 +9,7 @@ class Grunt extends Enemy {
         this.sprites.src = game.spritesIndex.grunt;
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE ELAPSED TIME (LATER)
         this.movementTimer = 0;
-        this.movementInterval = 20; // DECREASES ACCORDING TO WAVE ELAPSED TIME
+        this.movementInterval = 10; // DECREASES ACCORDING TO WAVE ELAPSED TIME
         setHitbox(this, 2, 5, 0, 2);
     }
     update() {
