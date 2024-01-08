@@ -5,14 +5,14 @@ class CollisionManager {
         this.game = game;
     }
     update() {
-        const {enemies, player, humans, debuggerr} = this.game;
+        const {enemies, player, humans, scoreMngr, soundMngr, projectileMngr, debuggerr} = this.game;
         if (!debuggerr.actorInvincibility) {
-            this.checkAllCollisions(player, enemies, humans);
+            this.checkAllCollisions(player, enemies, humans, scoreMngr, soundMngr, projectileMngr);
         }
     }
-    checkAllCollisions(player, enemies, humans) {
-        this.checkPlayerCollisions(player, enemies);
-        this.checkHumanCollisions(player, enemies, humans);
+    checkAllCollisions(player, enemies, humans, scoreMngr, soundMngr, projectileMngr) {
+        this.checkPlayerCollisions(player, enemies, scoreMngr, soundMngr, projectileMngr);
+        this.checkHumanCollisions(player, enemies, humans, scoreMngr, soundMngr);
         this.checkProjectileCollisions(this.game.projectileMngr.projectiles, enemies);
     }
     // Checks collision between two actors
@@ -35,36 +35,40 @@ class CollisionManager {
             && actorHitbox.top <= targetHitbox.bottom
         );
     }
-    checkPlayerCollisions(player, enemies) {
+    checkPlayerCollisions(player, enemies, scoreMngr, soundMngr, projectileMngr) {
         for (const enemy of enemies) {
             if (this.checkSingleCollision(player, enemy)) {
                 player.isAlive = false;
                 player.lives--;
-                this.game.scoreMngr.resetRescueBonus();
+                scoreMngr.resetRescueBonus();
+                soundMngr.playSound(this.game.soundFxIndex.playerDestroyed, 5);
+                projectileMngr.eraseAllProjectiles();
                 break;
             }
         }
     }
-    checkHumanCollisions(player, enemies, humans) {
-        this.checkHumanPlayerCollision(humans, player);
-        this.checkHumanEnemyCollision(humans, enemies);
+    checkHumanCollisions(player, enemies, humans, scoreMngr, soundMngr) {
+        this.checkHumanPlayerCollision(humans, player, scoreMngr, soundMngr);
+        this.checkHumanEnemyCollision(humans, enemies, soundMngr);
     }
-    checkHumanPlayerCollision(humans, player) {
+    checkHumanPlayerCollision(humans, player, scoreMngr, soundMngr) {
         for (const human of humans) {
             if (this.checkSingleCollision(player, human)) {
                 human.wasRescued = true;
-                this.game.scoreMngr.awardRecuePoints(human);
+                scoreMngr.awardRecuePoints(human);
+                soundMngr.playSound(this.game.soundFxIndex.humanRescued, 4, 0.5);
                 break;
             }
         }
     }
-    checkHumanEnemyCollision(humans, enemies) {
+    checkHumanEnemyCollision(humans, enemies, soundMngr) {
         for (const enemy of enemies) {
             // Destroys humans when colliding with Hulks
             if (enemy.isHulk) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
                         human.isAlive = false;
+                        soundMngr.playSound(this.game.soundFxIndex.humanDestroyed, 4, 0.48);
                         break;
                     }
                 }
@@ -80,6 +84,7 @@ class CollisionManager {
                     if (!enemy.isHulk) {
                         enemy.isAlive = false;
                         this.game.scoreMngr.awardEnemyPoints(enemy);
+                        this.game.soundMngr.playSound(this.game.soundFxIndex.enemyDestroyed, 3, 0.035);
                     } else {
                         this.knockbackHulk(projectile, enemy);
                     }
@@ -109,10 +114,10 @@ class CollisionManager {
         const halfHeight = projectile.height / 2;
         const centerX = projectile.screenX + halfWidth;
         const centerY = projectile.screenY + halfHeight;
-        const rotatedX1 = centerX - halfWidth * Math.abs(Math.cos(projectile.angle)) - halfHeight * Math.abs(Math.sin(projectile.angle));
-        const rotatedX2 = centerX + halfWidth * Math.abs(Math.cos(projectile.angle)) + halfHeight * Math.abs(Math.sin(projectile.angle));
-        const rotatedY1 = centerY - halfWidth * Math.abs(Math.sin(projectile.angle)) - halfHeight * Math.abs(Math.cos(projectile.angle));
-        const rotatedY2 = centerY + halfWidth * Math.abs(Math.sin(projectile.angle)) + halfHeight * Math.abs(Math.cos(projectile.angle));
+        const rotatedX1 = centerX - (halfWidth * Math.abs(Math.cos(projectile.angle))) - (halfHeight * Math.abs(Math.sin(projectile.angle)));
+        const rotatedX2 = centerX + (halfWidth * Math.abs(Math.cos(projectile.angle))) + (halfHeight * Math.abs(Math.sin(projectile.angle)));
+        const rotatedY1 = centerY - (halfWidth * Math.abs(Math.sin(projectile.angle))) - (halfHeight * Math.abs(Math.cos(projectile.angle)));
+        const rotatedY2 = centerY + (halfWidth * Math.abs(Math.sin(projectile.angle))) + (halfHeight * Math.abs(Math.cos(projectile.angle)));
         return {
             left: Math.min(rotatedX1, rotatedX2),
             right: Math.max(rotatedX1, rotatedX2),

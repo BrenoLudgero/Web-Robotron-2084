@@ -29,6 +29,7 @@ class ScoreManager {
         if (this.score >= this.nextExtraLife) {
             player.lives += 1;
             this.nextExtraLife += 25000;
+            this.game.soundMngr.playSound(this.game.soundFxIndex.extraLife, 4, 0.75)
         }
     }
 }

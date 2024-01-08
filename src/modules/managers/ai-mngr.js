@@ -26,11 +26,12 @@ class ArtificialIntelligence {
         if (randomNumber === 1) {
             this.chasePlayer(actor);
             cycleSprite(actor, 20, 0);
+            this.game.soundMngr.playSound(this.game.soundFxIndex.gruntStep, 1);
         }
     }
     // Returns one of 4 or 8 directions based on the actor's movementType
     setRandomDirection(actor) {
-        const numDirections = actor.movementType === 1 ? 4 : 8;
+        const numDirections = (actor.movementType === 1 ? 4 : 8);
         return this.directions[Math.floor(Math.random() * numDirections)];
     }
     setRandomWalkDistance() {

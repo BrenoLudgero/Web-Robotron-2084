@@ -12,7 +12,7 @@ class Player extends Actor {
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
         this.projectileSprite = game.spritesIndex.playerProjectile;
-        this.projectileSpeed = 28;
+        this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 7;
         setHitbox(this, 1, 3, 1, 1);
@@ -29,6 +29,7 @@ class Player extends Actor {
         if (this.projectileTimer <= 0) {
             this.game.projectileMngr.createProjectile(this.projectileSprite, playerX, playerY, this.projectileSpeed, left, right, up, down);
             this.projectileTimer = this.projectileDelay;
+            this.game.soundMngr.playSound(this.game.soundFxIndex.playerShot, 1, 0.1);
         }
     }
     updateProjectileTimer() {

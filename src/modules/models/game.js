@@ -1,6 +1,7 @@
 export {Game};
-import {spritesIndex} from "../helpers/indexes.js";
+import {spritesIndex, soundFxIndex} from "../helpers/indexes.js";
 import {UserInterface} from "../managers/ui-mngr.js";
+import {SoundManager} from "../managers/sound-mngr.js";
 import {Player} from "../actors/player.js";
 import {ActorManager} from "../managers/actor-mngr.js";
 import {ProjectileManager} from "../managers/projectile-mngr.js";
@@ -14,8 +15,10 @@ class Game {
     constructor() {
         this.globalTimer = 0;
         this.spritesIndex = spritesIndex;
+        this.soundFxIndex = soundFxIndex;
         this.scoreMngr = new ScoreManager(this);
         this.uiMngr = new UserInterface(this);
+        this.soundMngr = new SoundManager(this);
         this.player = new Player(this);
         this.enemies = new Set();
         this.humans = new Set();
