@@ -58,7 +58,7 @@ Obstacles are scattered around the screen and will destroy the player on contact
 | Arrow Right  | Shoot right |
 
 ## Known Issues
--
+Unexpected audio and visual behavior occurs when the browser console is open
 
 ## Debugging Shortcuts
 | Keyboard Key | Description |
