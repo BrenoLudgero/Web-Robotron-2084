@@ -6,8 +6,8 @@ class Player extends Actor {
     constructor(game) {
         super(game, 15, 24);
         this.sprites.src = game.spritesIndex.player;
-        this.screenX = (game.uiMngr.canvas.width / 2) - this.width;
-        this.screenY = (game.uiMngr.canvas.height / 2) - this.height;
+        this.screenX = (game.ui.canvas.width / 2) - this.width;
+        this.screenY = (game.ui.canvas.height / 2) - this.height;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
@@ -43,30 +43,30 @@ class Player extends Actor {
         }
     }
     // Methods below called in inputMngr.processMovementKeys
-    moveLeft(keysPressed) {
-        if (this.game.inputMngr.notPressingD(keysPressed)) {
+    moveLeft() {
+        if (this.game.inputMngr.notPressingD()) {
             this.screenX -= this.movementSpeed;
             setHitbox(this, 8, 4, 2, 0);
             this.cyclePlayerSprite(51);
         }
     }
-    moveRight(keysPressed) {
-        if (this.game.inputMngr.notPressingA(keysPressed)) {
+    moveRight() {
+        if (this.game.inputMngr.notPressingA()) {
             this.screenX += this.movementSpeed;
             setHitbox(this, 8, 4, 2, 0);
             this.cyclePlayerSprite(75);
         }
     }
-    moveUp(keysPressed) {
+    moveUp() {
         this.screenY -= this.movementSpeed;
-        if (this.game.inputMngr.pressingWOnly(keysPressed) || this.game.inputMngr.pressingDnA(keysPressed)) {
+        if (this.game.inputMngr.pressingWOnly() || this.game.inputMngr.pressingDnA()) {
             setHitbox(this, 1, 3, 1, 1);
             this.cyclePlayerSprite(26);
         }
     }
-    moveDown(keysPressed) {
+    moveDown() {
         this.screenY += this.movementSpeed;
-        if (this.game.inputMngr.pressingSOnly(keysPressed) || this.game.inputMngr.pressingDnA(keysPressed)) {
+        if (this.game.inputMngr.pressingSOnly() || this.game.inputMngr.pressingDnA()) {
             setHitbox(this, 1, 3, 1, 1);
             this.cyclePlayerSprite(0);
         }

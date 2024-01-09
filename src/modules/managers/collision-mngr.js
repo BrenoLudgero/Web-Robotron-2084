@@ -5,9 +5,9 @@ class CollisionManager {
         this.game = game;
     }
     update() {
-        const {enemies, player, humans, scoreMngr, soundMngr, projectileMngr, debuggerr} = this.game;
+        const {player, actorMngr, scoreMngr, soundMngr, projectileMngr, debuggerr} = this.game;
         if (!debuggerr.actorInvincibility) {
-            this.checkAllCollisions(player, enemies, humans, scoreMngr, soundMngr, projectileMngr);
+            this.checkAllCollisions(player, actorMngr.enemies, actorMngr.humans, scoreMngr, soundMngr, projectileMngr);
         }
     }
     checkAllCollisions(player, enemies, humans, scoreMngr, soundMngr, projectileMngr) {

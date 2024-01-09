@@ -58,9 +58,9 @@ class Projectile {
     }
     isOutOfBounds() {
         return (
-            this.screenX > this.game.uiMngr.canvas.width + 10 
+            this.screenX > this.game.ui.canvas.width + 10 
             || this.screenX < -10 
-            || this.screenY > this.game.uiMngr.canvas.height + 10 
+            || this.screenY > this.game.ui.canvas.height + 10 
             || this.screenY < -10
         );
     }

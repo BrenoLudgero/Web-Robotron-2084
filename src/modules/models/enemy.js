@@ -1,6 +1,6 @@
 export {Enemy};
 import {Actor} from "./actor.js";
-import {ArtificialIntelligence} from "../managers/ai-mngr.js";
+import {ArtificialIntelligence} from "./ai.js";
 
 class Enemy extends Actor {
     constructor(game, originalWidth, originalHeight) {

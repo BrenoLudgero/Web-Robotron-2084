@@ -28,8 +28,8 @@ function calculateDistance(actor1, actor2) {
 // Makes sure actors stay within canvas borders
 function setMovementBoundaries(actor) {
     const movementBoundaries = {
-        "x": actor.game.uiMngr.canvas.width - actor.width,
-        "y": actor.game.uiMngr.canvas.height - actor.height
+        "x": actor.game.ui.canvas.width - actor.width,
+        "y": actor.game.ui.canvas.height - actor.height
     };
     if (actor.screenY <= 2) {
         actor.screenY = 2;

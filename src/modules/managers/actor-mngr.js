@@ -7,20 +7,21 @@ import {RNG, calculateDistance} from "../helpers/globals.js"
 class ActorManager {
     constructor(game) {
         this.game = game;
+        this.enemies = new Set();
+        this.humans = new Set();
     }
     update() {
-        const {game} = this;
-        game.player.update();
-        if (game.debuggerr.shouldUpdateActors) {
-            this.updateActors(game.enemies);
-            this.updateActors(game.humans);
-            this.removeDestroyedOrRescued(game.enemies, game.humans);
+        this.game.player.update();
+        if (this.game.debuggerr.shouldUpdateActors) {
+            this.updateActors(this.enemies);
+            this.updateActors(this.humans);
+            this.removeDestroyedOrRescued(this.enemies, this.humans);
         }
     }
     draw(context) {
         this.game.player.draw(context);
-        this.drawActors(this.game.enemies, context);
-        this.drawActors(this.game.humans, context);
+        this.drawActors(this.enemies, context);
+        this.drawActors(this.humans, context);
     }
     isAwayFromOtherActors(actor, otherActors, minDistance) {
         let isAway = true;
@@ -33,15 +34,14 @@ class ActorManager {
     }
     // Checks if the newActor is at a sufficient distance from other actors before spawning
     isSafeToSpawnActor(newActor, maxScreenX, maxScreenY) {
-        const {game} = this;
         let isSafeToSpawn = false;
         while (!isSafeToSpawn) {
             newActor.screenX = RNG(1, maxScreenX);
             newActor.screenY = RNG(1, maxScreenY);
-            let playerDistance = calculateDistance(newActor, game.player);
+            let playerDistance = calculateDistance(newActor, this.game.player);
             let isAwayFromPlayer = playerDistance >= newActor.minPlayerSpawnDistance;
-            let isAwayFromHumans = this.isAwayFromOtherActors(newActor, game.humans, newActor.minHumanSpawnDistance);
-            let isAwayFromEnemies = this.isAwayFromOtherActors(newActor, game.enemies, newActor.minEnemySpawnDistance);
+            let isAwayFromHumans = this.isAwayFromOtherActors(newActor, this.humans, newActor.minHumanSpawnDistance);
+            let isAwayFromEnemies = this.isAwayFromOtherActors(newActor, this.enemies, newActor.minEnemySpawnDistance);
             if (isAwayFromPlayer && isAwayFromEnemies && isAwayFromHumans) {
                 isSafeToSpawn = true;
             }
@@ -52,10 +52,10 @@ class ActorManager {
         const {game} = this;
         for (let i = 0; i < numberEnemies; i++) {
             const newEnemy = new enemyType(game);
-            let maxScreenX = game.uiMngr.canvas.width - newEnemy.width;
-            let maxScreenY = game.uiMngr.canvas.height - newEnemy.height;
+            let maxScreenX = game.ui.canvas.width - newEnemy.width;
+            let maxScreenY = game.ui.canvas.height - newEnemy.height;
             if (this.isSafeToSpawnActor(newEnemy, maxScreenX, maxScreenY)) {
-                game.enemies.add(newEnemy);
+                this.enemies.add(newEnemy);
             }
         }
     }
@@ -63,10 +63,10 @@ class ActorManager {
         const {game} = this;
         for (let i = 0; i < numberHumans; i++) {
             const newHuman = new humanType(game);
-            let maxScreenX = game.uiMngr.canvas.width - newHuman.width;
-            let maxScreenY = game.uiMngr.canvas.height - newHuman.height;
+            let maxScreenX = game.ui.canvas.width - newHuman.width;
+            let maxScreenY = game.ui.canvas.height - newHuman.height;
             if (this.isSafeToSpawnActor(newHuman, maxScreenX, maxScreenY)) {
-                game.humans.add(newHuman);
+                this.humans.add(newHuman);
             }
         }
     }

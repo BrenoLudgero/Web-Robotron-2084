@@ -1,7 +1,7 @@
 export {Human};
 import {Actor} from "./actor.js";
 import {setHitbox, cycleSprite} from "../helpers/globals.js";
-import {ArtificialIntelligence} from "../managers/ai-mngr.js";
+import {ArtificialIntelligence} from "./ai.js";
 
 class Human extends Actor {
     constructor(game, originalWidth, originalHeight) {

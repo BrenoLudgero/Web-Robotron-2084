@@ -1,6 +1,7 @@
 export {Game};
 import {spritesIndex, soundFxIndex} from "../helpers/indexes.js";
-import {UserInterface} from "../managers/ui-mngr.js";
+import {UserInterface} from "./ui.js";
+import {UIManager} from "../managers/ui-mngr.js";
 import {SoundManager} from "../managers/sound-mngr.js";
 import {Player} from "../actors/player.js";
 import {ActorManager} from "../managers/actor-mngr.js";
@@ -17,15 +18,13 @@ class Game {
         this.spritesIndex = spritesIndex;
         this.soundFxIndex = soundFxIndex;
         this.scoreMngr = new ScoreManager(this);
-        this.uiMngr = new UserInterface(this);
+        this.ui = new UserInterface(this);
+        this.uiMngr = new UIManager(this, this.ui, spritesIndex);
         this.soundMngr = new SoundManager(this);
         this.player = new Player(this);
-        this.enemies = new Set();
-        this.humans = new Set();
         this.actorMngr = new ActorManager(this);
         this.projectileMngr = new ProjectileManager(this);
         this.inputMngr = new InputManager(this);
-        this.keysPressed = [];
         this.collisionMngr = new CollisionManager(this);
         this.debuggerr = new Debugger(this);
     }
@@ -41,7 +40,7 @@ class Game {
     }
     draw() {
         this.uiMngr.draw();
-        this.actorMngr.draw(this.uiMngr.ctx);
-        this.projectileMngr.draw(this.uiMngr.ctx);
+        this.actorMngr.draw(this.ui.ctx);
+        this.projectileMngr.draw(this.ui.ctx);
     }
 }

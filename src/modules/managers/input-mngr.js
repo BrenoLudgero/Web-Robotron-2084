@@ -3,14 +3,13 @@ export {InputManager};
 class InputManager {
     constructor(game) {
         this.game = game;
+        this.keysPressed = [];
         this.playerControls = ["w", "a", "s", "d", "arrowup", "arrowleft", "arrowdown", "arrowright"];
         this.setEventListeners();
     }
     update() {
-        const {keysPressed, player} = this.game;
-        this.processMovementKeys(keysPressed, player);
-        this.processShootingKeys(keysPressed, player);
-        console.log(keysPressed)
+        this.processMovementKeys(this.game.player);
+        this.processShootingKeys(this.game.player);
     }
     setEventListeners() {
         window.addEventListener("keydown", (e) => this.handleKeyDown(e));
@@ -21,20 +20,20 @@ class InputManager {
     // Pushes one instance of each pressed key to keysPressed
     handleKeyDown(event) {
         const key = event.key.toLowerCase();
-        if (this.playerControls.includes(key) && !this.game.keysPressed.includes(key)) {
-            this.game.keysPressed.push(key);
+        if (this.playerControls.includes(key) && !this.keysPressed.includes(key)) {
+            this.keysPressed.push(key);
         }
     }
     // Removes the key from keysPressed
     handleKeyUp(event) {
         const key = event.key.toLowerCase();
-        const keyIndex = this.game.keysPressed.indexOf(key);
+        const keyIndex = this.keysPressed.indexOf(key);
         if (keyIndex > -1) {
-            this.game.keysPressed.splice(keyIndex, 1);
+            this.keysPressed.splice(keyIndex, 1);
         }
         this.game.debuggerr.processDebugKeys(key);
     }
-    processMovementKeys(keysPressed, player) {
+    processMovementKeys(player) {
         const moveDirections = {
             "w": "moveUp",
             "s": "moveDown",
@@ -42,120 +41,120 @@ class InputManager {
             "a": "moveLeft"
         };
         Object.entries(moveDirections).forEach(([key, method]) => {
-            if (keysPressed.includes(key)) {
-                player[method](keysPressed);
+            if (this.keysPressed.includes(key)) {
+                player[method]();
             }
         });
     }
-    processShootingKeys(keysPressed, player) {
-        if (this.pressingUpOnly(keysPressed)) {
+    processShootingKeys(player) {
+        if (this.pressingUpOnly()) {
             //     shoot(left,  right,  up,  down, yDrawOffset)
             player.shoot(false, false, true, false, 0);
         } 
-        else if (this.pressingUpAndLeft(keysPressed)) {
+        else if (this.pressingUpAndLeft()) {
             player.shoot(true, false, true, false, 0);
         } 
-        else if (this.pressingUpAndRight(keysPressed)) {
+        else if (this.pressingUpAndRight()) {
             player.shoot(false, true, true, false, 0);
         }
-        if (this.pressingDownOnly(keysPressed)) {
+        if (this.pressingDownOnly()) {
             player.shoot(false, false, false, true, 16);
         } 
-        else if (this.pressingDownAndRight(keysPressed)) {
+        else if (this.pressingDownAndRight()) {
             player.shoot(false, true, false, true, 16);
         } 
-        else if (this.pressingDownAndLeft(keysPressed)) {
+        else if (this.pressingDownAndLeft()) {
             player.shoot(true, false, false, true, 16);
         }
-        if (this.pressingLeftOnly(keysPressed)) {
+        if (this.pressingLeftOnly()) {
             player.shoot(true, false, false, false, 9);
         } 
-        else if (this.pressingRightOnly(keysPressed)) {
+        else if (this.pressingRightOnly()) {
             player.shoot(false, true, false, false, 9);
         }
     }
     //      Shooting methods
-    pressingUpOnly(keysPressed) {
+    pressingUpOnly() {
         return (
-            keysPressed.includes("arrowup") 
-            && !keysPressed.includes("arrowleft") 
-            && !keysPressed.includes("arrowright")
+            this.keysPressed.includes("arrowup") 
+            && !this.keysPressed.includes("arrowleft") 
+            && !this.keysPressed.includes("arrowright")
         );
     }
-    pressingUpAndLeft(keysPressed) {
+    pressingUpAndLeft() {
         return (
-            keysPressed.includes("arrowup") 
-            && keysPressed.includes("arrowleft")
+            this.keysPressed.includes("arrowup") 
+            && this.keysPressed.includes("arrowleft")
         );
     }
-    pressingUpAndRight(keysPressed) {
+    pressingUpAndRight() {
         return (
-            keysPressed.includes("arrowup") 
-            && keysPressed.includes("arrowright")
+            this.keysPressed.includes("arrowup") 
+            && this.keysPressed.includes("arrowright")
         );
     }
-    pressingDownOnly(keysPressed) {
+    pressingDownOnly() {
         return (
-            keysPressed.includes("arrowdown") 
-            && !keysPressed.includes("arrowleft") 
-            && !keysPressed.includes("arrowright")
+            this.keysPressed.includes("arrowdown") 
+            && !this.keysPressed.includes("arrowleft") 
+            && !this.keysPressed.includes("arrowright")
         );
     }
-    pressingDownAndRight(keysPressed) {
+    pressingDownAndRight() {
         return (
-            keysPressed.includes("arrowdown") 
-            && keysPressed.includes("arrowright")
+            this.keysPressed.includes("arrowdown") 
+            && this.keysPressed.includes("arrowright")
         );
     }
-    pressingDownAndLeft(keysPressed) {
+    pressingDownAndLeft() {
         return (
-            keysPressed.includes("arrowdown") 
-            && keysPressed.includes("arrowleft")
+            this.keysPressed.includes("arrowdown") 
+            && this.keysPressed.includes("arrowleft")
         );
     }
-    pressingLeftOnly(keysPressed) {
+    pressingLeftOnly() {
         return (
-            keysPressed.includes("arrowleft") 
-            && !keysPressed.includes("arrowdown") 
-            && !keysPressed.includes("arrowup")
+            this.keysPressed.includes("arrowleft") 
+            && !this.keysPressed.includes("arrowdown") 
+            && !this.keysPressed.includes("arrowup")
         );
     }
-    pressingRightOnly(keysPressed) {
+    pressingRightOnly() {
         return (
-            keysPressed.includes("arrowright") 
-            && !keysPressed.includes("arrowdown") 
-            && !keysPressed.includes("arrowup")
+            this.keysPressed.includes("arrowright") 
+            && !this.keysPressed.includes("arrowdown") 
+            && !this.keysPressed.includes("arrowup")
         );
     }
     //      Movement methods
-    pressingWOnly(keysPressed) {
+    pressingWOnly() {
         return (
-            !keysPressed.includes("d") 
-            && !keysPressed.includes("a") 
-            && !keysPressed.includes("s")
+            !this.keysPressed.includes("d") 
+            && !this.keysPressed.includes("a") 
+            && !this.keysPressed.includes("s")
         );
     }
-    pressingSOnly(keysPressed) {
+    pressingSOnly() {
         return (
-            !keysPressed.includes("d") 
-            && !keysPressed.includes("w") 
-            && !keysPressed.includes("a")
+            !this.keysPressed.includes("d") 
+            && !this.keysPressed.includes("w") 
+            && !this.keysPressed.includes("a")
         );
     }
-    notPressingD(keysPressed) {
+    notPressingD() {
         return (
-            !keysPressed.includes("d")
+            !this.keysPressed.includes("d")
         );
     }
-    notPressingA(keysPressed) {
+    notPressingA() {
         return (
-            !keysPressed.includes("a")
+            !this.keysPressed.includes("a")
         );
     }
-    pressingDnA(keysPressed) {
+    pressingDnA() {
         return (
-            keysPressed.includes("d")
-            && keysPressed.includes("a")
+            this.keysPressed.includes("d")
+            && this.keysPressed.includes("a")
         );
     }
 }

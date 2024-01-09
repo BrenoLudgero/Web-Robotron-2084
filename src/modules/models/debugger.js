@@ -56,7 +56,7 @@ class Debugger {
         }
     }
     logActorCount() {
-        console.log("Humans: " + this.game.humans.size);
-        console.log("Enemies: " + this.game.enemies.size);
+        console.log("Humans: " + this.game.actorMngr.humans.size);
+        console.log("Enemies: " + this.game.actorMngr.enemies.size);
     }
 }
