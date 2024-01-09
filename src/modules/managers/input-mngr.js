@@ -3,13 +3,14 @@ export {InputManager};
 class InputManager {
     constructor(game) {
         this.game = game;
-        this.playerControls = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
+        this.playerControls = ["w", "a", "s", "d", "arrowup", "arrowleft", "arrowdown", "arrowright"];
         this.setEventListeners();
     }
     update() {
         const {keysPressed, player} = this.game;
-        this.readMovementKeys(keysPressed, player);
-        this.readShootingKeys(keysPressed, player);
+        this.processMovementKeys(keysPressed, player);
+        this.processShootingKeys(keysPressed, player);
+        console.log(keysPressed)
     }
     setEventListeners() {
         window.addEventListener("keydown", (e) => this.handleKeyDown(e));
@@ -19,32 +20,34 @@ class InputManager {
     }
     // Pushes one instance of each pressed key to keysPressed
     handleKeyDown(event) {
-        if (this.playerControls.includes(event.key) && !this.game.keysPressed.includes(event.key)) {
-            this.game.keysPressed.push(event.key);
+        const key = event.key.toLowerCase();
+        if (this.playerControls.includes(key) && !this.game.keysPressed.includes(key)) {
+            this.game.keysPressed.push(key);
         }
     }
     // Removes the key from keysPressed
     handleKeyUp(event) {
-        const keyIndex = this.game.keysPressed.indexOf(event.key);
+        const key = event.key.toLowerCase();
+        const keyIndex = this.game.keysPressed.indexOf(key);
         if (keyIndex > -1) {
             this.game.keysPressed.splice(keyIndex, 1);
         }
-        this.game.debuggerr.readDebugKeys(event);
+        this.game.debuggerr.processDebugKeys(key);
     }
-    readMovementKeys(keysPressed, player) {
-        if (keysPressed.includes("w")) {
-            player.moveUp(keysPressed);
-        }
-        if (keysPressed.includes("s")) {
-            player.moveDown(keysPressed);
-        }
-        if (keysPressed.includes("d")) {
-            player.moveRight();
-        } else if (keysPressed.includes("a")) {
-            player.moveLeft();
-        }
+    processMovementKeys(keysPressed, player) {
+        const moveDirections = {
+            "w": "moveUp",
+            "s": "moveDown",
+            "d": "moveRight",
+            "a": "moveLeft"
+        };
+        Object.entries(moveDirections).forEach(([key, method]) => {
+            if (keysPressed.includes(key)) {
+                player[method](keysPressed);
+            }
+        });
     }
-    readShootingKeys(keysPressed, player) {
+    processShootingKeys(keysPressed, player) {
         if (this.pressingUpOnly(keysPressed)) {
             //     shoot(left,  right,  up,  down, yDrawOffset)
             player.shoot(false, false, true, false, 0);
@@ -71,58 +74,60 @@ class InputManager {
             player.shoot(false, true, false, false, 9);
         }
     }
+    //      Shooting methods
     pressingUpOnly(keysPressed) {
         return (
-            keysPressed.includes("ArrowUp") 
-            && !keysPressed.includes("ArrowLeft") 
-            && !keysPressed.includes("ArrowRight")
+            keysPressed.includes("arrowup") 
+            && !keysPressed.includes("arrowleft") 
+            && !keysPressed.includes("arrowright")
         );
     }
     pressingUpAndLeft(keysPressed) {
         return (
-            keysPressed.includes("ArrowUp") 
-            && keysPressed.includes("ArrowLeft")
+            keysPressed.includes("arrowup") 
+            && keysPressed.includes("arrowleft")
         );
     }
     pressingUpAndRight(keysPressed) {
         return (
-            keysPressed.includes("ArrowUp") 
-            && keysPressed.includes("ArrowRight")
+            keysPressed.includes("arrowup") 
+            && keysPressed.includes("arrowright")
         );
     }
     pressingDownOnly(keysPressed) {
         return (
-            keysPressed.includes("ArrowDown") 
-            && !keysPressed.includes("ArrowLeft") 
-            && !keysPressed.includes("ArrowRight")
+            keysPressed.includes("arrowdown") 
+            && !keysPressed.includes("arrowleft") 
+            && !keysPressed.includes("arrowright")
         );
     }
     pressingDownAndRight(keysPressed) {
         return (
-            keysPressed.includes("ArrowDown") 
-            && keysPressed.includes("ArrowRight")
+            keysPressed.includes("arrowdown") 
+            && keysPressed.includes("arrowright")
         );
     }
     pressingDownAndLeft(keysPressed) {
         return (
-            keysPressed.includes("ArrowDown") 
-            && keysPressed.includes("ArrowLeft")
+            keysPressed.includes("arrowdown") 
+            && keysPressed.includes("arrowleft")
         );
     }
     pressingLeftOnly(keysPressed) {
         return (
-            keysPressed.includes("ArrowLeft") 
-            && !keysPressed.includes("ArrowDown") 
-            && !keysPressed.includes("ArrowUp")
+            keysPressed.includes("arrowleft") 
+            && !keysPressed.includes("arrowdown") 
+            && !keysPressed.includes("arrowup")
         );
     }
     pressingRightOnly(keysPressed) {
         return (
-            keysPressed.includes("ArrowRight") 
-            && !keysPressed.includes("ArrowDown") 
-            && !keysPressed.includes("ArrowUp")
+            keysPressed.includes("arrowright") 
+            && !keysPressed.includes("arrowdown") 
+            && !keysPressed.includes("arrowup")
         );
     }
+    //      Movement methods
     pressingWOnly(keysPressed) {
         return (
             !keysPressed.includes("d") 
@@ -135,6 +140,22 @@ class InputManager {
             !keysPressed.includes("d") 
             && !keysPressed.includes("w") 
             && !keysPressed.includes("a")
+        );
+    }
+    notPressingD(keysPressed) {
+        return (
+            !keysPressed.includes("d")
+        );
+    }
+    notPressingA(keysPressed) {
+        return (
+            !keysPressed.includes("a")
+        );
+    }
+    pressingDnA(keysPressed) {
+        return (
+            keysPressed.includes("d")
+            && keysPressed.includes("a")
         );
     }
 }

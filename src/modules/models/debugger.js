@@ -8,8 +8,8 @@ class Debugger {
         this.actorInvincibility = false;
         this.shouldUpdateActors = true;
     }
-    readDebugKeys(event) {
-        switch (event.key) {
+    processDebugKeys(key) {
+        switch (key) {
             case "h":
                 this.toggleHitboxes(); break;
             case "i":

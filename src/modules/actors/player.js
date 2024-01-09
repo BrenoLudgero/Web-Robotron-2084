@@ -21,7 +21,7 @@ class Player extends Actor {
         setMovementBoundaries(this);
         this.updateProjectileTimer();
     }
-    // Called in inputMngr.readShootingKeys
+    // Called in inputMngr.processShootingKeys
     shoot(left, right, up, down, yOffset) {
         const xOffset = 9;
         const playerX = this.screenX + xOffset;
@@ -30,11 +30,6 @@ class Player extends Actor {
             this.game.projectileMngr.createProjectile(this.projectileSprite, playerX, playerY, this.projectileSpeed, left, right, up, down);
             this.projectileTimer = this.projectileDelay;
             this.game.soundMngr.playSound(this.game.soundFxIndex.playerShot, 1, 0.1);
-        }
-    }
-    updateProjectileTimer() {
-        if (this.projectileTimer > 0) {
-            this.projectileTimer --;
         }
     }
     cyclePlayerSprite(spritesheetY) {
@@ -47,28 +42,32 @@ class Player extends Actor {
             }
         }
     }
-    // Methods below called inputMngr.readMovementKeys
-    moveLeft() {
-        this.screenX -= this.movementSpeed;
-        setHitbox(this, 8, 4, 2, 0);
-        this.cyclePlayerSprite(51);
+    // Methods below called in inputMngr.processMovementKeys
+    moveLeft(keysPressed) {
+        if (this.game.inputMngr.notPressingD(keysPressed)) {
+            this.screenX -= this.movementSpeed;
+            setHitbox(this, 8, 4, 2, 0);
+            this.cyclePlayerSprite(51);
+        }
     }
-    moveRight() {
-        this.screenX += this.movementSpeed;
-        setHitbox(this, 8, 4, 2, 0);
-        this.cyclePlayerSprite(75);
+    moveRight(keysPressed) {
+        if (this.game.inputMngr.notPressingA(keysPressed)) {
+            this.screenX += this.movementSpeed;
+            setHitbox(this, 8, 4, 2, 0);
+            this.cyclePlayerSprite(75);
+        }
     }
     moveUp(keysPressed) {
         this.screenY -= this.movementSpeed;
-        setHitbox(this, 1, 3, 1, 1);
-        if (this.game.inputMngr.pressingWOnly(keysPressed)) {
+        if (this.game.inputMngr.pressingWOnly(keysPressed) || this.game.inputMngr.pressingDnA(keysPressed)) {
+            setHitbox(this, 1, 3, 1, 1);
             this.cyclePlayerSprite(26);
         }
     }
     moveDown(keysPressed) {
         this.screenY += this.movementSpeed;
-        setHitbox(this, 1, 3, 1, 1);
-        if (this.game.inputMngr.pressingSOnly(keysPressed)) {
+        if (this.game.inputMngr.pressingSOnly(keysPressed) || this.game.inputMngr.pressingDnA(keysPressed)) {
+            setHitbox(this, 1, 3, 1, 1);
             this.cyclePlayerSprite(0);
         }
     }

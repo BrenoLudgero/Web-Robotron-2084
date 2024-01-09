@@ -38,4 +38,9 @@ class Actor {
         this.width = newWidth;
         this.height = newHeight;
     }
+    updateProjectileTimer() {
+        if (this.projectileTimer > 0) {
+            this.projectileTimer --;
+        }
+    }
 }

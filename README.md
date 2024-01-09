@@ -58,7 +58,7 @@ Obstacles are scattered around the screen and will destroy the player on contact
 | Arrow Right  | Shoot right |
 
 ## Known Issues
-You can't move if Caps Lock is turned on
+-
 
 ## Debugging Shortcuts
 | Keyboard Key | Description |
