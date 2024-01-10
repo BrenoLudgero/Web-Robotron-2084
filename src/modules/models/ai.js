@@ -4,7 +4,7 @@ import {RNG, cycleSprite, setMovementBoundaries} from "../helpers/globals.js";
 class ArtificialIntelligence {
     constructor(game) {
         this.game = game;
-        this.walkDistances = [16, 18, 20, 22, 25, 30, 35, 40];
+        this.walkDistances = new Array(6);
         this.directions = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
     }
     // Grunts only
@@ -34,8 +34,16 @@ class ArtificialIntelligence {
         const numDirections = (actor.movementType === 1 ? 4 : 8);
         return this.directions[Math.floor(Math.random() * numDirections)];
     }
+    // Fills walkDistances with randomly generated numbers
     setRandomWalkDistance() {
-        return this.walkDistances[Math.floor(Math.random() * this.walkDistances.length)];
+        for (let i = 0; i < this.walkDistances.length; i++) {
+            this.walkDistances[i] = RNG(10, 35);
+        }
+    }
+    // Returns one of 6 walkDistances randomly
+    getRandomWalkDistance() {
+        this.setRandomWalkDistance();
+        return this.walkDistances[RNG(0, this.walkDistances.length - 1)];
     }
     // Moves to a random direction for a random distance
     moveToRandomDirection(actor) {
@@ -65,7 +73,7 @@ class ArtificialIntelligence {
             actor.remainingWalkingDistance--;
         } else {
             actor.currentDirection = this.setRandomDirection(actor);
-            actor.remainingWalkingDistance = this.setRandomWalkDistance();
+            actor.remainingWalkingDistance = this.getRandomWalkDistance();
         }
     }
     isActorAgainstWall(actor) {
