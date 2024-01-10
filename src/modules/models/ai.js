@@ -20,9 +20,9 @@ class ArtificialIntelligence {
             actor.screenY += actor.movementSpeed;
         }
     }
-    // Grunts only
+    // Grunts only. 50% change to chasePlayer
     moveAtRandomIntervals(actor) {
-        let randomNumber = RNG(1, 3);
+        let randomNumber = RNG(1, 2);
         if (randomNumber === 1) {
             this.chasePlayer(actor);
             cycleSprite(actor, 20, 0);
