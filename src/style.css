@@ -4,14 +4,19 @@
 }
 body {
     margin: 0;
-    display: flex;
-    padding: 6px;
     font-family: "Robotron", sans-serif;
-    justify-content: space-around;
     background-color: black;
 }
 body * { /*  !  !  !  !  ! */
     user-select: none;
+}
+
+/* UI, canvas elements */
+#game-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Top and Bottom UI Info */
@@ -39,7 +44,7 @@ body * { /*  !  !  !  !  ! */
     display: flex;
     justify-content: flex-end;
     width: 138px;
-    margin-right: 20px;
+    margin: 0px 20px 0px 0px;
 }
 #lives {
     height: 90%;
@@ -64,7 +69,6 @@ body * { /*  !  !  !  !  ! */
 
 /* Canvas */
 canvas {
-    top: 30px;
     margin: auto;
     display: block;
     /* cursor: crosshair; */
