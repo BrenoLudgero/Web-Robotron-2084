@@ -3,15 +3,15 @@ import {Actor} from "../models/actor.js";
 import {setHitbox, setMovementBoundaries} from "../helpers/globals.js";
 
 class Player extends Actor {
-    constructor(game) {
+    constructor(game, spritesIndex) {
         super(game, 15, 24);
-        this.sprites.src = game.spritesIndex.player;
+        this.sprites.src = spritesIndex.player;
         this.screenX = (game.ui.canvas.width / 2) - this.width;
         this.screenY = (game.ui.canvas.height / 2) - this.height;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
-        this.projectileSprite = game.spritesIndex.playerProjectile;
+        this.projectileSprite = spritesIndex.playerProjectile;
         this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 7;
@@ -23,18 +23,22 @@ class Player extends Actor {
     }
     // Called in inputMngr.processShootingKeys
     shoot(left, right, up, down, yOffset) {
+        const {screenX, screenY} = this;
+        const {projectileMngr, soundMngr} = this.game;
+        const {projectileSprite, projectileSpeed, projectileDelay} = this;
         const xOffset = 9;
-        const playerX = this.screenX + xOffset;
-        const playerY = this.screenY + yOffset;
+        const playerX = screenX + xOffset;
+        const playerY = screenY + yOffset;
         if (this.projectileTimer <= 0) {
-            this.game.projectileMngr.createProjectile(this.projectileSprite, playerX, playerY, this.projectileSpeed, left, right, up, down);
-            this.projectileTimer = this.projectileDelay;
-            this.game.soundMngr.playSound(this.game.soundFxIndex.playerShot, 1, 0.1);
+            projectileMngr.createProjectile(projectileSprite, playerX, playerY, projectileSpeed, left, right, up, down);
+            this.projectileTimer = projectileDelay;
+            soundMngr.playSound("playerShot", 2, 0.1);
         }
     }
     cyclePlayerSprite(spritesheetY) {
+        const {game, movementAnimationDelay} = this;
         this.spritesheetY = spritesheetY;
-        if (this.game.globalTimer % this.movementAnimationDelay === 0) {
+        if (game.globalTimer % movementAnimationDelay === 0) {
             if (this.spritesheetX < (this.sprites.width - this.width)) {
                 this.spritesheetX += 16;
             } else {
@@ -42,33 +46,45 @@ class Player extends Actor {
             }
         }
     }
+    animate(direction) { 
+        switch(direction) {
+            case("left"):
+                setHitbox(this, 8, 4, 2, 0);
+                this.cyclePlayerSprite(51); break;
+            case("right"):
+                setHitbox(this, 8, 4, 2, 0);
+                this.cyclePlayerSprite(75); break;
+            case("up"):
+                setHitbox(this, 1, 3, 1, 1);
+                this.cyclePlayerSprite(26); break;
+            case("down"):
+                setHitbox(this, 1, 3, 1, 1);
+                this.cyclePlayerSprite(0); break;
+        }
+    }
     // Methods below called in inputMngr.processMovementKeys
-    moveLeft() {
-        if (this.game.inputMngr.notPressingD()) {
+    moveLeft(inputMngr) {
+        if (inputMngr.notPressingD()) {
             this.screenX -= this.movementSpeed;
-            setHitbox(this, 8, 4, 2, 0);
-            this.cyclePlayerSprite(51);
+            this.animate("left");
         }
     }
-    moveRight() {
-        if (this.game.inputMngr.notPressingA()) {
+    moveRight(inputMngr) {
+        if (inputMngr.notPressingA()) {
             this.screenX += this.movementSpeed;
-            setHitbox(this, 8, 4, 2, 0);
-            this.cyclePlayerSprite(75);
+            this.animate("right");
         }
     }
-    moveUp() {
+    moveUp(inputMngr) {
         this.screenY -= this.movementSpeed;
-        if (this.game.inputMngr.pressingWOnly() || this.game.inputMngr.pressingDnA()) {
-            setHitbox(this, 1, 3, 1, 1);
-            this.cyclePlayerSprite(26);
+        if (inputMngr.pressingWOnly() || inputMngr.pressingDnA()) {
+            this.animate("up");
         }
     }
-    moveDown() {
+    moveDown(inputMngr) {
         this.screenY += this.movementSpeed;
-        if (this.game.inputMngr.pressingSOnly() || this.game.inputMngr.pressingDnA()) {
-            setHitbox(this, 1, 3, 1, 1);
-            this.cyclePlayerSprite(0);
+        if (inputMngr.pressingSOnly() || inputMngr.pressingDnA()) {
+            this.animate("down");
         }
     }
 }

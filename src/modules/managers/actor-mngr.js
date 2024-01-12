@@ -1,32 +1,33 @@
 export {ActorManager};
-import {Grunt} from "../actors/enemies/grunt.js";
-import {Hulk} from "../actors/enemies/hulk.js";
-import {Mommy} from "../actors/humans/mommy.js";
-import {RNG, calculateDistance} from "../helpers/globals.js"
+import {Player} from "../actors/player.js";
+import {RNG, getDistance} from "../helpers/globals.js"
 
 class ActorManager {
-    constructor(game) {
-        this.game = game;
+    constructor(game, spritesIndex) {
+        this.player = new Player(game, spritesIndex);
         this.enemies = new Set();
         this.humans = new Set();
     }
-    update() {
-        this.game.player.update();
-        if (this.game.debuggerr.shouldUpdateActors) {
-            this.updateActors(this.enemies);
-            this.updateActors(this.humans);
-            this.removeDestroyedOrRescued(this.enemies, this.humans);
+    update(game) {
+        const {enemies, humans, player} = this;
+        const debuggerr = game.debuggerr;
+        player.update();
+        if (debuggerr.shouldUpdateActors) {
+            this.updateActors(enemies, game);
+            this.updateActors(humans, game);
+            this.removeDestroyedOrRescued(enemies, humans);
         }
     }
     draw(context) {
-        this.game.player.draw(context);
-        this.drawActors(this.enemies, context);
-        this.drawActors(this.humans, context);
+        const {player, enemies, humans} = this;
+        player.draw(context);
+        this.drawActors(enemies, context);
+        this.drawActors(humans, context);
     }
     isAwayFromOtherActors(actor, otherActors, minDistance) {
         let isAway = true;
         otherActors.forEach(otherActor => {
-            if (calculateDistance(actor, otherActor) < minDistance) {
+            if (getDistance(actor, otherActor) < minDistance) {
                 isAway = false;
             }
         });
@@ -34,56 +35,49 @@ class ActorManager {
     }
     // Checks if the newActor is at a sufficient distance from other actors before spawning
     isSafeToSpawnActor(newActor, maxScreenX, maxScreenY) {
+        const {player, enemies, humans} = this;
         let isSafeToSpawn = false;
         while (!isSafeToSpawn) {
             newActor.screenX = RNG(1, maxScreenX);
             newActor.screenY = RNG(1, maxScreenY);
-            let playerDistance = calculateDistance(newActor, this.game.player);
+            let playerDistance = getDistance(newActor, player);
             let isAwayFromPlayer = playerDistance >= newActor.minPlayerSpawnDistance;
-            let isAwayFromHumans = this.isAwayFromOtherActors(newActor, this.humans, newActor.minHumanSpawnDistance);
-            let isAwayFromEnemies = this.isAwayFromOtherActors(newActor, this.enemies, newActor.minEnemySpawnDistance);
-            if (isAwayFromPlayer && isAwayFromEnemies && isAwayFromHumans) {
-                isSafeToSpawn = true;
-            }
+            let isAwayFromHumans = this.isAwayFromOtherActors(newActor, humans, newActor.minHumanSpawnDistance);
+            let isAwayFromEnemies = this.isAwayFromOtherActors(newActor, enemies, newActor.minEnemySpawnDistance);
+            isSafeToSpawn = (isAwayFromPlayer && isAwayFromEnemies && isAwayFromHumans);
         }
         return isSafeToSpawn;
     }
-    addEnemies(numberEnemies, enemyType) {
-        const {game} = this;
+    addEnemies(game, numberEnemies, enemyType, spritesIndex) {
+        const ui = game.ui;
         for (let i = 0; i < numberEnemies; i++) {
-            const newEnemy = new enemyType(game);
-            let maxScreenX = game.ui.canvas.width - newEnemy.width;
-            let maxScreenY = game.ui.canvas.height - newEnemy.height;
+            const newEnemy = new enemyType(game, spritesIndex);
+            let maxScreenX = ui.canvas.width - newEnemy.width;
+            let maxScreenY = ui.canvas.height - newEnemy.height;
             if (this.isSafeToSpawnActor(newEnemy, maxScreenX, maxScreenY)) {
                 this.enemies.add(newEnemy);
             }
         }
     }
-    addHumans(numberHumans, humanType) {
-        const {game} = this;
+    addHumans(game, numberHumans, humanType, spritesIndex) {
+        const ui = game.ui;
         for (let i = 0; i < numberHumans; i++) {
-            const newHuman = new humanType(game);
-            let maxScreenX = game.ui.canvas.width - newHuman.width;
-            let maxScreenY = game.ui.canvas.height - newHuman.height;
+            const newHuman = new humanType(game, spritesIndex);
+            let maxScreenX = ui.canvas.width - newHuman.width;
+            let maxScreenY = ui.canvas.height - newHuman.height;
             if (this.isSafeToSpawnActor(newHuman, maxScreenX, maxScreenY)) {
                 this.humans.add(newHuman);
             }
         }
     }
-    // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
-    spawnActors() {
-        this.addHumans(10, Mommy);
-        this.addEnemies(5, Hulk);
-        this.addEnemies(40, Grunt);
+    updateActors(actors, game) {
+        actors.forEach(actor => {
+            actor.update(game);
+        });
     }
     drawActors(actors, context) {
         actors.forEach(actor => {
             actor.draw(context);
-        });
-    }
-    updateActors(actors) {
-        actors.forEach(actor => {
-            actor.update();
         });
     }
     removeDestroyedOrRescued(enemies, humans) {

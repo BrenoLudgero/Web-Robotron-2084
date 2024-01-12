@@ -2,8 +2,7 @@ export {Debugger};
 
 // TEMPORARY
 class Debugger {
-    constructor(game) {
-        this.game = game;
+    constructor() {
         this.shouldDrawHitboxes = false;
         this.actorInvincibility = false;
         this.shouldUpdateActors = true;
@@ -30,6 +29,7 @@ class Debugger {
         this.shouldUpdateActors = !this.shouldUpdateActors;
         console.log("UPDATING ACTORS: " + this.shouldUpdateActors);
     }
+    // Not 100% accurate due to rect() limitations
     drawHitboxes(actor, context) {
         if (this.shouldDrawHitboxes) {
             context.beginPath();
@@ -42,7 +42,6 @@ class Debugger {
                 context.rotate(actor.angle);
                 context.rect(-halfWidth, -halfHeight, actor.width, actor.height);
             } else {
-                // Not 100% accurate due to rect() limitations
                 context.rect(
                     (actor.screenX - actor.hitboxXOffset) + (actor.width - actor.hitboxWidth) / 2,
                     (actor.screenY - actor.hitboxYOffset) + (actor.height - actor.hitboxHeight) / 2,
@@ -55,8 +54,8 @@ class Debugger {
             context.setTransform(1, 0, 0, 1, 0, 0); // Resets the context transformation
         }
     }
-    logActorCount() {
-        console.log("Humans: " + this.game.actorMngr.humans.size);
-        console.log("Enemies: " + this.game.actorMngr.enemies.size);
+    logActorCount(game) {
+        console.log("Humans: " + game.actorMngr.humans.size);
+        console.log("Enemies: " + game.actorMngr.enemies.size);
     }
 }

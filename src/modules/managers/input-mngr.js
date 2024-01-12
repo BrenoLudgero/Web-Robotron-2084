@@ -1,39 +1,39 @@
 export {InputManager};
 
 class InputManager {
-    constructor(game) {
-        this.game = game;
+    constructor(game) { // REMOVE GAME WITH DEBUGGER
         this.keysPressed = [];
         this.playerControls = ["w", "a", "s", "d", "arrowup", "arrowleft", "arrowdown", "arrowright"];
-        this.setEventListeners();
+        this.setEventListeners(game);
     }
-    update() {
-        this.processMovementKeys(this.game.player);
-        this.processShootingKeys(this.game.player);
+    update(actorMngr) {
+        this.processMovementKeys(actorMngr.player, this.keysPressed);
+        this.processShootingKeys(actorMngr.player);
     }
-    setEventListeners() {
-        window.addEventListener("keydown", (e) => this.handleKeyDown(e));
-        window.addEventListener("keyup", (e) => this.handleKeyUp(e));
+    // Pushes one instance of each pressed key to keysPressed
+    handleKeyDown(event, playerControls, keysPressed) {
+        const key = event.key.toLowerCase();
+        if (playerControls.includes(key) && !keysPressed.includes(key)) {
+            keysPressed.push(key);
+        }
+    }
+    // Removes the key from keysPressed when unpressed
+    handleKeyUp(event, game, keysPressed) {
+        const key = event.key.toLowerCase();
+        const keyIndex = keysPressed.indexOf(key);
+        if (keyIndex > -1) {
+            keysPressed.splice(keyIndex, 1);
+        }
+        game.debuggerr.processDebugKeys(key);
+    }
+    setEventListeners(game) {
+        const {playerControls, keysPressed} = this;
+        window.addEventListener("keydown", (e) => this.handleKeyDown(e, playerControls, keysPressed));
+        window.addEventListener("keyup", (e) => this.handleKeyUp(e, game, keysPressed));
         //window.addEventListener("mousedown", (e) => console.log("CLICK"));
         //window.addEventListener("mouseup", (e) => console.log("NO CLICK"));
     }
-    // Pushes one instance of each pressed key to keysPressed
-    handleKeyDown(event) {
-        const key = event.key.toLowerCase();
-        if (this.playerControls.includes(key) && !this.keysPressed.includes(key)) {
-            this.keysPressed.push(key);
-        }
-    }
-    // Removes the key from keysPressed
-    handleKeyUp(event) {
-        const key = event.key.toLowerCase();
-        const keyIndex = this.keysPressed.indexOf(key);
-        if (keyIndex > -1) {
-            this.keysPressed.splice(keyIndex, 1);
-        }
-        this.game.debuggerr.processDebugKeys(key);
-    }
-    processMovementKeys(player) {
+    processMovementKeys(player, keysPressed) {
         const moveDirections = {
             "w": "moveUp",
             "s": "moveDown",
@@ -41,8 +41,8 @@ class InputManager {
             "a": "moveLeft"
         };
         Object.entries(moveDirections).forEach(([key, method]) => {
-            if (this.keysPressed.includes(key)) {
-                player[method]();
+            if (keysPressed.includes(key)) {
+                player[method](this); // player.moveUp(this)
             }
         });
     }
@@ -73,7 +73,7 @@ class InputManager {
             player.shoot(false, true, false, false, 9);
         }
     }
-    //      Shooting methods
+    //   Shooting methods
     pressingUpOnly() {
         return (
             this.keysPressed.includes("arrowup") 
@@ -126,7 +126,7 @@ class InputManager {
             && !this.keysPressed.includes("arrowup")
         );
     }
-    //      Movement methods
+    //   Movement methods
     pressingWOnly() {
         return (
             !this.keysPressed.includes("d") 

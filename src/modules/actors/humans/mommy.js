@@ -2,8 +2,8 @@ export {Mommy};
 import {Human} from "../../models/human.js";
 
 class Mommy extends Human {
-    constructor(game) {
+    constructor(game, spritesIndex) {
         super(game, 14, 28);
-        this.sprites.src = game.spritesIndex.mommy;
+        this.sprites.src = spritesIndex.mommy;
     }
 }

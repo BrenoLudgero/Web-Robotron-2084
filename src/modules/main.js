@@ -10,8 +10,11 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
-USE MORE PARAMETERS (SEE COLISION MANAGER)
+UPDATE HITBOXES
+MERGE CYCLESPRITE FUNCTIONS
+FIX PLAYER AGAINST WALL VISUAL GLITCH
 IMPLEMENT STATE PATTERN
+REDUCE MAGIC NUMBERS
 IMPLEMENT ALL ACTORS + SOUNDS & OBSTACLES
 HUMAN, ENEMY INTERACTION WITH OBSTACLES
 SPAWN / DEATH ANIMATIONS
@@ -48,7 +51,7 @@ window.addEventListener("load", () => {
         // Updates framerate indicator
         if (currentFrame - lastFPSUpdate >= 1000) {
             const FPS = Math.round((framesThisSecond * 1000) / (currentFrame - lastFPSUpdate));
-            game.uiMngr.updateFPS(FPS);
+            game.uiMngr.updateFPS(game.ui, FPS);
             framesThisSecond = 0;
             lastFPSUpdate = currentFrame;
         }
@@ -56,6 +59,6 @@ window.addEventListener("load", () => {
     }
     // Called once
     runGame();
-    game.actorMngr.spawnActors();
-    game.debuggerr.logActorCount();
+    game.spawnActors();
+    game.debuggerr.logActorCount(game);
 });

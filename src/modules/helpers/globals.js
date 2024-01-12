@@ -1,4 +1,4 @@
-export {RNG, setHitbox, cycleSprite, calculateDistance, setMovementBoundaries};
+export {RNG, setHitbox, cycleSprite, getDistance, setMovementBoundaries};
 
 // Generates a random number between (and including) min and max
 function RNG(min, max) {
@@ -20,12 +20,13 @@ function cycleSprite(actor, increment, spritesheetY) {
     }
     actor.spritesheetX = initialSpritesheetX;
 }
-function calculateDistance(actor1, actor2) {
-    const distanceX = actor2.screenX - actor1.screenX;
-    const distanceY = actor2.screenY - actor1.screenY;
+// Returns the distance between two actors
+function getDistance(actorA, actorB) {
+    const distanceX = actorB.screenX - actorA.screenX;
+    const distanceY = actorB.screenY - actorA.screenY;
     return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 }
-// Makes sure actors stay within canvas borders
+// Ensures actors stay within canvas borders
 function setMovementBoundaries(actor) {
     const movementBoundaries = {
         "x": actor.game.ui.canvas.width - actor.width,
@@ -33,12 +34,14 @@ function setMovementBoundaries(actor) {
     };
     if (actor.screenY <= 2) {
         actor.screenY = 2;
-    } else if (actor.screenY >= movementBoundaries.y) {
+    }
+    else if (actor.screenY >= movementBoundaries.y) {
         actor.screenY = movementBoundaries.y;
     }
     if (actor.screenX <= 2) {
         actor.screenX = 2;
-    } else if (actor.screenX >= movementBoundaries.x) {
+    } 
+    else if (actor.screenX >= movementBoundaries.x) {
         actor.screenX = movementBoundaries.x;
     }
     return movementBoundaries;

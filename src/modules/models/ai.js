@@ -2,59 +2,33 @@ export {ArtificialIntelligence};
 import {RNG, cycleSprite, setMovementBoundaries} from "../helpers/globals.js";
 
 class ArtificialIntelligence {
-    constructor(game) {
-        this.game = game;
+    constructor() {
         this.directions = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
         this.previousDirections = [];
     }
-    // Grunts only
-    chasePlayer(actor) {
-        if (actor.screenX > this.game.player.screenX) {
-            actor.screenX -= actor.movementSpeed;
+    // Grunts only. Step towards the player
+    chasePlayer(grunt, game) {
+        const player = game.actorMngr.player;
+        if (grunt.screenX > player.screenX) {
+            grunt.screenX -= grunt.movementSpeed;
         } else {
-            actor.screenX += actor.movementSpeed;
+            grunt.screenX += grunt.movementSpeed;
         }
-        if (actor.screenY > this.game.player.screenY) {
-            actor.screenY -= actor.movementSpeed;
+        if (grunt.screenY > player.screenY) {
+            grunt.screenY -= grunt.movementSpeed;
         } else {
-            actor.screenY += actor.movementSpeed;
+            grunt.screenY += grunt.movementSpeed;
         }
     }
     // Grunts only. 50% change to chasePlayer
-    moveAtRandomIntervals(actor) {
+    moveAtRandomIntervals(grunt, game) {
         let randomNumber = RNG(1, 2);
         if (randomNumber === 1) {
-            this.chasePlayer(actor);
-            cycleSprite(actor, 20, 0);
-            this.game.soundMngr.playSound(this.game.soundFxIndex.gruntStep, 1);
+            this.chasePlayer(grunt, game);
+            game.soundMngr.playSound("gruntStep", 1);
+            cycleSprite(grunt, 20, 0);
+            return true;
         }
-    }
-    // Returns a new walkDistance with a guaranteed longer walk when moving away from a wall
-    setRandomWalkDistance(actor, avoidingWall) {
-        const minDistance = avoidingWall ? 32 : 16;
-        const maxDistance = 55;
-        actor.remainingWalkingDistance = RNG(minDistance, maxDistance);
-    }
-    // Returns one of 4 or 8 directions based on the actor's movementType if not in previousDirections
-    getRandomDirection(actor) {
-        const numDirections = (actor.movementType === 1 ? 4 : 8);
-        let newDirection;
-        do {
-            newDirection = this.directions[Math.floor(Math.random() * numDirections)];
-        } while (this.previousDirections.includes(newDirection));
-        return newDirection;
-    }
-    // Stores the actor's last 2 or 3 directions based on the its movementType
-    storeDirection(actor) {
-        let amount = actor.movementType === 1 ? 1 : 2;
-        if (this.previousDirections.length > amount) {
-            this.previousDirections.shift();
-        }
-        this.previousDirections.push(actor.currentDirection);
-    }
-    setRandomDirection(actor) {
-        actor.currentDirection = this.getRandomDirection(actor);
-        this.storeDirection(actor);
     }
     moveActor(actor) {
         switch(actor.currentDirection) {
@@ -67,19 +41,46 @@ class ArtificialIntelligence {
             case("down"):
                 actor.screenY += actor.movementSpeed; break;
             case("upleft"):
-                actor.screenY -= actor.movementSpeed;
+                actor.screenY -= actor.movementSpeed; 
                 actor.screenX -= actor.movementSpeed; break;
             case("upright"):
-                actor.screenX += actor.movementSpeed;
+                actor.screenX += actor.movementSpeed; 
                 actor.screenY -= actor.movementSpeed; break;
             case("downleft"):
-                actor.screenX -= actor.movementSpeed;
+                actor.screenX -= actor.movementSpeed; 
                 actor.screenY += actor.movementSpeed; break;
             case("downright"):
-                actor.screenX += actor.movementSpeed;
+                actor.screenX += actor.movementSpeed; 
                 actor.screenY += actor.movementSpeed; break;
         }
         actor.remainingWalkingDistance--;
+    }
+    setRandomWalkDistance(actor) {
+        const minDistance = 16;
+        const maxDistance = 50;
+        actor.remainingWalkingDistance = RNG(minDistance, maxDistance);
+    }
+    // Returns one of 4 or 8 directions based on the actor's movementType if not found in previousDirections
+    getRandomDirection(actor, directions, previousDirections) {
+        const numberOfDirections = (actor.movementType === 1 ? 4 : 8);
+        let newDirection;
+        do {
+            newDirection = directions[Math.floor(Math.random() * numberOfDirections)];
+        } while (previousDirections.includes(newDirection));
+        return newDirection;
+    }
+    // Stores the actor's last 2 or 3 directions based on its movementType
+    storeDirection(actor, previousDirections) {
+        let amountToStore = actor.movementType === 1 ? 1 : 2;
+        if (previousDirections.length > amountToStore) {
+            previousDirections.shift();
+        }
+        previousDirections.push(actor.currentDirection);
+    }
+    setRandomDirection(actor) {
+        const {directions, previousDirections} = this;
+        actor.currentDirection = this.getRandomDirection(actor, directions, previousDirections);
+        this.storeDirection(actor, previousDirections);
     }
     // Moves to a random direction for a random distance
     moveToRandomDirection(actor) {
@@ -102,7 +103,7 @@ class ArtificialIntelligence {
     // Pushes the actor away from the wall and moves it to a new direciton
     moveAwayFromWall(actor) {
         if (this.isActorAgainstWall(actor)) {
-            const distanceToMove = 4;
+            const distanceToMove = 3;
             switch (actor.currentDirection) {
                 case("left"):
                     actor.screenX += distanceToMove; break;
@@ -113,20 +114,20 @@ class ArtificialIntelligence {
                 case("down"):
                     actor.screenY -= distanceToMove; break;
                 case("upleft"):
-                    actor.screenX += (distanceToMove / 2);
+                    actor.screenX += (distanceToMove / 2); 
                     actor.screenY += (distanceToMove / 2); break;
                 case("upright"):
-                    actor.screenX -= (distanceToMove / 2);
+                    actor.screenX -= (distanceToMove / 2); 
                     actor.screenY += (distanceToMove / 2); break;
                 case("downleft"):
-                    actor.screenX += (distanceToMove / 2);
+                    actor.screenX += (distanceToMove / 2); 
                     actor.screenY -= (distanceToMove / 2); break;
                 case("downright"):
-                    actor.screenX -= (distanceToMove / 2);
+                    actor.screenX -= (distanceToMove / 2); 
                     actor.screenY -= (distanceToMove / 2); break;
             }
             this.setRandomDirection(actor)
-            this.setRandomWalkDistance(actor, true);
+            this.setRandomWalkDistance(actor);
         }
     }
     moveRandomly(actor) {
