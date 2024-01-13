@@ -42,13 +42,19 @@ class UIManager {
     livesHasChanged(ui, actorMngr) {
         return ui.livesElement.childElementCount !== actorMngr.player.lives;
     }
+    createLifeIndicator(spritesIndex) {
+        const lifeIndicator = document.createElement("img");
+        lifeIndicator.src = spritesIndex.life;
+        lifeIndicator.alt = "Life Indicator";
+        lifeIndicator.className = "life-indicator";
+        lifeIndicator.width = "";
+        lifeIndicator.height = "";
+        return lifeIndicator;
+    }
     updateLifeIndicators(ui, currentLives, spritesIndex) {
         ui.livesElement.innerHTML = "";
         for (let i = 0; i < currentLives; i++) {
-            const lifeIndicator = document.createElement("img");
-            lifeIndicator.src = spritesIndex.life;
-            lifeIndicator.alt = "Life Indicator";
-            lifeIndicator.className = "life-indicator";
+            let lifeIndicator = this.createLifeIndicator(spritesIndex);
             ui.livesElement.appendChild(lifeIndicator);
         }
     }

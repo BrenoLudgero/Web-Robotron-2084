@@ -53,6 +53,8 @@ body * { /*  !  !  !  !  ! */
     display: flex;
 }
 .life-indicator {
+    width: auto;
+    height: auto;
     padding-top: 2px;
     padding-right: 10px;
     height: inherit;
@@ -73,6 +75,8 @@ body * { /*  !  !  !  !  ! */
 canvas {
     margin: auto;
     display: block;
+    width: 876px;  /*  !  !  !  !  ! */
+    height: 720px; /*  !  !  !  !  ! */
     /* cursor: crosshair; */
     background-color: black;
     border: 7px solid rgb(255, 110, 0);
