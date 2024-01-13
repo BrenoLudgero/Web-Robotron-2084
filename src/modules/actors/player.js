@@ -1,6 +1,6 @@
 export {Player};
 import {Actor} from "../models/actor.js";
-import {setHitbox, setMovementBoundaries} from "../helpers/globals.js";
+import {setHitbox} from "../helpers/globals.js";
 
 class Player extends Actor {
     constructor(game, spritesIndex) {
@@ -18,7 +18,6 @@ class Player extends Actor {
         setHitbox(this, 1, 3, 1, 1);
     }
     update() {
-        setMovementBoundaries(this);
         this.updateProjectileTimer();
     }
     // Called in inputMngr.processShootingKeys

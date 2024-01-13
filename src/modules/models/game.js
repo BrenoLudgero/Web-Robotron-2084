@@ -45,7 +45,7 @@ class Game {
         actorMngr.draw(ui.ctx);
         projectileMngr.draw(this, ui.ctx);
     }
-    // TEMPORARY. WAVE FUNCTION
+    // TEMPORARY. WAVE METHOD
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const {actorMngr} = this;

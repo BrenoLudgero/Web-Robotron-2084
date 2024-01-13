@@ -1,5 +1,5 @@
 export {ArtificialIntelligence};
-import {RNG, cycleSprite, setMovementBoundaries} from "../helpers/globals.js";
+import {RNG, cycleSprite} from "../helpers/globals.js";
 
 class ArtificialIntelligence {
     constructor() {
@@ -41,17 +41,17 @@ class ArtificialIntelligence {
             case("down"):
                 actor.screenY += actor.movementSpeed; break;
             case("upleft"):
-                actor.screenY -= actor.movementSpeed; 
-                actor.screenX -= actor.movementSpeed; break;
+                actor.screenY -= (actor.movementSpeed * 0.8); 
+                actor.screenX -= (actor.movementSpeed * 0.8); break;
             case("upright"):
-                actor.screenX += actor.movementSpeed; 
-                actor.screenY -= actor.movementSpeed; break;
+                actor.screenX += (actor.movementSpeed * 0.8); 
+                actor.screenY -= (actor.movementSpeed * 0.8); break;
             case("downleft"):
-                actor.screenX -= actor.movementSpeed; 
-                actor.screenY += actor.movementSpeed; break;
+                actor.screenX -= (actor.movementSpeed * 0.8); 
+                actor.screenY += (actor.movementSpeed * 0.8); break;
             case("downright"):
-                actor.screenX += actor.movementSpeed; 
-                actor.screenY += actor.movementSpeed; break;
+                actor.screenX += (actor.movementSpeed * 0.8); 
+                actor.screenY += (actor.movementSpeed * 0.8); break;
         }
         actor.remainingWalkingDistance--;
     }
@@ -69,9 +69,9 @@ class ArtificialIntelligence {
         } while (previousDirections.includes(newDirection));
         return newDirection;
     }
-    // Stores the actor's last 2 or 3 directions based on its movementType
+    // Stores the actor's last 2 or 4 directions based on its movementType
     storeDirection(actor, previousDirections) {
-        let amountToStore = actor.movementType === 1 ? 1 : 2;
+        let amountToStore = actor.movementType === 1 ? 1 : 3;
         if (previousDirections.length > amountToStore) {
             previousDirections.shift();
         }
@@ -92,46 +92,23 @@ class ArtificialIntelligence {
         }
     }
     isActorAgainstWall(actor) {
-        const movementBoundaries = setMovementBoundaries(actor);
+        const {screenX, screenY, movementBoundaries} = actor;
         return (
-            actor.screenX >= movementBoundaries.x 
-            || actor.screenX <= 2 
-            || actor.screenY >= movementBoundaries.y 
-            || actor.screenY <= 2
+            screenX >= movementBoundaries.x 
+            || screenX <= 2 
+            || screenY >= movementBoundaries.y 
+            || screenY <= 2
         );
     }
-    // Pushes the actor away from the wall and moves it to a new direciton
     moveAwayFromWall(actor) {
         if (this.isActorAgainstWall(actor)) {
-            const distanceToMove = 3;
-            switch (actor.currentDirection) {
-                case("left"):
-                    actor.screenX += distanceToMove; break;
-                case("right"):
-                    actor.screenX -= distanceToMove; break;
-                case("up"):
-                    actor.screenY += distanceToMove; break;
-                case("down"):
-                    actor.screenY -= distanceToMove; break;
-                case("upleft"):
-                    actor.screenX += (distanceToMove / 2); 
-                    actor.screenY += (distanceToMove / 2); break;
-                case("upright"):
-                    actor.screenX -= (distanceToMove / 2); 
-                    actor.screenY += (distanceToMove / 2); break;
-                case("downleft"):
-                    actor.screenX += (distanceToMove / 2); 
-                    actor.screenY -= (distanceToMove / 2); break;
-                case("downright"):
-                    actor.screenX -= (distanceToMove / 2); 
-                    actor.screenY -= (distanceToMove / 2); break;
-            }
-            this.setRandomDirection(actor)
+            this.setRandomDirection(actor);
             this.setRandomWalkDistance(actor);
         }
     }
     moveRandomly(actor) {
-        this.moveToRandomDirection(actor);
         this.moveAwayFromWall(actor);
+        this.moveToRandomDirection(actor);
+        actor.stayWithinCanvas();
     }
 }

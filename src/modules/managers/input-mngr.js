@@ -43,6 +43,7 @@ class InputManager {
         Object.entries(moveDirections).forEach(([key, method]) => {
             if (keysPressed.includes(key)) {
                 player[method](this); // player.moveUp(this)
+                player.stayWithinCanvas();
             }
         });
     }
