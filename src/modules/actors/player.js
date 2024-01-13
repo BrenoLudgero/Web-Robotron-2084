@@ -15,7 +15,7 @@ class Player extends Actor {
         this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 7;
-        setHitbox(this, 1, 3, 1, 1);
+        setHitbox(this, 8, 8, 1, 1);
     }
     update() {
         this.updateProjectileTimer();
@@ -48,17 +48,17 @@ class Player extends Actor {
     animate(direction) { 
         switch(direction) {
             case("left"):
-                setHitbox(this, 8, 4, 2, 0);
-                this.cyclePlayerSprite(51); break;
+                this.cyclePlayerSprite(51); 
+                setHitbox(this, 10, 4, 1, 0); break;
             case("right"):
-                setHitbox(this, 8, 4, 2, 0);
-                this.cyclePlayerSprite(75); break;
+                this.cyclePlayerSprite(75); 
+                setHitbox(this, 10, 4, 1, 0); break;
             case("up"):
-                setHitbox(this, 1, 3, 1, 1);
-                this.cyclePlayerSprite(26); break;
+                this.cyclePlayerSprite(26); 
+                setHitbox(this, 8, 8, 1, 3); break;
             case("down"):
-                setHitbox(this, 1, 3, 1, 1);
-                this.cyclePlayerSprite(0); break;
+                this.cyclePlayerSprite(0); 
+                setHitbox(this, 8, 8, 1, 1); break;
         }
     }
     // Methods below called in inputMngr.processMovementKeys

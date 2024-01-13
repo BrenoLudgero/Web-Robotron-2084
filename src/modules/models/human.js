@@ -14,6 +14,9 @@ class Human extends Actor {
         this.movementAnimationDelay = 9;
         this.minPlayerSpawnDistance = 100; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = 50;
+        if (this.isMommyOrDaddy()) {
+            setHitbox(this, 2, 2, 0, 1);
+        }
         // screenX and screenY positions defined in actorMngr.addHuman
     }
     update() {
@@ -23,26 +26,32 @@ class Human extends Actor {
             this.animate(currentDirection);
         }
     }
+    isMommyOrDaddy() {
+        return (
+            this.constructor.name === "Mommy"
+            || this.constructor.name === "Daddy"
+        );
+    }
     animate(currentDirection) {
         if (currentDirection === "up") {
-            setHitbox(this, 2, 2, 0, 1);
             cycleSprite(this, 16, 30);
+            setHitbox(this, 2, 2, 0, 1);
         }
         if (currentDirection === "down") {
-            setHitbox(this, 2, 2, 0, 1);
             cycleSprite(this, 16, 0);
+            setHitbox(this, 2, 2, 0, 1);
         }
         if (currentDirection === "left"
             || currentDirection === "upleft"
             || currentDirection === "downleft") {
-                setHitbox(this, 4, 4, 0, 0);
                 cycleSprite(this, 16, 59);
+                setHitbox(this, 4, 4, 0, 0);
         }
         if (currentDirection === "right"
             || currentDirection === "upright"
             || currentDirection === "downright") {
-                setHitbox(this, 4, 4, 0, 2);
                 cycleSprite(this, 16, 88);
+                setHitbox(this, 4, 4, 0, 2);
         }
     }
 }

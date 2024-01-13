@@ -9,6 +9,7 @@ class Hulk extends Enemy {
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
         this.minHumanSpawnDistance = 90;
+        setHitbox(this, 0, 18, 0, 2);
     }
     update(game) {
         const {ai, movementAnimationDelay} = this;
@@ -23,15 +24,15 @@ class Hulk extends Enemy {
     animate() {
         switch(this.currentDirection) {
             case("left"):
-                setHitbox(this, 16, 16, -1, -4);
-                cycleSprite(this,28, 33); break;
+                cycleSprite(this,28, 33); 
+                setHitbox(this, 14, 16, 0, -4); break;
             case("right"):
-                setHitbox(this, 16, 16, 0, -4);
-                cycleSprite(this,28, 65); break;
+                cycleSprite(this,28, 65); 
+                setHitbox(this, 14, 16, 0, -4); break;
             case("up"):
             case("down"):
-                setHitbox(this, 0, 14, 0, -2);
-                cycleSprite(this,28, 0); break;
+                cycleSprite(this,28, 0); 
+                setHitbox(this, 0, 18, 0, 2); break;
         }
     }
 }

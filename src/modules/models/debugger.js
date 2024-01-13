@@ -3,7 +3,7 @@ export {Debugger};
 // TEMPORARY
 class Debugger {
     constructor() {
-        this.shouldDrawHitboxes = false;
+        this.shouldDrawHitboxes = true;
         this.actorInvincibility = false;
         this.shouldUpdateActors = true;
     }

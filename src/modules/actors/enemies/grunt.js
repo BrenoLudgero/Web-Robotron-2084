@@ -10,7 +10,7 @@ class Grunt extends Enemy {
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE ELAPSED TIME (TAKING TOO LONG)
         this.movementTimer = 0;
         this.movementInterval = 10; // DECREASES ACCORDING TO WAVE ELAPSED TIME
-        setHitbox(this, 2, 5, 0, 2);
+        setHitbox(this, 2, 6, 0, 3);
     }
     update(game) {
         const {ai, movementInterval} = this;
