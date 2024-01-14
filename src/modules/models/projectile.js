@@ -2,7 +2,7 @@ export {Projectile};
 
 // Instantiated in projectileMngr
 class Projectile {
-    constructor(spriteSrc, screenX, screenY, speed, left, right, up, down) {
+    constructor(spriteSrc, screenX, screenY, speed, direction) {
         this.width = 3;
         this.height = 20;
         this.sprite = new Image();
@@ -11,21 +11,17 @@ class Projectile {
         this.spritesheetY = 0;
         this.screenX = screenX;
         this.screenY = screenY;
-        this.goLeft = left;
-        this.goRight = right;
-        this.goUp = up;
-        this.goDown = down;
+        this.direction = direction;
         this.speed = speed;
         this.angle = 0; // Rotation angle depending on the 'go' direction
         this.knockbackForce = 6; // For Hulk collision
-        this.shouldDelete = false;
+        this.mustDelete = false;
         // Speed defined by each actor
     }
     update(game) {
-        const {goUp, goDown, goLeft, goRight, screenX, screenY} = this;
-        this.moveProjectile(goUp, goDown, goLeft, goRight);
-        if (this.isOutOfBounds(game, screenX, screenY)) {
-            this.shouldDelete = true;
+        this.moveProjectile();
+        if (this.outOfBounds(game)) {
+            this.mustDelete = true;
         }
     }
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
@@ -37,8 +33,8 @@ class Projectile {
         context.restore();
         game.debuggerr.drawHitboxes(this, context);
     }
-    isOutOfBounds(game, screenX, screenY) {
-        const ui = game.ui;
+    outOfBounds(ui) {
+        const {screenX, screenY} = this;
         return (
             screenX > ui.canvas.width + 10 
             || screenX < -10 
@@ -82,29 +78,29 @@ class Projectile {
         this.screenX += this.speed;
         this.screenY += this.speed;
     }
-    moveProjectile(goUp, goDown, goLeft, goRight) {
-        if (goUp && goLeft) {
+    moveProjectile() {
+        if (this.direction === "upleft") {
             this.moveUpLeft();
         } 
-        else if (goUp && goRight) {
+        else if (this.direction === "upright") {
             this.moveUpRight();
         } 
-        else if (goDown && goLeft) {
+        else if (this.direction === "downleft") {
             this.moveDownLeft();
         } 
-        else if (goDown && goRight) {
+        else if (this.direction === "downright") {
             this.moveDownRight();
         } 
-        else if (goUp) {
+        else if (this.direction === "up") {
             this.moveUp();
         } 
-        else if (goDown) {
+        else if (this.direction === "down") {
             this.moveDown();
         } 
-        else if (goLeft) {
+        else if (this.direction === "left") {
             this.moveLeft();
         } 
-        else if (goRight) {
+        else if (this.direction === "right") {
             this.moveRight();
         }
     }

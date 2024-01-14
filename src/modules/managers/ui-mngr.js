@@ -12,31 +12,34 @@ class UIManager {
     }
     // Creates a string indicating the amount of lives beyond 20
     createSurplusLivesIndicator(ui) {
-        const surplusLivesIndicator = document.createElement("span");
-        surplusLivesIndicator.id = "surplus-lives-indicator";
-        ui.livesElement.appendChild(surplusLivesIndicator);
-        return surplusLivesIndicator;
+        const surplusIndicator = document.createElement("span");
+        surplusIndicator.id = "surplus-lives-indicator";
+        ui.livesElement.appendChild(surplusIndicator);
+        return surplusIndicator;
     }
-    removeSurplusLivesIndicator(surplusLivesIndicator) {
-        if (surplusLivesIndicator) {
-            surplusLivesIndicator.parentNode.removeChild(surplusLivesIndicator);
+    removeSurplusIndicator(surplusIndicator) {
+        if (surplusIndicator) {
+            surplusIndicator.parentNode.removeChild(surplusIndicator);
         }
     }
-    updateSurplusLivesCount(surplusLivesIndicator, surplusLivesCount) {
-        if (surplusLivesCount !== parseInt(surplusLivesIndicator.innerHTML)) {
-            surplusLivesIndicator.innerHTML = `+${surplusLivesCount}`;
+    shouldUpdateSurplus(surplusLivesCount, surplusIndicator) {
+        return surplusLivesCount !== parseInt(surplusIndicator.innerHTML);
+    }
+    updateSurplusLivesCount(surplusLivesCount, surplusIndicator) {
+        if (this.shouldUpdateSurplus(surplusLivesCount, surplusIndicator)) {
+            surplusIndicator.innerHTML = `+${surplusLivesCount}`;
         }
     }
-    updateSurplusLivesIndicator(ui, currentLives) {
+    updateSurplusIndicator(ui, currentLives) {
         const surplusLivesCount = currentLives - 20;
-        let surplusLivesIndicator = document.querySelector("#surplus-lives-indicator");
+        let surplusIndicator = document.querySelector("#surplus-lives-indicator");
         if (surplusLivesCount > 0) {
-            if (!surplusLivesIndicator) {
-                surplusLivesIndicator = this.createSurplusLivesIndicator(ui);
+            if (!surplusIndicator) {
+                surplusIndicator = this.createSurplusLivesIndicator(ui);
             }
-            this.updateSurplusLivesCount(surplusLivesIndicator, surplusLivesCount);
+            this.updateSurplusLivesCount(surplusLivesCount, surplusIndicator);
         } else {
-            this.removeSurplusLivesIndicator(surplusLivesIndicator);
+            this.removeSurplusIndicator(surplusIndicator);
         }
     }
     livesHasChanged(ui, actorMngr) {
@@ -58,15 +61,18 @@ class UIManager {
             ui.livesElement.appendChild(lifeIndicator);
         }
     }
+    enoughSpaceForLives(ui) {
+        return ui.livesElement.childElementCount < 20;
+    }
     updateLivesElement(ui, actorMngr, spritesIndex) {
         if (!this.livesHasChanged(ui, actorMngr)) {
             return;
         }
         const currentLives = actorMngr.player.lives;
-        if (ui.livesElement.childElementCount < 20) {
+        if (this.enoughSpaceForLives(ui)) {
             this.updateLifeIndicators(ui, currentLives, spritesIndex);
         } else {
-            this.updateSurplusLivesIndicator(ui, currentLives);
+            this.updateSurplusIndicator(ui, currentLives);
         }
     }
     scoreHasChanged(ui, scoreMngr) {
@@ -77,7 +83,7 @@ class UIManager {
             ui.scoreElement.innerHTML = scoreMngr.score;
         }
     }
-    updateFPS(ui, FPS) {
+    updateFPSElement(ui, FPS) {
         ui.fpsElement.innerHTML = FPS;
     }
 }

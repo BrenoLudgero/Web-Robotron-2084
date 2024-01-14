@@ -1,4 +1,4 @@
-export {RNG, setHitbox, cycleSprite, getDistance};
+export {RNG, setHitbox, cycleSprite, getDistance, canMove};
 
 // Generates a random number between (and including) min and max
 function RNG(min, max) {
@@ -13,7 +13,7 @@ function setHitbox(actor, widthSubtraction, heightSubtraction, xOffset, yOffset)
 function notEndOfSheet(actor, maxSpritesheetX) {
     return actor.spritesheetX < maxSpritesheetX;
 }
-function spriteCycle(actor) {
+function nextSprite(actor) {
     const initialSpritesheetX = 0;
     const maxSpritesheetX = (actor.sprites.width - actor.width);
     if (notEndOfSheet(actor, maxSpritesheetX)) {
@@ -22,18 +22,15 @@ function spriteCycle(actor) {
     }
     actor.spritesheetX = initialSpritesheetX;
 }
-function canMove(actor) {
-    return actor.game.globalTimer % actor.movementAnimationDelay === 0;
-}
-function shouldCyclePlayer(player) {
-    return canMove(player);
-}
 function isPlayer(actor) {
     return actor.constructor.name === "Player";
 }
-function playerSpriteCycle(player) {
-    if (shouldCyclePlayer(player)) {
-        spriteCycle(player);
+function canMove(actor) {
+    return actor.game.globalTimer % actor.movementAnimationDelay === 0;
+}
+function nextPlayerSprite(player) {
+    if (canMove(player)) { // Unrelated to the ability to move in this specific case
+        nextSprite(player);
     }
 }
 function cycleSprite(actor, spritesheetY) {
@@ -41,10 +38,10 @@ function cycleSprite(actor, spritesheetY) {
         actor.spritesheetY = spritesheetY;
     }
     if (isPlayer(actor)) {
-        playerSpriteCycle(actor);
+        nextPlayerSprite(actor);
     }
     else {
-        spriteCycle(actor);
+        nextSprite(actor);
     }
 }
 // Returns the distance between two actors

@@ -3,7 +3,7 @@ export {Actor};
 class Actor {
     constructor(game, originalWidth, originalHeight) {
         this.game = game;
-        this.isAlive = true;
+        this.alive = true;
         this.sprites = new Image(); // src defined in each actor
         this.spritesheetX = 0;
         this.spritesheetY = 0;
@@ -47,19 +47,34 @@ class Actor {
             "y": ui.canvas.height - this.height
         };
     }
+    touchingCeiling() {
+        return this.screenY <= 2;
+    }
+    touchingFloor() {
+        return this.screenY >= this.movementBoundaries.y;
+    }
+    touchingLeftWall() {
+        return this.screenX <= 2;
+    }
+    touchingRightWall() {
+        return this.screenX >= this.movementBoundaries.x;
+    }
     stayWithinCanvas() {
-        if (this.screenY <= 2) {
+        if (this.touchingCeiling()) {
             this.screenY = 2;
         } 
-        else if (this.screenY >= this.movementBoundaries.y) {
+        else if (this.touchingFloor()) {
             this.screenY = this.movementBoundaries.y;
         }
-        if (this.screenX <= 2) {
+        if (this.touchingLeftWall()) {
             this.screenX = 2;
         } 
-        else if (this.screenX >= this.movementBoundaries.x) {
+        else if (this.touchingRightWall()) {
             this.screenX = this.movementBoundaries.x;
         }
+    }
+    canShoot() {
+        return this.projectileTimer <= 0;
     }
     updateProjectileTimer() {
         if (this.projectileTimer > 0) {

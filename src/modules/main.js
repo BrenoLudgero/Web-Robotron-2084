@@ -10,7 +10,7 @@
 // Based on the blue label ROM revision with default game settings
 
 /* TO-DO LIST (IN DESCENDING ORDER OF PRIORITY):
-UPDATE GRUNT HITBOX
+BREAK DOWN SPRITES INTO 'TILES'
 IMPLEMENT STATE PATTERN
 REDUCE MAGIC NUMBERS
 IMPLEMENT ALL ACTORS + SOUNDS & OBSTACLES
@@ -49,7 +49,7 @@ window.addEventListener("load", () => {
         // Updates framerate indicator
         if (currentFrame - lastFPSUpdate >= 1000) {
             const FPS = Math.round((framesThisSecond * 1000) / (currentFrame - lastFPSUpdate));
-            game.uiMngr.updateFPS(game.ui, FPS);
+            game.uiMngr.updateFPSElement(game.ui, FPS);
             framesThisSecond = 0;
             lastFPSUpdate = currentFrame;
         }

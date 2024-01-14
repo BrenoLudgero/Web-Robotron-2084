@@ -1,6 +1,6 @@
 export {Hulk};
 import {Enemy} from "../../models/enemy.js";
-import {setHitbox, cycleSprite} from "../../helpers/globals.js";
+import {setHitbox, cycleSprite, canMove} from "../../helpers/globals.js";
 
 class Hulk extends Enemy {
     constructor(game, spritesIndex) {
@@ -12,15 +12,11 @@ class Hulk extends Enemy {
         this.minHumanSpawnDistance = 90;
         setHitbox(this, 0, 18, 0, 2);
     }
-    update(game) {
-        const {ai, movementAnimationDelay} = this;
-        if (this.canMove(movementAnimationDelay, game)) {
-            ai.moveRandomly(this);
+    update() {
+        if (canMove(this)) {
+            this.ai.moveRandomly(this);
             this.animate();
         }
-    }
-    canMove(movementAnimationDelay, game) {
-        return game.globalTimer % movementAnimationDelay === 0;
     }
     animate() {
         switch(this.currentDirection) {

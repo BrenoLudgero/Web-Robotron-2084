@@ -8,8 +8,8 @@ class ProjectileManager {
     update(game) {
         const {projectiles} = this;
         projectiles.forEach(projectile => {
-            projectile.update(game);
-            if (projectile.shouldDelete) {
+            projectile.update(game.ui);
+            if (projectile.mustDelete) {
                 projectiles.delete(projectile);
             }
         });
@@ -17,8 +17,8 @@ class ProjectileManager {
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
         this.projectiles.forEach(projectile => projectile.draw(game, context));
     }
-    createProjectile(spriteSrc, screenX, screenY, speed, left, right, up, down) {
-        const projectile = new Projectile(spriteSrc, screenX, screenY, speed, left, right, up, down);
+    createProjectile(spriteSrc, screenX, screenY, speed, direction) {
+        const projectile = new Projectile(spriteSrc, screenX, screenY, speed, direction);
         this.projectiles.add(projectile);
     }
     eraseAllProjectiles() {

@@ -6,15 +6,22 @@ class ArtificialIntelligence {
         this.directions = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
         this.previousDirections = [];
     }
+    // [Player] --> [Grunt]
+    atPlayerRight(grunt, player) {
+        return grunt.screenX > player.screenX;
+    }
+    belowPlayer(grunt, player) {
+        return grunt.screenY > player.screenY;
+    }
     // Grunts only. Step towards the player
     chasePlayer(grunt, game) {
         const player = game.actorMngr.player;
-        if (grunt.screenX > player.screenX) {
+        if (this.atPlayerRight(grunt, player)) {
             grunt.screenX -= grunt.movementSpeed;
         } else {
             grunt.screenX += grunt.movementSpeed;
         }
-        if (grunt.screenY > player.screenY) {
+        if (this.belowPlayer(grunt, player)) {
             grunt.screenY -= grunt.movementSpeed;
         } else {
             grunt.screenY += grunt.movementSpeed;
@@ -69,10 +76,13 @@ class ArtificialIntelligence {
         } while (previousDirections.includes(newDirection));
         return newDirection;
     }
+    maxCapacity(previousDirections, amountToStore) {
+        return previousDirections.length > amountToStore;
+    }
     // Stores the actor's last 2 or 4 directions based on its movementType
     storeDirection(actor, previousDirections) {
         let amountToStore = actor.movementType === 1 ? 1 : 3;
-        if (previousDirections.length > amountToStore) {
+        if (this.maxCapacity(previousDirections, amountToStore)) {
             previousDirections.shift();
         }
         previousDirections.push(actor.currentDirection);

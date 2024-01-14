@@ -14,23 +14,26 @@ class ScoreManager {
     resetRescueBonus() {
         this.rescueBonus = 0;
     }
+    belowBonusLimit() {
+        return this.rescueBonus < 4000;
+    }
     // Awards human points + bonus up to 5,000 total
     // 1,000 bonus after 2 or more consecutive rescues
     awardRecuePoints(human) {
         this.score += (human.points + this.rescueBonus);
-        if (this.rescueBonus < 4000) {
+        if (this.belowBonusLimit()) {
             this.rescueBonus += 1000;
         }
     }
     awardEnemyPoints(enemy) {
         this.score += enemy.points;
     }
-    shouldAwardLife() {
+    extraLifeScoreAchieved() {
         return this.score >= this.nextExtraLife;
     }
     // Awards an extra life when the score is divisible by 25,000
     awardExtraLife(player, soundMngr) {
-        if (this.shouldAwardLife()) {
+        if (this.extraLifeScoreAchieved()) {
             player.lives += 1;
             this.nextExtraLife += 25000;
             soundMngr.playSound("extraLife", 5, 0.604);

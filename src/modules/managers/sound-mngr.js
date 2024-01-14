@@ -31,8 +31,7 @@ class SoundManager {
     playNewSound(currentSound) {
         currentSound.sound.play();
     }
-    // Sets a timeout so a sound can be played exclusively for a minimumDuration (seconds)
-    createTimeout(minimumDuration) {
+    playExclusively(minimumDuration) {
         if (minimumDuration) {
             this.timeout = setTimeout(() => {
                 this.timeout = null;
@@ -52,6 +51,6 @@ class SoundManager {
         this.stopCurrentSound(currentSound);
         this.createNewSound(soundFxIndex[sound], priority, currentSound);
         this.playNewSound(currentSound);
-        this.createTimeout(minimumDuration);
+        this.playExclusively(minimumDuration);
     }
 }

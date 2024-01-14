@@ -1,6 +1,6 @@
 export {Human};
 import {Actor} from "./actor.js";
-import {setHitbox, cycleSprite} from "../helpers/globals.js";
+import {setHitbox, cycleSprite, canMove} from "../helpers/globals.js";
 import {ArtificialIntelligence} from "./ai.js";
 
 class Human extends Actor {
@@ -8,7 +8,7 @@ class Human extends Actor {
         super(game, originalWidth, originalHeight);
         this.points = 1000; // Awarded by collisionMngr.checkHumanCollisions
         this.ai = new ArtificialIntelligence();
-        this.wasRescued = false;
+        this.rescued = false;
         this.movementType = 2; // 8 directions
         this.movementSpeed = 4;
         this.movementAnimationDelay = 9;
@@ -20,8 +20,8 @@ class Human extends Actor {
         // screenX and screenY positions defined in actorMngr.addHuman
     }
     update() {
-        const {game, movementAnimationDelay, ai, currentDirection} = this;
-        if (game.globalTimer % movementAnimationDelay === 0) {
+        const {ai, currentDirection} = this;
+        if (canMove(this)) {
             ai.moveRandomly(this);
             this.animate(currentDirection);
         }
@@ -34,23 +34,23 @@ class Human extends Actor {
     }
     animate(currentDirection) {
         if (currentDirection === "up") {
-            cycleSprite(this, 16, 30);
+            cycleSprite(this, 30);
             setHitbox(this, 2, 2, 0, 1);
         }
         if (currentDirection === "down") {
-            cycleSprite(this, 16, 0);
+            cycleSprite(this, 0);
             setHitbox(this, 2, 2, 0, 1);
         }
         if (currentDirection === "left"
             || currentDirection === "upleft"
             || currentDirection === "downleft") {
-                cycleSprite(this, 16, 59);
+                cycleSprite(this, 59);
                 setHitbox(this, 4, 4, 0, 0);
         }
         if (currentDirection === "right"
             || currentDirection === "upright"
             || currentDirection === "downright") {
-                cycleSprite(this, 16, 88);
+                cycleSprite(this, 88);
                 setHitbox(this, 4, 4, 0, 2);
         }
     }

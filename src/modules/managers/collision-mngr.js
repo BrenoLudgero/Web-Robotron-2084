@@ -36,10 +36,14 @@ class CollisionManager {
             bottom: Math.max(rotatedY1, rotatedY2)
         };
     }
+    isProjectile(actor) {
+        return actor.angle !== undefined;
+    }
     // Checks collision between two actors
-    checkSingleCollision(actor, target) { // Projectile shall always be 'actor'
+    // Projectile shall always be 'actor'
+    checkSingleCollision(actor, target) {
         const targetHitbox = this.getHitbox(target);
-        if (actor.angle !== undefined) { // Projectiles
+        if (this.isProjectile(actor)) {
             const actorRotatedHitbox = this.getRotatedHitbox(actor);
             return (
                 actorRotatedHitbox.right >= targetHitbox.left 
@@ -56,10 +60,11 @@ class CollisionManager {
             && actorHitbox.top <= targetHitbox.bottom
         );
     }
+    // IF ... RETURN TRUE BREAK
     checkPlayerCollisions(player, enemies, scoreMngr, soundMngr, projectileMngr) {
         for (const enemy of enemies) {
             if (this.checkSingleCollision(player, enemy)) {
-                player.isAlive = false;
+                player.alive = false;
                 player.lives--;
                 scoreMngr.resetRescueBonus();
                 soundMngr.playSound("playerDestroyed", 6);
@@ -72,21 +77,23 @@ class CollisionManager {
     checkHumanPlayerCollision(humans, player, scoreMngr, soundMngr) {
         for (const human of humans) {
             if (this.checkSingleCollision(player, human)) {
-                human.wasRescued = true;
+                human.rescued = true;
                 scoreMngr.awardRecuePoints(human);
                 soundMngr.playSound("humanRescued", 4, 0.47);
                 break;
             }
         }
     }
+    isHulk(enemy) {
+        return enemy.constructor.name === "Hulk";
+    }
     // IF ... RETURN TRUE BREAK
     checkHumanEnemyCollision(humans, enemies, soundMngr) {
         for (const enemy of enemies) {
-            // Destroys humans when colliding with Hulks
-            if (enemy.constructor.name === "Hulk") {
+            if (this.isHulk(enemy)) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
-                        human.isAlive = false;
+                        human.alive = false;
                         soundMngr.playSound("humanDestroyed", 4, 0.48);
                         break;
                     }
@@ -99,9 +106,18 @@ class CollisionManager {
         this.checkHumanEnemyCollision(humans, enemies, soundMngr);
     }
     knockbackHulk(projectile, hulk) {
-        const {goRight, goLeft, goDown, goUp, knockbackForce} = projectile;
-        const knockbackXDirection = goRight ? 1 : (goLeft ? -1 : 0);
-        const knockbackYDirection = goDown ? 1 : (goUp ? -1 : 0);
+        const {direction, knockbackForce} = projectile;
+        const directionMap = {
+            "up": {x: 0, y: -1},
+            "upright": {x: 1, y: -1},
+            "upleft": {x: -1, y: -1},
+            "left": {x: -1, y: 0},
+            "right": {x: 1, y: 0},
+            "down": {x: 0, y: 1},
+            "downright": {x: 1, y: 1},
+            "downleft": {x: -1, y: 1},
+        };
+        const {x: knockbackXDirection, y: knockbackYDirection} = directionMap[direction];
         hulk.screenX += knockbackXDirection * knockbackForce;
         hulk.screenY += knockbackYDirection * knockbackForce;
     }
@@ -111,15 +127,14 @@ class CollisionManager {
             for (const enemy of enemies) {
                 // IF ... RETURN TRUE BREAK
                 if (this.checkSingleCollision(projectile, enemy)) {
-                    // Destroys enemies that are not Hulks
-                    if (enemy.constructor.name !== "Hulk") {
-                        enemy.isAlive = false;
+                    if (!this.isHulk(enemy)) {
+                        enemy.alive = false;
                         scoreMngr.awardEnemyPoints(enemy);
                         soundMngr.playSound("enemyDestroyed", 3, 0.086);
                     } else {
                         this.knockbackHulk(projectile, enemy);
                     }
-                    projectile.shouldDelete = true;
+                    projectile.mustDelete = true;
                     break;
                 }
             }

@@ -30,7 +30,7 @@ class Game {
     }
     update() {
         const {scoreMngr, ui, uiMngr, actorMngr, projectileMngr, inputMngr, collisionMngr} = this;
-        if (actorMngr.player.isAlive) {
+        if (actorMngr.player.alive) {
             actorMngr.update(this);
             inputMngr.update(actorMngr);
             projectileMngr.update(this);
