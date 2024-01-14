@@ -26,7 +26,7 @@ class ArtificialIntelligence {
         if (randomNumber === 1) {
             this.chasePlayer(grunt, game);
             game.soundMngr.playSound("gruntStep", 1);
-            cycleSprite(grunt, 20, 0);
+            cycleSprite(grunt, null);
             return true;
         }
     }

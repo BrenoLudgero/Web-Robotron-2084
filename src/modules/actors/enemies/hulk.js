@@ -6,6 +6,7 @@ class Hulk extends Enemy {
     constructor(game, spritesIndex) {
         super(game, 26, 32);
         this.sprites.src = spritesIndex.hulk;
+        this.spritesheetIncrement = 28;
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
         this.minHumanSpawnDistance = 90;
@@ -24,14 +25,14 @@ class Hulk extends Enemy {
     animate() {
         switch(this.currentDirection) {
             case("left"):
-                cycleSprite(this,28, 33); 
+                cycleSprite(this, 33); 
                 setHitbox(this, 14, 16, 0, -4); break;
             case("right"):
-                cycleSprite(this,28, 65); 
+                cycleSprite(this, 65); 
                 setHitbox(this, 14, 16, 0, -4); break;
             case("up"):
             case("down"):
-                cycleSprite(this,28, 0); 
+                cycleSprite(this, 0); 
                 setHitbox(this, 0, 18, 0, 2); break;
         }
     }

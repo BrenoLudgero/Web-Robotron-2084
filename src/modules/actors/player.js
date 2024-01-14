@@ -1,11 +1,12 @@
 export {Player};
 import {Actor} from "../models/actor.js";
-import {setHitbox} from "../helpers/globals.js";
+import {setHitbox, cycleSprite} from "../helpers/globals.js";
 
 class Player extends Actor {
     constructor(game, spritesIndex) {
         super(game, 15, 24);
         this.sprites.src = spritesIndex.player;
+        this.spritesheetIncrement = 16;
         this.screenX = (game.ui.canvas.width / 2) - this.width;
         this.screenY = (game.ui.canvas.height / 2) - this.height;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
@@ -34,30 +35,19 @@ class Player extends Actor {
             soundMngr.playSound("playerShot", 2, 0.1);
         }
     }
-    cyclePlayerSprite(spritesheetY) {
-        const {game, movementAnimationDelay} = this;
-        this.spritesheetY = spritesheetY;
-        if (game.globalTimer % movementAnimationDelay === 0) {
-            if (this.spritesheetX < (this.sprites.width - this.width)) {
-                this.spritesheetX += 16;
-            } else {
-                this.spritesheetX = 0;
-            }
-        }
-    }
     animate(direction) { 
         switch(direction) {
             case("left"):
-                this.cyclePlayerSprite(51); 
+                cycleSprite(this, 51); 
                 setHitbox(this, 10, 4, 1, 0); break;
             case("right"):
-                this.cyclePlayerSprite(75); 
+                cycleSprite(this, 75); 
                 setHitbox(this, 10, 4, 1, 0); break;
             case("up"):
-                this.cyclePlayerSprite(26); 
+                cycleSprite(this, 26); 
                 setHitbox(this, 8, 8, 1, 3); break;
             case("down"):
-                this.cyclePlayerSprite(0); 
+                cycleSprite(this, 0); 
                 setHitbox(this, 8, 8, 1, 1); break;
         }
     }

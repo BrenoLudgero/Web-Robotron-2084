@@ -10,15 +10,42 @@ function setHitbox(actor, widthSubtraction, heightSubtraction, xOffset, yOffset)
     actor.hitboxXOffset = xOffset;
     actor.hitboxYOffset = yOffset;
 }
-function cycleSprite(actor, increment, spritesheetY) {
+function notEndOfSheet(actor, maxSpritesheetX) {
+    return actor.spritesheetX < maxSpritesheetX;
+}
+function spriteCycle(actor) {
     const initialSpritesheetX = 0;
     const maxSpritesheetX = (actor.sprites.width - actor.width);
-    actor.spritesheetY = spritesheetY;
-    if (actor.spritesheetX < maxSpritesheetX) {
-        actor.spritesheetX += increment;
+    if (notEndOfSheet(actor, maxSpritesheetX)) {
+        actor.spritesheetX += actor.spritesheetIncrement;
         return;
     }
     actor.spritesheetX = initialSpritesheetX;
+}
+function canMove(actor) {
+    return actor.game.globalTimer % actor.movementAnimationDelay === 0;
+}
+function shouldCyclePlayer(player) {
+    return canMove(player);
+}
+function isPlayer(actor) {
+    return actor.constructor.name === "Player";
+}
+function playerSpriteCycle(player) {
+    if (shouldCyclePlayer(player)) {
+        spriteCycle(player);
+    }
+}
+function cycleSprite(actor, spritesheetY) {
+    if (spritesheetY !== null) {
+        actor.spritesheetY = spritesheetY;
+    }
+    if (isPlayer(actor)) {
+        playerSpriteCycle(actor);
+    }
+    else {
+        spriteCycle(actor);
+    }
 }
 // Returns the distance between two actors
 function getDistance(actorA, actorB) {
