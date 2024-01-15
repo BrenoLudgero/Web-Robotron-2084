@@ -79,11 +79,17 @@ class Projectile {
         this.screenY += this.speed;
     }
     moveProjectile() {
-        if (this.direction === "upleft") {
+        if (this.direction === "up") {
+            this.moveUp();
+        } 
+        else if (this.direction === "upleft") {
             this.moveUpLeft();
         } 
         else if (this.direction === "upright") {
             this.moveUpRight();
+        } 
+        if (this.direction === "down") {
+            this.moveDown();
         } 
         else if (this.direction === "downleft") {
             this.moveDownLeft();
@@ -91,13 +97,7 @@ class Projectile {
         else if (this.direction === "downright") {
             this.moveDownRight();
         } 
-        else if (this.direction === "up") {
-            this.moveUp();
-        } 
-        else if (this.direction === "down") {
-            this.moveDown();
-        } 
-        else if (this.direction === "left") {
+        if (this.direction === "left") {
             this.moveLeft();
         } 
         else if (this.direction === "right") {
