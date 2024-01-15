@@ -3,9 +3,9 @@ export {Debugger};
 // TEMPORARY
 class Debugger {
     constructor() {
-        this.shouldDrawHitboxes = false;
+        this.shouldDrawHitboxes = true;
         this.actorInvincibility = false;
-        this.shouldUpdateActors = true;
+        this.shouldUpdateActors = false;
     }
     processDebugKeys(key) {
         switch (key) {
@@ -42,14 +42,17 @@ class Debugger {
                 context.rotate(actor.angle);
                 context.rect(-halfWidth, -halfHeight, actor.width, actor.height);
             } else {
-                context.rect(
-                    (actor.screenX - actor.hitboxXOffset) + (actor.width - actor.hitboxWidth) / 2,
-                    (actor.screenY - actor.hitboxYOffset) + (actor.height - actor.hitboxHeight) / 2,
-                    actor.hitboxWidth,
-                    actor.hitboxHeight
-                );
+                for (const limb in actor.hitboxes) {
+                    const hitbox = actor.hitboxes[limb];
+                    context.rect(
+                        (actor.screenX + hitbox.xPosition),
+                        (actor.screenY + hitbox.yPosition),
+                        hitbox.width,
+                        hitbox.height
+                    );
+                }
             }
-            context.strokeStyle = "red";
+            context.strokeStyle = "blue";
             context.stroke();
             context.setTransform(1, 0, 0, 1, 0, 0); // Resets the context transformation
         }

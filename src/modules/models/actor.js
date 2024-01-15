@@ -1,4 +1,5 @@
 export {Actor};
+import {cycleSprite} from "../helpers/globals.js";
 
 class Actor {
     constructor(game, originalWidth, originalHeight) {
@@ -9,11 +10,8 @@ class Actor {
         this.spritesheetY = 0;
         this.setScaledDimensions(originalWidth, originalHeight);
         this.setMovementBoundaries(game);
-        // Used in collisionMngr.getHitbox
-        this.hitboxWidth = this.width;
-        this.hitboxHeight = this.height;
-        this.hitboxXOffset = 0;
-        this.hitboxYOffset = 0;
+        this.limbs = {};
+        this.hitboxes = {};
     }
     draw(context) {
         context.drawImage(
@@ -46,6 +44,35 @@ class Actor {
             "x": ui.canvas.width - this.width,
             "y": ui.canvas.height - this.height
         };
+    }
+    setHitbox(limb) {
+        const xPosition = this.limbs[limb].xPosition;
+        const yPosition = this.limbs[limb].yPosition;
+        this.hitboxes[limb] = {
+            width: this.limbs[limb].width,
+            height: this.limbs[limb].height,
+            xPosition,
+            yPosition
+        };
+    }
+    setAllHitboxes(limbs) {
+        for (const limb in limbs) {
+            this.setHitbox(limb);
+        }
+    }
+    updateHitboxes(actor, limb, properties) {
+        Object.keys(properties).forEach(property => {
+            actor.hitboxes[limb][property] = properties[property];
+        });
+    }
+    animate(actor, direction) {
+        const config = actor.hitboxConfig[direction];
+        cycleSprite(this, config.spriteCycle);
+        Object.keys(config).forEach(limb => {
+            if (limb !== "spriteCycle") {
+                this.updateHitboxes(actor, limb, config[limb]);
+            }
+        });
     }
     touchingCeiling() {
         return this.screenY <= 2;

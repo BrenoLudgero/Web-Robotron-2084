@@ -1,6 +1,5 @@
 export {Player};
 import {Actor} from "../models/actor.js";
-import {setHitbox, cycleSprite} from "../helpers/globals.js";
 
 class Player extends Actor {
     constructor(game, spritesIndex) {
@@ -16,7 +15,41 @@ class Player extends Actor {
         this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 7;
-        setHitbox(this, 8, 8, 1, 1);
+        this.hitboxConfig = {
+            "left": {
+                spriteCycle: 51,
+                head: {width: 11, xPosition: 4, yPosition: 3},
+                torso: {width: 11, height: 11, xPosition: 4, yPosition: 16},
+                leftArm: {width: 0, height: 0},
+                rightArm: {width: 0, height: 0},
+                legs: {width: 6, height: 12, xPosition: 7}
+            },
+            "right": {
+                spriteCycle: 75,
+                head: {width: 11, xPosition: 6, yPosition: 3},
+                torso: {width: 11, height: 11, xPosition: 6, yPosition: 16},
+                leftArm: {width: 0, height: 0},
+                rightArm: {width: 0, height: 0},
+                legs: {width: 6, height: 12, xPosition: 8}
+            },
+            "up": {
+                spriteCycle: 26,
+                head: {width: 17, xPosition: 2, yPosition: 1},
+                torso: {width: 15, height: 8, xPosition: 3, yPosition: 14},
+                leftArm: {width: 3, height: 9, xPosition: 18, yPosition: 17},
+                legs: {width: 9, height: 7, xPosition: 6}
+            },
+            "down": {
+                spriteCycle: 0,
+                head: {width: 17, height: 9, xPosition: 2, yPosition: 3},
+                torso: {width: 15, height: 8, xPosition: 3, yPosition: 15},
+                rightArm: {width: 3, height: 9, xPosition: 0, yPosition: 17},
+                leftArm: {width: 3, height: 9, xPosition: 18, yPosition: 17},
+                legs: {width: 9, height: 7, xPosition: 6, yPosition: 23}
+            }
+        };
+        this.limbs = this.hitboxConfig.down;
+        this.setAllHitboxes(this.limbs);
     }
     update() {
         this.updateProjectileTimer();
@@ -34,45 +67,29 @@ class Player extends Actor {
             soundMngr.playSound("playerShot", 2, 0.1);
         }
     }
-    animate(direction) { 
-        switch(direction) {
-            case("left"):
-                cycleSprite(this, 51); 
-                setHitbox(this, 10, 4, 1, 0); break;
-            case("right"):
-                cycleSprite(this, 75); 
-                setHitbox(this, 10, 4, 1, 0); break;
-            case("up"):
-                cycleSprite(this, 26); 
-                setHitbox(this, 8, 8, 1, 3); break;
-            case("down"):
-                cycleSprite(this, 0); 
-                setHitbox(this, 8, 8, 1, 1); break;
-        }
-    }
     // Methods below called in inputMngr.processMovementKeys
     moveLeft(inputMngr) {
         if (inputMngr.notPressingD()) {
             this.screenX -= this.movementSpeed;
-            this.animate("left");
+            this.animate(this, "left");
         }
     }
     moveRight(inputMngr) {
         if (inputMngr.notPressingA()) {
             this.screenX += this.movementSpeed;
-            this.animate("right");
+            this.animate(this, "right");
         }
     }
     moveUp(inputMngr) {
         this.screenY -= this.movementSpeed;
         if (inputMngr.pressingWOnly() || inputMngr.pressingDnA()) {
-            this.animate("up");
+            this.animate(this, "up");
         }
     }
     moveDown(inputMngr) {
         this.screenY += this.movementSpeed;
         if (inputMngr.pressingSOnly() || inputMngr.pressingDnA()) {
-            this.animate("down");
+            this.animate(this, "down");
         }
     }
 }

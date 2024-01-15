@@ -1,14 +1,8 @@
-export {RNG, setHitbox, cycleSprite, getDistance, canMove};
+export {RNG, cycleSprite, getDistance, canMove};
 
 // Generates a random number between (and including) min and max
 function RNG(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function setHitbox(actor, widthSubtraction, heightSubtraction, xOffset, yOffset) {
-    actor.hitboxWidth = actor.width - widthSubtraction;
-    actor.hitboxHeight = actor.height - heightSubtraction;
-    actor.hitboxXOffset = xOffset;
-    actor.hitboxYOffset = yOffset;
 }
 function notEndOfSheet(actor, maxSpritesheetX) {
     return actor.spritesheetX < maxSpritesheetX;

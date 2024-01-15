@@ -12,12 +12,16 @@ class CollisionManager {
         this.checkHumanCollisions(player, enemies, humans, scoreMngr, soundMngr);
         this.checkProjectileCollisions(projectileMngr.projectiles, enemies, scoreMngr, soundMngr);
     }
-    getHitbox(actor) {
-        return { //    Adjusts the hitbox alignment        Keeps hitbox centered on the sprite
-            left: (actor.screenX - actor.hitboxXOffset) + (actor.width - actor.hitboxWidth) / 2,
-            right: (actor.screenX - actor.hitboxXOffset) + (actor.width + actor.hitboxWidth) / 2,
-            top: (actor.screenY - actor.hitboxYOffset) + (actor.height - actor.hitboxHeight) / 2,
-            bottom: (actor.screenY - actor.hitboxYOffset) + (actor.height + actor.hitboxHeight) / 2
+    isProjectile(actor) {
+        return actor.angle !== undefined;
+    }
+    getLimbHitbox(actor, limb) {
+        const hitbox = actor.hitboxes[limb];
+        return {
+            left: actor.screenX + hitbox.xPosition,
+            right: actor.screenX + (hitbox.xPosition + hitbox.width),
+            top: actor.screenY + hitbox.yPosition,
+            bottom: actor.screenY + (hitbox.yPosition + hitbox.height)
         };
     }
     getRotatedHitbox(projectile) {
@@ -36,29 +40,33 @@ class CollisionManager {
             bottom: Math.max(rotatedY1, rotatedY2)
         };
     }
-    isProjectile(actor) {
-        return actor.angle !== undefined;
+    collisionDetected(actor, target) {
+        return (
+            actor.right >= target.left 
+            && actor.left <= target.right 
+            && actor.bottom >= target.top 
+            && actor.top <= target.bottom
+        );
     }
     // Checks collision between two actors
-    // Projectile shall always be 'actor'
     checkSingleCollision(actor, target) {
-        const targetHitbox = this.getHitbox(target);
-        if (this.isProjectile(actor)) {
-            const actorRotatedHitbox = this.getRotatedHitbox(actor);
-            return (
-                actorRotatedHitbox.right >= targetHitbox.left 
-                && actorRotatedHitbox.left <= targetHitbox.right 
-                && actorRotatedHitbox.bottom >= targetHitbox.top 
-                && actorRotatedHitbox.top <= targetHitbox.bottom
-            );
+        for (const targetLimb in target.hitboxes) {
+            const targetHitbox = this.getLimbHitbox(target, targetLimb);
+            if (this.isProjectile(actor)) {
+                const projectileHitbox = this.getRotatedHitbox(actor);
+                if (this.collisionDetected(projectileHitbox, targetHitbox)) {
+                    return true;
+                }
+            } else {
+                for (const actorLimb in actor.hitboxes) {
+                    const actorHitbox = this.getLimbHitbox(actor, actorLimb);
+                    if (this.collisionDetected(actorHitbox, targetHitbox)) {
+                        return true;
+                    }
+                }
+            }
         }
-        const actorHitbox = this.getHitbox(actor);
-        return (
-            actorHitbox.right >= targetHitbox.left 
-            && actorHitbox.left <= targetHitbox.right 
-            && actorHitbox.bottom >= targetHitbox.top 
-            && actorHitbox.top <= targetHitbox.bottom
-        );
+        return false;
     }
     // IF ... RETURN TRUE BREAK
     checkPlayerCollisions(player, enemies, scoreMngr, soundMngr, projectileMngr) {

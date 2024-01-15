@@ -1,6 +1,6 @@
 export {Hulk};
 import {Enemy} from "../../models/enemy.js";
-import {setHitbox, cycleSprite, canMove} from "../../helpers/globals.js";
+import {canMove} from "../../helpers/globals.js";
 
 class Hulk extends Enemy {
     constructor(game, spritesIndex) {
@@ -10,26 +10,44 @@ class Hulk extends Enemy {
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
         this.minHumanSpawnDistance = 90;
-        setHitbox(this, 0, 18, 0, 2);
+        this.hitboxConfig = {
+            "left": {
+                spriteCycle: 33,
+                head: {xPosition: 16, yPosition: 3},
+                neck: {xPosition: 18, yPosition: 7},
+                torso: {xPosition: 9, yPosition: 11},
+                rightArm: {width: 0, height: 0},
+                leftArm: {width: 0, height: 0},
+                legs: {width: 14, height: 11, xPosition: 10, yPosition: 34}
+            },
+            "right": {
+                spriteCycle: 65,
+                head: {xPosition: 14, yPosition: 1},
+                neck: {xPosition: 17, yPosition: 6},
+                torso: {xPosition: 9, yPosition: 11},
+                rightArm: {width: 0, height: 0},
+                leftArm: {width: 0, height: 0},
+                legs: {width: 14, height: 11, xPosition: 15, yPosition: 33}
+            },
+            "up": {
+                spriteCycle: 0,
+                head: {width: 9, height: 4, xPosition: 15, yPosition: 0},
+                neck: {width: 4, height: 4, xPosition: 17, yPosition: 4},
+                torso: {width: 22, height: 22, xPosition: 9, yPosition: 9},
+                rightArm: {width: 9, height: 24, xPosition: 30, yPosition: 9},
+                leftArm: {width: 9, height: 24, xPosition: 0, yPosition: 9},
+                legs: {width: 15, height: 7, xPosition: 12, yPosition: 31}
+            },
+            "down": {}
+        };
+        this.hitboxConfig.down = {...this.hitboxConfig.up};
+        this.limbs = this.hitboxConfig.down;
+        this.setAllHitboxes(this.limbs);
     }
     update() {
         if (canMove(this)) {
             this.ai.moveRandomly(this);
-            this.animate();
-        }
-    }
-    animate() {
-        switch(this.currentDirection) {
-            case("left"):
-                cycleSprite(this, 33); 
-                setHitbox(this, 14, 16, 0, -4); break;
-            case("right"):
-                cycleSprite(this, 65); 
-                setHitbox(this, 14, 16, 0, -4); break;
-            case("up"):
-            case("down"):
-                cycleSprite(this, 0); 
-                setHitbox(this, 0, 18, 0, 2); break;
+            this.animate(this, this.currentDirection);
         }
     }
 }

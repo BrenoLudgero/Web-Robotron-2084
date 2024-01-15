@@ -42,39 +42,48 @@ class Projectile {
             || screenY < -10
         );
     }
+    // Height is adjusted to eliminate gaps between hitboxes
     moveUp() {
         this.angle = 0;
+        this.height = 24;
         this.screenY -= this.speed;
     }
     moveUpLeft() {
         this.angle = -Math.PI / 4;
+        this.height = 34;
         this.screenX -= this.speed;
         this.screenY -= this.speed;
     }
     moveUpRight() {
         this.angle = Math.PI / 4;
+        this.height = 34;
         this.screenX += this.speed;
         this.screenY -= this.speed;
     }
     moveLeft() {
         this.angle = -Math.PI / 2;
+        this.height = 24;
         this.screenX -= this.speed;
     }
     moveRight() {
         this.angle = Math.PI / 2;
+        this.height = 24;
         this.screenX += this.speed;
     }
     moveDownLeft() {
         this.angle = 3 * (-Math.PI / 4);
+        this.height = 34;
         this.screenX -= this.speed;
         this.screenY += this.speed;
     }
     moveDown() {
         this.angle = 0;
+        this.height = 24;
         this.screenY += this.speed;
     }
     moveDownRight() {
         this.angle = 3 * (Math.PI / 4);
+        this.height = 34;
         this.screenX += this.speed;
         this.screenY += this.speed;
     }
