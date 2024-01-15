@@ -3,9 +3,9 @@ export {Debugger};
 // TEMPORARY
 class Debugger {
     constructor() {
-        this.shouldDrawHitboxes = true;
+        this.shouldDrawHitboxes = false;
         this.actorInvincibility = false;
-        this.shouldUpdateActors = false;
+        this.shouldUpdateActors = true;
     }
     processDebugKeys(key) {
         switch (key) {

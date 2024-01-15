@@ -29,10 +29,10 @@ class CollisionManager {
         const halfHeight = projectile.height / 2;
         const centerX = projectile.screenX + halfWidth;
         const centerY = projectile.screenY + halfHeight;
-        const rotatedX1 = centerX - (halfWidth * Math.abs(Math.cos(projectile.angle))) - (halfHeight * Math.abs(Math.sin(projectile.angle)));
-        const rotatedX2 = centerX + (halfWidth * Math.abs(Math.cos(projectile.angle))) + (halfHeight * Math.abs(Math.sin(projectile.angle)));
-        const rotatedY1 = centerY - (halfWidth * Math.abs(Math.sin(projectile.angle))) - (halfHeight * Math.abs(Math.cos(projectile.angle)));
-        const rotatedY2 = centerY + (halfWidth * Math.abs(Math.sin(projectile.angle))) + (halfHeight * Math.abs(Math.cos(projectile.angle)));
+        const rotatedX1 = (centerX - (halfWidth * Math.abs(Math.cos(projectile.angle)))) - (halfHeight * Math.abs(Math.sin(projectile.angle)));
+        const rotatedX2 = (centerX + (halfWidth * Math.abs(Math.cos(projectile.angle)))) + (halfHeight * Math.abs(Math.sin(projectile.angle)));
+        const rotatedY1 = (centerY - (halfWidth * Math.abs(Math.sin(projectile.angle)))) - (halfHeight * Math.abs(Math.cos(projectile.angle)));
+        const rotatedY2 = (centerY + (halfWidth * Math.abs(Math.sin(projectile.angle)))) + (halfHeight * Math.abs(Math.cos(projectile.angle)));
         return {
             left: Math.min(rotatedX1, rotatedX2),
             right: Math.max(rotatedX1, rotatedX2),

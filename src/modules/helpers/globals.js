@@ -9,7 +9,7 @@ function notEndOfSheet(actor, maxSpritesheetX) {
 }
 function nextSprite(actor) {
     const initialSpritesheetX = 0;
-    const maxSpritesheetX = (actor.sprites.width - actor.width);
+    const maxSpritesheetX = actor.sprites.width - actor.width;
     if (notEndOfSheet(actor, maxSpritesheetX)) {
         actor.spritesheetX += actor.spritesheetIncrement;
         return;
@@ -28,7 +28,7 @@ function nextPlayerSprite(player) {
     }
 }
 function cycleSprite(actor, spritesheetY) {
-    if (spritesheetY !== null) {
+    if (spritesheetY != undefined) {
         actor.spritesheetY = spritesheetY;
     }
     if (isPlayer(actor)) {
@@ -42,5 +42,5 @@ function cycleSprite(actor, spritesheetY) {
 function getDistance(actorA, actorB) {
     const distanceX = actorB.screenX - actorA.screenX;
     const distanceY = actorB.screenY - actorA.screenY;
-    return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
 }
