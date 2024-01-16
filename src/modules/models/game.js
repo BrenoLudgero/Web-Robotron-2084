@@ -55,6 +55,6 @@ class Game {
         const {actorMngr} = this;
         actorMngr.addActors(15, Mommy, spritesIndex);
         actorMngr.addActors(10, Hulk, spritesIndex);
-        //actorMngr.addActors(25, Grunt, spritesIndex);
+        actorMngr.addActors(25, Grunt, spritesIndex);
     }
 }

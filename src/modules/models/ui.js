@@ -9,7 +9,7 @@ class UserInterface {
         this.scoreElement = document.getElementById("score");
         this.scoreElement.innerHTML = scoreMngr.score;
         this.livesElement = document.getElementById("lives");
-        this.fpsElement = document.getElementById("fps-counter");
+        this.FPSElement = document.getElementById("fps-counter");
     }
     // Initializes canvas.width and height with scaled dimensions
     setCanvasScaledResolution(scaleFactor) {

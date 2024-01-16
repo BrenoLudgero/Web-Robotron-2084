@@ -85,6 +85,6 @@ class UIManager {
         }
     }
     updateFPSElement(ui, FPS) {
-        ui.fpsElement.innerHTML = FPS;
+        ui.FPSElement.innerHTML = FPS;
     }
 }

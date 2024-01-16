@@ -1,20 +1,17 @@
 export {SoundManager};
+import {SoundEffect} from "../models/sound.js";
 import {soundFxIndex} from "../helpers/indexes.js";
 
 // Plays one sound at a time depending on its priority
 // Priority levels range from 1 (lowest) to 6 (highest)
 class SoundManager {
     constructor() {
-        this.currentSound = {
-            sound: null,
-            priority: 0
-        };
-        this.timeout = null;
-        this.soundFxIndex = soundFxIndex;
+        this.currentSound = new SoundEffect();
     }
-    shouldPlayNow(priority, currentSound) {
+    // A high priority sound (5 or 6) or a sound of current priority
+    shouldPlayNow(priority) {
         return (
-            priority >= currentSound.priority
+            priority >= this.currentSound.priority
             || priority > 4
         );
     }
@@ -24,33 +21,32 @@ class SoundManager {
             currentSound.sound = null;
         }
     }
-    createNewSound(sound, priority, currentSound) {
+    createNewSound(sound, priority) {
         const newSound = new Audio(sound);
-        currentSound.sound = newSound;
-        currentSound.priority = priority;
+        this.currentSound.sound = newSound;
+        this.currentSound.priority = priority;
     }
     playNewSound(currentSound) {
         currentSound.sound.play();
     }
     playExclusively(minimumDuration) {
         if (minimumDuration) {
-            this.timeout = setTimeout(() => {
-                this.timeout = null;
+            this.currentSound.timeout = setTimeout(() => {
+                this.currentSound.timeout = null;
             }, minimumDuration * 1000);
         }
     }
-    // Plays a high priority sound (5 or 6) immediately
-    // Or a sound of current / lower priority if there's no ongoing timeout
     playSound(sound, priority, minimumDuration) {
-        const {currentSound, timeout, soundFxIndex} = this;
-        if (this.shouldPlayNow(priority, currentSound)) {
-            clearTimeout(timeout);
-        }  
-        else if (timeout !== null) {
+        const {currentSound} = this;
+        if (this.shouldPlayNow(priority)) {
+            clearTimeout(currentSound.timeout);
+        } 
+        // Ignores any sound of lower priority than the current one
+        else if (currentSound.timeout !== null) {
             return;
         }
         this.stopCurrentSound(currentSound);
-        this.createNewSound(soundFxIndex[sound], priority, currentSound);
+        this.createNewSound(soundFxIndex[sound], priority);
         this.playNewSound(currentSound);
         this.playExclusively(minimumDuration);
     }
