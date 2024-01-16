@@ -8,7 +8,7 @@ const spritesIndex = {
     hulk: imgPath + "actors/enemies/hulk.png",
     mommy: imgPath + "actors/humans/mommy.png",
     player: imgPath + "actors/player.png",
-    playerProjectile: imgPath + "projectiles/player-prjctl.png",
+    playerProjectile: imgPath + "projectiles/player_prjctl.png",
     life: imgPath + "ui/life.png"
 };
 const soundFxIndex = {

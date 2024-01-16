@@ -3,10 +3,10 @@ import {Player} from "../actors/player.js";
 import {RNG, getDistance} from "../helpers/globals.js"
 
 class ActorManager {
-    constructor(game, spritesIndex) {
+    constructor(game) {
         this.game = game;
         this.actors = {
-            player: new Player(game, spritesIndex),
+            player: new Player(game),
             enemies: new Set(),
             humans: new Set()
         }
@@ -71,9 +71,9 @@ class ActorManager {
                 this.actors.obtacles.add(newActor); break;
         }
     }
-    addActors(numberActors, actorType, spritesIndex) {
+    addActors(numberActors, actorType) {
         for (let i = 0; i < numberActors; i++) {
-            const newActor = new actorType(this.game, spritesIndex);
+            const newActor = new actorType(this.game);
             if (this.safeToSpawn(newActor)) {
                 this.addActor(newActor, actorType);
             }

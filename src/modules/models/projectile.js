@@ -2,11 +2,10 @@ export {Projectile};
 
 // Instantiated in projectileMngr
 class Projectile {
-    constructor(spriteSrc, screenX, screenY, speed, direction) {
+    constructor(sprite, screenX, screenY, speed, direction) {
         this.width = 3;
         this.height = 20;
-        this.sprite = new Image();
-        this.sprite.src = spriteSrc;
+        this.sprite = sprite;
         this.spritesheetX = 0;
         this.spritesheetY = 0;
         this.screenX = screenX;
@@ -25,11 +24,11 @@ class Projectile {
         }
     }
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
-        const {width, height, screenX, screenY, angle, sprite} = this;
+        const {width, height, screenX, screenY, angle} = this;
         context.save();
         context.translate(screenX + (width / 2), screenY + (height / 2));
         context.rotate(angle);
-        context.drawImage(sprite, -width / 2, -height / 2);
+        context.drawImage(this.sprite.spritesheet, -width / 2, -height / 2);
         context.restore();
         game.debuggerr.drawHitboxes(this, context);
     }

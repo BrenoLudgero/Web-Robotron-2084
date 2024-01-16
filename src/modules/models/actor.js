@@ -1,11 +1,13 @@
 export {Actor};
+import {Sprite} from "./sprite.js";
 import {cycleSprite} from "../helpers/globals.js";
 
 class Actor {
     constructor(game, originalWidth, originalHeight) {
         this.game = game;
         this.currentState = "alive";
-        this.sprites = new Image(); // src defined in each actor
+        this.sprites = new Sprite(this.getSpriteName());
+        this.projectileSprite = new Sprite(this.getProjectileSpriteName());
         this.spritesheetX = 0;
         this.spritesheetY = 0;
         this.setScaledDimensions(originalWidth, originalHeight);
@@ -15,7 +17,7 @@ class Actor {
     }
     draw(context) {
         context.drawImage(
-            this.sprites, 
+            this.sprites.spritesheet, 
             this.spritesheetX, 
             this.spritesheetY, 
             this.originalWidth, 
@@ -26,6 +28,12 @@ class Actor {
             this.originalHeight * 1.5
         );
         this.game.debuggerr.drawHitboxes(this, context);
+    }
+    getSpriteName() {
+        return this.constructor.name.toLowerCase(); // e.g. player
+    }
+    getProjectileSpriteName() {
+        return `${this.getSpriteName()}Projectile`; // e.g. playerProjectile
     }
     updateState(state) {
         this.currentState = state;

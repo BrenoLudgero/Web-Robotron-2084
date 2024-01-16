@@ -2,9 +2,8 @@ export {Mommy};
 import {Human} from "../../models/human.js";
 
 class Mommy extends Human {
-    constructor(game, spritesIndex) {
+    constructor(game) {
         super(game, 14, 28);
-        this.sprites.src = spritesIndex.mommy;
         this.spritesheetIncrement = 16;
         this.hitboxConfig = {
             "left": {

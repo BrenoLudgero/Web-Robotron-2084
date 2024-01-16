@@ -9,7 +9,7 @@ function notEndOfSheet(actor, maxSpritesheetX) {
 }
 function nextSprite(actor) {
     const initialSpritesheetX = 0;
-    const maxSpritesheetX = actor.sprites.width - actor.width;
+    const maxSpritesheetX = actor.sprites.spritesheet.width - actor.width;
     if (notEndOfSheet(actor, maxSpritesheetX)) {
         actor.spritesheetX += actor.spritesheetIncrement;
         return;

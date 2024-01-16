@@ -2,16 +2,14 @@ export {Player};
 import {Actor} from "../models/actor.js";
 
 class Player extends Actor {
-    constructor(game, spritesIndex) {
+    constructor(game) {
         super(game, 15, 24);
-        this.sprites.src = spritesIndex.player;
         this.spritesheetIncrement = 16;
         this.screenX = (game.ui.canvas.width / 2) - this.width;
         this.screenY = (game.ui.canvas.height / 2) - this.height;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
         this.movementSpeed = 3.8;
         this.movementAnimationDelay = 2;
-        this.projectileSprite = spritesIndex.playerProjectile;
         this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 7;

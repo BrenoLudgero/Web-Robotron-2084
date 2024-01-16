@@ -1,9 +1,10 @@
 export {UIManager};
+import {Sprite} from "../models/sprite.js";
 
 class UIManager {
-    update(score, ui, actorMngr, spritesIndex) {
+    update(score, ui, actorMngr) {
         this.updateScoreElement(ui, score.currentScore);
-        this.updateLivesElement(ui, actorMngr, spritesIndex);
+        this.updateLivesElement(ui, actorMngr);
     }
     // Removes sprites from the previous frame
     clear(ui) {
@@ -46,32 +47,33 @@ class UIManager {
         let interfaceLivesCount = ui.livesElement.childElementCount;
         return interfaceLivesCount !== playerLives;
     }
-    createLifeIndicator(spritesIndex) {
+    createLifeIndicator() {
         const lifeIndicator = document.createElement("img");
-        lifeIndicator.src = spritesIndex.life;
+        const sprite = new Sprite("life").spritesheet;
+        lifeIndicator.src = sprite.src;
         lifeIndicator.alt = "Life Indicator";
         lifeIndicator.className = "life-indicator";
         lifeIndicator.width = "";
         lifeIndicator.height = "";
         return lifeIndicator;
     }
-    updateLifeIndicators(ui, currentLives, spritesIndex) {
+    updateLifeIndicators(ui, currentLives) {
         ui.livesElement.innerHTML = "";
         for (let i = 0; i < currentLives; i++) {
-            let lifeIndicator = this.createLifeIndicator(spritesIndex);
+            let lifeIndicator = this.createLifeIndicator();
             ui.livesElement.appendChild(lifeIndicator);
         }
     }
     enoughSpaceForLives(ui) {
         return ui.livesElement.childElementCount < 20;
     }
-    updateLivesElement(ui, actorMngr, spritesIndex) {
+    updateLivesElement(ui, actorMngr) {
         let playerLives = actorMngr.actors.player.lives;
         if (!this.livesHasChanged(ui, playerLives)) {
             return;
         }
         if (this.enoughSpaceForLives(ui)) {
-            this.updateLifeIndicators(ui, playerLives, spritesIndex);
+            this.updateLifeIndicators(ui, playerLives);
         } else {
             this.updateSurplusIndicator(ui, playerLives);
         }

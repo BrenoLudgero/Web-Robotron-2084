@@ -3,9 +3,8 @@ import {Enemy} from "../../models/enemy.js";
 import {canMove} from "../../helpers/globals.js";
 
 class Hulk extends Enemy {
-    constructor(game, spritesIndex) {
+    constructor(game) {
         super(game, 26, 32);
-        this.sprites.src = spritesIndex.hulk;
         this.spritesheetIncrement = 28;
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
