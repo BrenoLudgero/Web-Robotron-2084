@@ -4,13 +4,13 @@ import {cycleSprite} from "../helpers/globals.js";
 class Actor {
     constructor(game, originalWidth, originalHeight) {
         this.game = game;
-        this.alive = true;
+        this.currentState = "alive";
         this.sprites = new Image(); // src defined in each actor
         this.spritesheetX = 0;
         this.spritesheetY = 0;
         this.setScaledDimensions(originalWidth, originalHeight);
         this.setMovementBoundaries(game);
-        this.limbs = {};
+        this.limbs = {}; // Each limb has its own hitbox
         this.hitboxes = {};
     }
     draw(context) {
@@ -26,6 +26,9 @@ class Actor {
             this.originalHeight * 1.5
         );
         this.game.debuggerr.drawHitboxes(this, context);
+    }
+    updateState(state) {
+        this.currentState = state;
     }
     // Initializes width and height with scaled dimensions
     setScaledDimensions(originalWidth, originalHeight) {

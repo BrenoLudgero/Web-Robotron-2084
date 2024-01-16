@@ -8,7 +8,6 @@ class Human extends Actor {
         super(game, originalWidth, originalHeight);
         this.points = 1000; // Awarded by collisionMngr.checkHumanCollisions
         this.ai = new ArtificialIntelligence();
-        this.rescued = false;
         this.movementType = 2; // 8 directions
         this.movementSpeed = 4;
         this.movementAnimationDelay = 9;
@@ -22,10 +21,4 @@ class Human extends Actor {
             this.animate(this, this.currentDirection);
         }
     }
-    /* isMommyOrDaddy() {
-        return (
-            this.constructor.name === "Mommy"
-            || this.constructor.name === "Daddy"
-        );
-    } */
 }

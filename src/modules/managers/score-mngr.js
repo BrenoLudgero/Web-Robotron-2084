@@ -6,11 +6,9 @@ class ScoreManager {
         this.rescueBonus = 0;
         this.nextExtraLife = 25000;
     }
-    update(game) {
-        const {actorMngr, soundMngr} = game;
-        this.awardExtraLife(actorMngr.player, soundMngr);
+    update(player, soundMngr) {
+        this.awardExtraLife(player, soundMngr);
     }
-    // Methods below used in collisionMngr
     resetRescueBonus() {
         this.rescueBonus = 0;
     }

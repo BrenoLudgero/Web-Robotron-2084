@@ -3,15 +3,16 @@ import {typeOfActor} from "../helpers/globals.js";
 
 class CollisionManager {
     update(game) {
-        const {actorMngr, scoreMngr, soundMngr, projectileMngr, debuggerr} = game;
+        const {actorMngr, projectileMngr, debuggerr} = game;
+        const {player, enemies, humans} = actorMngr.actors;
         if (!debuggerr.actorInvincibility) {
-            this.checkAllCollisions(actorMngr.player, actorMngr.enemies, actorMngr.humans, scoreMngr, soundMngr, projectileMngr);
+            this.checkAllCollisions(player, enemies, humans, projectileMngr);
         }
     }
-    checkAllCollisions(player, enemies, humans, scoreMngr, soundMngr, projectileMngr) {
-        this.checkPlayerCollisions(player, enemies, scoreMngr, soundMngr, projectileMngr);
-        this.checkHumanCollisions(player, enemies, humans, scoreMngr, soundMngr);
-        this.checkProjectileCollisions(projectileMngr.projectiles, enemies, scoreMngr, soundMngr);
+    checkAllCollisions(player, enemies, humans, projectileMngr) {
+        this.checkPlayerCollisions(player, enemies);
+        this.checkHumanCollisions(player, enemies, humans);
+        this.checkProjectileCollisions(projectileMngr.projectiles, enemies);
     }
     isProjectile(actor) {
         return actor.angle !== undefined;
@@ -69,63 +70,47 @@ class CollisionManager {
         }
         return false;
     }
-    // IF ... RETURN TRUE BREAK
-    checkPlayerCollisions(player, enemies, scoreMngr, soundMngr, projectileMngr) {
+    checkPlayerCollisions(player, enemies) {
         for (const enemy of enemies) {
             if (this.checkSingleCollision(player, enemy)) {
-                player.alive = false;
-                player.lives--;
-                scoreMngr.resetRescueBonus();
-                soundMngr.playSound("playerDestroyed", 6);
-                projectileMngr.eraseAllProjectiles();
+                player.updateState("destroyed");
                 break;
             }
         }
     }
-    // IF ... RETURN TRUE BREAK
-    checkHumanPlayerCollision(humans, player, scoreMngr, soundMngr) {
+    checkHumanPlayerCollision(humans, player) {
         for (const human of humans) {
             if (this.checkSingleCollision(player, human)) {
-                human.rescued = true;
-                scoreMngr.awardRecuePoints(human);
-                soundMngr.playSound("humanRescued", 4, 0.47);
+                human.updateState("rescued");
                 break;
             }
         }
     }
-    isHulk(enemy) {
-        return enemy.constructor.name === "Hulk";
-    }
-    // IF ... RETURN TRUE BREAK
-    checkHumanEnemyCollision(humans, enemies, soundMngr) {
+    checkHumanEnemyCollision(humans, enemies) {
         for (const enemy of enemies) {
             if (typeOfActor(enemy, "Hulk")) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
-                        human.alive = false;
-                        soundMngr.playSound("humanDestroyed", 4, 0.48);
+                        human.updateState("destroyed");
                         break;
                     }
                 }
             }
         }
     }
-    checkHumanCollisions(player, enemies, humans, scoreMngr, soundMngr) {
-        this.checkHumanPlayerCollision(humans, player, scoreMngr, soundMngr);
-        this.checkHumanEnemyCollision(humans, enemies, soundMngr);
+    checkHumanCollisions(player, enemies, humans) {
+        this.checkHumanPlayerCollision(humans, player);
+        this.checkHumanEnemyCollision(humans, enemies);
     }
     // Checks collision between all projectiles and enemies
-    checkProjectileCollisions(projectiles, enemies, scoreMngr, soundMngr) {
+    checkProjectileCollisions(projectiles, enemies) {
         for (const projectile of projectiles) {
             for (const enemy of enemies) {
-                // IF ... RETURN TRUE BREAK
                 if (this.checkSingleCollision(projectile, enemy)) {
                     if (!typeOfActor(enemy, "Hulk")) {
-                        enemy.alive = false;
-                        scoreMngr.awardEnemyPoints(enemy);
-                        soundMngr.playSound("enemyDestroyed", 3, 0.086);
+                        enemy.updateState("destroyed");
                     } else {
-                        this.knockbackHulk(projectile, enemy);
+                        projectile.knockback(enemy);
                     }
                     projectile.mustDelete = true;
                     break;

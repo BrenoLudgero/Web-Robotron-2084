@@ -4,25 +4,28 @@ import {RNG, getDistance} from "../helpers/globals.js"
 
 class ActorManager {
     constructor(game, spritesIndex) {
-        this.player = new Player(game, spritesIndex);
-        this.enemies = new Set();
-        this.humans = new Set();
-    }
-    update(game) {
-        const {enemies, humans, player} = this;
-        const debuggerr = game.debuggerr;
-        player.update();
-        if (debuggerr.shouldUpdateActors) {
-            this.updateActors(enemies, game);
-            this.updateActors(humans, game);
-            this.deleteDestroyedOrRescued(enemies, humans);
+        this.game = game;
+        this.actors = {
+            player: new Player(game, spritesIndex),
+            enemies: new Set(),
+            humans: new Set()
         }
     }
+    update() {
+        const {player, enemies, humans} = this.actors;
+        const debuggerr = this.game.debuggerr;
+        if (debuggerr.shouldUpdateActors) {
+            this.updateActors(enemies);
+            this.updateActors(humans);
+            this.deleteDestroyedOrRescued(enemies, humans);
+        }
+        player.update();
+    }
     draw(context) {
-        const {player, enemies, humans} = this;
-        player.draw(context);
+        const {player, enemies, humans} = this.actors;
         this.drawActors(enemies, context);
         this.drawActors(humans, context);
+        player.draw(context);
     }
     awayFromOthers(actor, otherActors, minDistance) {
         let away = true;
@@ -34,12 +37,14 @@ class ActorManager {
         return away;
     }
     setRandomScreenPosition(newActor) {
-        newActor.screenX = RNG(3, newActor.movementBoundaries.x);
-        newActor.screenY = RNG(3, newActor.movementBoundaries.y);
+        const minimumX = 3;
+        const minimumY = 3;
+        newActor.screenX = RNG(minimumX, newActor.movementBoundaries.x);
+        newActor.screenY = RNG(minimumY, newActor.movementBoundaries.y);
     }
     // Checks if the newActor is at a sufficient distance from other actors before spawning
     safeToSpawn(newActor) {
-        const {player, enemies, humans} = this;
+        const {player, enemies, humans} = this.actors;
         const {minPlayerSpawnDistance, minHumanSpawnDistance, minEnemySpawnDistance} = newActor;
         let safeToSpawn = false;
         while (!safeToSpawn) {
@@ -59,24 +64,24 @@ class ActorManager {
         const type = this.getParentClass(actorType);
         switch(type) {
             case("Human"):
-                this.humans.add(newActor); break;
+                this.actors.humans.add(newActor); break;
             case("Enemy"):
-                this.enemies.add(newActor); break;
+                this.actors.enemies.add(newActor); break;
             case("Obstacle"):
-                this.obtacles.add(newActor); break;
+                this.actors.obtacles.add(newActor); break;
         }
     }
-    addActors(game, numberActors, actorType, spritesIndex) {
+    addActors(numberActors, actorType, spritesIndex) {
         for (let i = 0; i < numberActors; i++) {
-            const newActor = new actorType(game, spritesIndex);
+            const newActor = new actorType(this.game, spritesIndex);
             if (this.safeToSpawn(newActor)) {
                 this.addActor(newActor, actorType);
             }
         }
     }
-    updateActors(actors, game) {
+    updateActors(actors) {
         actors.forEach(actor => {
-            actor.update(game);
+            actor.update(this.game);
         });
     }
     drawActors(actors, context) {

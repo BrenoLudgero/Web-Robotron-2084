@@ -8,6 +8,7 @@ import {ProjectileManager} from "../managers/projectile-mngr.js";
 import {InputManager} from "../managers/input-mngr.js";
 import {ScoreManager} from "../managers/score-mngr.js";
 import {CollisionManager} from "../managers/collision-mngr.js";
+import {StateManager} from "../managers/state-mngr.js";
 import {Debugger} from "./debugger.js";
 
 import {Grunt} from "../actors/enemies/grunt.js";
@@ -26,17 +27,20 @@ class Game {
         this.projectileMngr = new ProjectileManager();
         this.inputMngr = new InputManager(this);
         this.collisionMngr = new CollisionManager();
+        this.stateMngr = new StateManager(this);
         this.debuggerr = new Debugger();
     }
     update() {
-        const {scoreMngr, ui, uiMngr, actorMngr, projectileMngr, inputMngr, collisionMngr} = this;
-        if (actorMngr.player.alive) {
-            actorMngr.update(this);
-            inputMngr.update(actorMngr);
-            projectileMngr.update(this);
-            collisionMngr.update(this);
-            scoreMngr.update(this);
-            uiMngr.update(scoreMngr, ui, actorMngr, spritesIndex);
+        const {scoreMngr, ui, soundMngr, actorMngr, stateMngr} = this;
+        let player = actorMngr.actors.player;
+        if (!stateMngr.actorDestroyed(player)) {
+            actorMngr.update();
+            this.inputMngr.update(player);
+            this.projectileMngr.update(this);
+            this.collisionMngr.update(this);
+            scoreMngr.update(player, soundMngr);
+            this.uiMngr.update(scoreMngr, ui, actorMngr, spritesIndex);
+            stateMngr.update();
         }
     }
     draw() {
@@ -49,8 +53,8 @@ class Game {
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const {actorMngr} = this;
-        actorMngr.addActors(this, 15, Mommy, spritesIndex);
-        actorMngr.addActors(this, 10, Hulk, spritesIndex);
-        actorMngr.addActors(this, 25, Grunt, spritesIndex);
+        actorMngr.addActors(15, Mommy, spritesIndex);
+        actorMngr.addActors(10, Hulk, spritesIndex);
+        //actorMngr.addActors(25, Grunt, spritesIndex);
     }
 }

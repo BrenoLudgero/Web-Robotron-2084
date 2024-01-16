@@ -6,9 +6,9 @@ class InputManager {
         this.playerControls = ["w", "a", "s", "d", "arrowup", "arrowleft", "arrowdown", "arrowright"];
         this.listenToPlayerControls(game);
     }
-    update(actorMngr) {
-        this.processMovementKeys(actorMngr.player);
-        this.processShootingKeys(actorMngr.player);
+    update(player) {
+        this.processMovementKeys(player);
+        this.processShootingKeys(player);
     }
     pressing(key) {
         return this.keysPressed.includes(key);
@@ -40,10 +40,10 @@ class InputManager {
     }
     listenToPlayerControls(game) {
         const {keysPressed} = this;
-        window.addEventListener("keydown", (e) => this.handleKeyDown(e, keysPressed));
-        window.addEventListener("keyup", (e) => this.handleKeyUp(e, game, keysPressed));
-        //window.addEventListener("mousedown", (e) => console.log("CLICK"));
-        //window.addEventListener("mouseup", (e) => console.log("NO CLICK"));
+        window.addEventListener("keydown", (event) => this.handleKeyDown(event, keysPressed));
+        window.addEventListener("keyup", (event) => this.handleKeyUp(event, game, keysPressed));
+        //window.addEventListener("mousedown", (event) => console.log("CLICK"));
+        //window.addEventListener("mouseup", (event) => console.log("NO CLICK"));
     }
     processKeyFunction(player, key, method) {
         if (this.pressing(key)) {

@@ -6,7 +6,7 @@ class ArtificialIntelligence {
         this.directions = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
         this.previousDirections = [];
     }
-    // [Player] --> [Grunt]
+    // [Player]  [Grunt]
     atPlayerRight(grunt, player) {
         return grunt.screenX > player.screenX;
     }
@@ -15,7 +15,7 @@ class ArtificialIntelligence {
     }
     // Grunts only. Step towards the player
     chasePlayer(grunt, game) {
-        const player = game.actorMngr.player;
+        const player = game.actorMngr.actors.player;
         if (this.atPlayerRight(grunt, player)) {
             grunt.screenX -= grunt.movementSpeed;
         } else {

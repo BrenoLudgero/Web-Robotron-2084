@@ -19,7 +19,7 @@ class Player extends Actor {
             "left": {
                 spriteCycle: 51,
                 head: {width: 11, xPosition: 4, yPosition: 3},
-                torso: {width: 11, height: 11, xPosition: 4, yPosition: 16},
+                torso: {width: 10, height: 11, xPosition: 6, yPosition: 16},
                 leftArm: {width: 0, height: 0},
                 rightArm: {width: 0, height: 0},
                 legs: {width: 6, height: 12, xPosition: 7}
@@ -27,7 +27,7 @@ class Player extends Actor {
             "right": {
                 spriteCycle: 75,
                 head: {width: 11, xPosition: 6, yPosition: 3},
-                torso: {width: 11, height: 11, xPosition: 6, yPosition: 16},
+                torso: {width: 10, height: 11, xPosition: 6, yPosition: 16},
                 leftArm: {width: 0, height: 0},
                 rightArm: {width: 0, height: 0},
                 legs: {width: 6, height: 12, xPosition: 8}
@@ -64,7 +64,7 @@ class Player extends Actor {
         if (this.canShoot()) {
             projectileMngr.createProjectile(projectileSprite, playerX, playerY, projectileSpeed, direction);
             this.projectileTimer = projectileDelay;
-            soundMngr.playSound("playerShot", 2, 0.1);
+            soundMngr.playSound("playerShot", 2);
         }
     }
     // Methods below called in inputMngr.processMovementKeys
