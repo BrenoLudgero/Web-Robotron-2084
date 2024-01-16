@@ -39,8 +39,8 @@ class Game {
             this.projectileMngr.update(this);
             this.collisionMngr.update(this);
             scoreMngr.update(player, soundMngr);
-            this.uiMngr.update(scoreMngr, ui, actorMngr, spritesIndex);
             stateMngr.update();
+            this.uiMngr.update(scoreMngr, ui, actorMngr, spritesIndex);
         }
     }
     draw() {
