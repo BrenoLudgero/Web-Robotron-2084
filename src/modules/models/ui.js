@@ -1,13 +1,13 @@
 export {UserInterface};
 
 class UserInterface {
-    constructor(scoreMngr) {
+    constructor(score) {
         this.canvas = document.querySelector("canvas");
         this.setCanvasScaledResolution(3);
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
         this.scoreElement = document.getElementById("score");
-        this.scoreElement.innerHTML = scoreMngr.score;
+        this.scoreElement.innerHTML = score.currentScore;
         this.livesElement = document.getElementById("lives");
         this.FPSElement = document.getElementById("fps-counter");
     }

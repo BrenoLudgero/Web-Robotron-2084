@@ -1,8 +1,8 @@
 export {UIManager};
 
 class UIManager {
-    update(scoreMngr, ui, actorMngr, spritesIndex) {
-        this.updateScoreElement(ui, scoreMngr);
+    update(score, ui, actorMngr, spritesIndex) {
+        this.updateScoreElement(ui, score.currentScore);
         this.updateLivesElement(ui, actorMngr, spritesIndex);
     }
     // Removes sprites from the previous frame
@@ -76,12 +76,12 @@ class UIManager {
             this.updateSurplusIndicator(ui, playerLives);
         }
     }
-    scoreHasChanged(ui, scoreMngr) {
-        return ui.scoreElement.innerHTML != scoreMngr.score;
+    scoreHasChanged(ui, score) {
+        return ui.scoreElement.innerHTML != score;
     }
-    updateScoreElement(ui, scoreMngr) {
-        if (this.scoreHasChanged(ui, scoreMngr)) {
-            ui.scoreElement.innerHTML = scoreMngr.score;
+    updateScoreElement(ui, score) {
+        if (this.scoreHasChanged(ui, score)) {
+            ui.scoreElement.innerHTML = score;
         }
     }
     updateFPSElement(ui, FPS) {

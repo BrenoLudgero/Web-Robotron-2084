@@ -1,8 +1,8 @@
-export {ScoreManager};
+export {Score};
 
-class ScoreManager {
+class Score {
     constructor() {
-        this.score = 0;
+        this.currentScore = 0;
         this.rescueBonus = 0;
         this.nextExtraLife = 25000;
     }
@@ -18,16 +18,16 @@ class ScoreManager {
     // Awards human points + bonus up to 5,000 total
     // 1,000 bonus after 2 or more consecutive rescues
     awardRecuePoints(human) {
-        this.score += (human.points + this.rescueBonus);
+        this.currentScore += (human.points + this.rescueBonus);
         if (this.belowBonusLimit()) {
             this.rescueBonus += 1000;
         }
     }
     awardEnemyPoints(enemy) {
-        this.score += enemy.points;
+        this.currentScore += enemy.points;
     }
     extraLifeScoreAchieved() {
-        return this.score >= this.nextExtraLife;
+        return this.currentScore >= this.nextExtraLife;
     }
     // Awards an extra life when the score is divisible by 25,000
     awardExtraLife(player, soundMngr) {

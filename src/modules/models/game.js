@@ -6,7 +6,7 @@ import {SoundManager} from "../managers/sound-mngr.js";
 import {ActorManager} from "../managers/actor-mngr.js";
 import {ProjectileManager} from "../managers/projectile-mngr.js";
 import {InputManager} from "../managers/input-mngr.js";
-import {ScoreManager} from "../managers/score-mngr.js";
+import {Score} from "./score.js";
 import {CollisionManager} from "../managers/collision-mngr.js";
 import {StateManager} from "../managers/state-mngr.js";
 import {Debugger} from "./debugger.js";
@@ -19,8 +19,8 @@ import {Mommy} from "../actors/humans/mommy.js";
 class Game {
     constructor() {
         this.globalTimer = 0;
-        this.scoreMngr = new ScoreManager();
-        this.ui = new UserInterface(this.scoreMngr);
+        this.score = new Score();
+        this.ui = new UserInterface(this.score);
         this.uiMngr = new UIManager();
         this.soundMngr = new SoundManager();
         this.actorMngr = new ActorManager(this, spritesIndex);
@@ -31,16 +31,16 @@ class Game {
         this.debuggerr = new Debugger();
     }
     update() {
-        const {scoreMngr, ui, soundMngr, actorMngr, stateMngr} = this;
+        const {score, ui, soundMngr, actorMngr, stateMngr} = this;
         let player = actorMngr.actors.player;
         if (!stateMngr.actorDestroyed(player)) {
             actorMngr.update();
             this.inputMngr.update(player);
             this.projectileMngr.update(this);
             this.collisionMngr.update(this);
-            scoreMngr.update(player, soundMngr);
+            score.update(player, soundMngr);
             stateMngr.update();
-            this.uiMngr.update(scoreMngr, ui, actorMngr, spritesIndex);
+            this.uiMngr.update(score, ui, actorMngr, spritesIndex);
         }
     }
     draw() {

@@ -3,7 +3,7 @@ export {StateManager};
 class StateManager {
     constructor(game) {
         this.game = game;
-        this.scoreMngr = game.scoreMngr;
+        this.score = game.score;
         this.soundMngr = game.soundMngr;
         this.projectileMngr = game.projectileMngr;
         this.actors = game.actorMngr.actors;
@@ -18,7 +18,7 @@ class StateManager {
     handlePlayerDestroyed() {
         if (this.actorDestroyed(this.player)) {
             this.player.lives--;
-            this.scoreMngr.resetRescueBonus();
+            this.score.resetRescueBonus();
             this.soundMngr.playSound("playerDestroyed", 6);
             this.projectileMngr.eraseAllProjectiles();
         }
@@ -33,7 +33,7 @@ class StateManager {
     }
     humanRescued(human) {
         if (this.humanWasRecued(human)) {
-            this.scoreMngr.awardRecuePoints(human);
+            this.score.awardRecuePoints(human);
             this.soundMngr.playSound("humanRescued", 4, 0.4);
         }
     }
@@ -45,7 +45,7 @@ class StateManager {
     }
     enemyDestroyed(enemy) {
         if (this.actorDestroyed(enemy)) {
-            this.scoreMngr.awardEnemyPoints(enemy);
+            this.score.awardEnemyPoints(enemy);
             this.soundMngr.playSound("enemyDestroyed", 3, 0.086);
         }
     }
