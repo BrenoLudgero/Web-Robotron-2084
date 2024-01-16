@@ -1,4 +1,5 @@
 export {CollisionManager};
+import {typeOfActor} from "../helpers/globals.js";
 
 class CollisionManager {
     update(game) {
@@ -98,7 +99,7 @@ class CollisionManager {
     // IF ... RETURN TRUE BREAK
     checkHumanEnemyCollision(humans, enemies, soundMngr) {
         for (const enemy of enemies) {
-            if (this.isHulk(enemy)) {
+            if (typeOfActor(enemy, "Hulk")) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
                         human.alive = false;
@@ -113,29 +114,13 @@ class CollisionManager {
         this.checkHumanPlayerCollision(humans, player, scoreMngr, soundMngr);
         this.checkHumanEnemyCollision(humans, enemies, soundMngr);
     }
-    knockbackHulk(projectile, hulk) {
-        const {direction, knockbackForce} = projectile;
-        const directionMap = {
-            "up": {x: 0, y: -1},
-            "upright": {x: 1, y: -1},
-            "upleft": {x: -1, y: -1},
-            "left": {x: -1, y: 0},
-            "right": {x: 1, y: 0},
-            "down": {x: 0, y: 1},
-            "downright": {x: 1, y: 1},
-            "downleft": {x: -1, y: 1},
-        };
-        const {x: knockbackXDirection, y: knockbackYDirection} = directionMap[direction];
-        hulk.screenX += knockbackXDirection * knockbackForce;
-        hulk.screenY += knockbackYDirection * knockbackForce;
-    }
     // Checks collision between all projectiles and enemies
     checkProjectileCollisions(projectiles, enemies, scoreMngr, soundMngr) {
         for (const projectile of projectiles) {
             for (const enemy of enemies) {
                 // IF ... RETURN TRUE BREAK
                 if (this.checkSingleCollision(projectile, enemy)) {
-                    if (!this.isHulk(enemy)) {
+                    if (!typeOfActor(enemy, "Hulk")) {
                         enemy.alive = false;
                         scoreMngr.awardEnemyPoints(enemy);
                         soundMngr.playSound("enemyDestroyed", 3, 0.086);

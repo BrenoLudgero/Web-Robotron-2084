@@ -1,5 +1,5 @@
 export {Game};
-import {spritesIndex, soundFxIndex} from "../helpers/indexes.js";
+import {spritesIndex} from "../helpers/indexes.js";
 import {UserInterface} from "./ui.js";
 import {UIManager} from "../managers/ui-mngr.js";
 import {SoundManager} from "../managers/sound-mngr.js";
@@ -21,7 +21,7 @@ class Game {
         this.scoreMngr = new ScoreManager();
         this.ui = new UserInterface(this.scoreMngr);
         this.uiMngr = new UIManager();
-        this.soundMngr = new SoundManager(soundFxIndex);
+        this.soundMngr = new SoundManager();
         this.actorMngr = new ActorManager(this, spritesIndex);
         this.projectileMngr = new ProjectileManager();
         this.inputMngr = new InputManager(this);
@@ -49,8 +49,8 @@ class Game {
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const {actorMngr} = this;
-        actorMngr.addHumans(this, 15, Mommy, spritesIndex);
-        actorMngr.addEnemies(this, 10, Hulk, spritesIndex);
-        actorMngr.addEnemies(this, 25, Grunt, spritesIndex);
+        actorMngr.addActors(this, 15, Mommy, spritesIndex);
+        actorMngr.addActors(this, 10, Hulk, spritesIndex);
+        actorMngr.addActors(this, 25, Grunt, spritesIndex);
     }
 }

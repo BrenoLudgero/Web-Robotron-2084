@@ -13,8 +13,8 @@ class Projectile {
         this.screenY = screenY;
         this.direction = direction;
         this.speed = speed;
-        this.angle = 0; // Rotation angle depending on the 'go' direction
-        this.knockbackForce = 6; // For Hulk collision
+        this.angle = 0;
+        this.knockbackForce = 6;
         this.mustDelete = false;
         // Speed defined by each actor
     }
@@ -41,6 +41,21 @@ class Projectile {
             || screenY > ui.canvas.height + 10 
             || screenY < -10
         );
+    }
+    knockback(hulk) {
+        const directionMap = {
+            "up": {x: 0, y: -1},
+            "upright": {x: 1, y: -1},
+            "upleft": {x: -1, y: -1},
+            "left": {x: -1, y: 0},
+            "right": {x: 1, y: 0},
+            "down": {x: 0, y: 1},
+            "downright": {x: 1, y: 1},
+            "downleft": {x: -1, y: 1},
+        };
+        const {x: knockbackXDirection, y: knockbackYDirection} = directionMap[this.direction];
+        hulk.screenX += knockbackXDirection * this.knockbackForce;
+        hulk.screenY += knockbackYDirection * this.knockbackForce;
     }
     // Height is adjusted to eliminate gaps between hitboxes
     moveUp() {

@@ -42,8 +42,9 @@ class UIManager {
             this.removeSurplusIndicator(surplusIndicator);
         }
     }
-    livesHasChanged(ui, actorMngr) {
-        return ui.livesElement.childElementCount !== actorMngr.player.lives;
+    livesHasChanged(ui, playerLives) {
+        let interfaceLivesCount = ui.livesElement.childElementCount;
+        return interfaceLivesCount !== playerLives;
     }
     createLifeIndicator(spritesIndex) {
         const lifeIndicator = document.createElement("img");
@@ -65,14 +66,14 @@ class UIManager {
         return ui.livesElement.childElementCount < 20;
     }
     updateLivesElement(ui, actorMngr, spritesIndex) {
-        if (!this.livesHasChanged(ui, actorMngr)) {
+        let playerLives = actorMngr.actors.player.lives;
+        if (!this.livesHasChanged(ui, playerLives)) {
             return;
         }
-        const currentLives = actorMngr.player.lives;
         if (this.enoughSpaceForLives(ui)) {
-            this.updateLifeIndicators(ui, currentLives, spritesIndex);
+            this.updateLifeIndicators(ui, playerLives, spritesIndex);
         } else {
-            this.updateSurplusIndicator(ui, currentLives);
+            this.updateSurplusIndicator(ui, playerLives);
         }
     }
     scoreHasChanged(ui, scoreMngr) {

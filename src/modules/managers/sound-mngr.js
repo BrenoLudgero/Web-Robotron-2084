@@ -1,9 +1,10 @@
 export {SoundManager};
+import {soundFxIndex} from "../helpers/indexes.js";
 
 // Plays one sound at a time depending on its priority
 // Priority levels range from 1 (lowest) to 6 (highest)
 class SoundManager {
-    constructor(soundFxIndex) {
+    constructor() {
         this.currentSound = {
             sound: null,
             priority: 0

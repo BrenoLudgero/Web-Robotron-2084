@@ -15,7 +15,7 @@ class ActorManager {
         if (debuggerr.shouldUpdateActors) {
             this.updateActors(enemies, game);
             this.updateActors(humans, game);
-            this.removeDestroyedOrRescued(enemies, humans);
+            this.deleteDestroyedOrRescued(enemies, humans);
         }
     }
     draw(context) {
@@ -52,19 +52,25 @@ class ActorManager {
         }
         return safeToSpawn;
     }
-    addEnemies(game, numberEnemies, enemyType, spritesIndex) {
-        for (let i = 0; i < numberEnemies; i++) {
-            const newEnemy = new enemyType(game, spritesIndex);
-            if (this.safeToSpawn(newEnemy)) {
-                this.enemies.add(newEnemy);
-            }
+    getParentClass(actorType) {
+        return Object.getPrototypeOf(actorType).name;
+    }
+    addActor(newActor, actorType) {
+        const type = this.getParentClass(actorType);
+        switch(type) {
+            case("Human"):
+                this.humans.add(newActor); break;
+            case("Enemy"):
+                this.enemies.add(newActor); break;
+            case("Obstacle"):
+                this.obtacles.add(newActor); break;
         }
     }
-    addHumans(game, numberHumans, humanType, spritesIndex) {
-        for (let i = 0; i < numberHumans; i++) {
-            const newHuman = new humanType(game, spritesIndex);
-            if (this.safeToSpawn(newHuman)) {
-                this.humans.add(newHuman);
+    addActors(game, numberActors, actorType, spritesIndex) {
+        for (let i = 0; i < numberActors; i++) {
+            const newActor = new actorType(game, spritesIndex);
+            if (this.safeToSpawn(newActor)) {
+                this.addActor(newActor, actorType);
             }
         }
     }
@@ -78,16 +84,21 @@ class ActorManager {
             actor.draw(context);
         });
     }
-    removeDestroyedOrRescued(enemies, humans) {
-        enemies.forEach(enemy => {
-            if (!enemy.alive) {
-                enemies.delete(enemy);
+    wasDestroyed(actor) {
+        return actor.currentState === "destroyed";
+    }
+    wasRescued(human) {
+        return human.currentState === "rescued";
+    }
+    deleteActors(actors) {
+        actors.forEach(actor => {
+            if (this.wasDestroyed(actor) || this.wasRescued(actor)) {
+                actors.delete(actor);
             }
         });
-        humans.forEach(human => {
-            if (!human.alive || human.rescued) {
-                humans.delete(human);
-            }
-        });
+    }
+    deleteDestroyedOrRescued(enemies, humans) {
+        this.deleteActors(enemies);
+        this.deleteActors(humans);
     }
 }

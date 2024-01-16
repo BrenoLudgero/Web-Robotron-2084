@@ -1,4 +1,4 @@
-export {RNG, cycleSprite, getDistance, canMove};
+export {RNG, typeOfActor, canMove, cycleSprite, getDistance};
 
 // Generates a random number between (and including) min and max
 function RNG(min, max) {
@@ -16,8 +16,8 @@ function nextSprite(actor) {
     }
     actor.spritesheetX = initialSpritesheetX;
 }
-function isPlayer(actor) {
-    return actor.constructor.name === "Player";
+function typeOfActor(actor, type) {
+    return actor.constructor.name === type;
 }
 function canMove(actor) {
     return actor.game.globalTimer % actor.movementAnimationDelay === 0;
@@ -31,7 +31,7 @@ function cycleSprite(actor, spritesheetY) {
     if (spritesheetY != undefined) {
         actor.spritesheetY = spritesheetY;
     }
-    if (isPlayer(actor)) {
+    if (typeOfActor(actor, "Player")) {
         nextPlayerSprite(actor);
     }
     else {
