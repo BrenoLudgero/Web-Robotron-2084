@@ -16,18 +16,18 @@ class Player extends Actor {
         this.hitboxConfig = {
             "left": {
                 spritesheetY: 51,
-                head: {width: 11, xPosition: 4, yPosition: 3},
-                torso: {width: 10, height: 11, xPosition: 6, yPosition: 16},
-                leftArm: {width: 0, height: 0},
-                rightArm: {width: 0, height: 0},
+                head: {width: 11, xPosition: 4, yPosition: 2},
+                torso: {width: 8, height: 11, xPosition: 6, yPosition: 16},
+                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
                 legs: {width: 6, height: 12, xPosition: 7}
             },
             "right": {
                 spritesheetY: 75,
-                head: {width: 11, xPosition: 6, yPosition: 3},
-                torso: {width: 10, height: 11, xPosition: 6, yPosition: 16},
-                leftArm: {width: 0, height: 0},
-                rightArm: {width: 0, height: 0},
+                head: {width: 11, xPosition: 6, yPosition: 2},
+                torso: {width: 8, height: 11, xPosition: 7, yPosition: 16},
+                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
                 legs: {width: 6, height: 12, xPosition: 8}
             },
             "up": {

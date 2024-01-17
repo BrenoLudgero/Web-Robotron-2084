@@ -21,9 +21,9 @@ class CollisionManager {
         const hitbox = actor.hitboxes[limb];
         return {
             left: actor.screenX + hitbox.xPosition,
-            right: actor.screenX + (hitbox.xPosition + hitbox.width),
+            right: (actor.screenX + hitbox.xPosition) + hitbox.width,
             top: actor.screenY + hitbox.yPosition,
-            bottom: actor.screenY + (hitbox.yPosition + hitbox.height)
+            bottom: (actor.screenY + hitbox.yPosition) + hitbox.height
         };
     }
     getRotatedHitbox(projectile) {

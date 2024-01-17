@@ -15,8 +15,8 @@ class Hulk extends Enemy {
                 head: {xPosition: 16, yPosition: 3},
                 neck: {xPosition: 18, yPosition: 7},
                 torso: {xPosition: 9, yPosition: 11},
-                rightArm: {width: 0, height: 0},
-                leftArm: {width: 0, height: 0},
+                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
                 legs: {width: 14, height: 11, xPosition: 10, yPosition: 34}
             },
             "right": {
@@ -24,8 +24,8 @@ class Hulk extends Enemy {
                 head: {xPosition: 14, yPosition: 1},
                 neck: {xPosition: 17, yPosition: 6},
                 torso: {xPosition: 9, yPosition: 11},
-                rightArm: {width: 0, height: 0},
-                leftArm: {width: 0, height: 0},
+                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
                 legs: {width: 14, height: 11, xPosition: 15, yPosition: 33}
             },
             "up": {
