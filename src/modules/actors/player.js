@@ -47,7 +47,7 @@ class Player extends Actor {
             }
         };
         this.limbs = this.hitboxConfig.down;
-        this.setAllHitboxes(this.limbs);
+        this.game.hitboxMngr.setAllHitboxes(this);
     }
     update() {
         this.updateProjectileTimer();

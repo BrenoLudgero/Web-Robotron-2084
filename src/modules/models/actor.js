@@ -2,7 +2,7 @@ export {Actor};
 
 class Actor {
     constructor(game, originalWidth, originalHeight) {
-        this.game = game; // REMOVE WITH DEBUGGER
+        this.game = game;
         this.currentState = "alive";
         game.spriteMngr.setActorSprites(this);
         game.spriteMngr.setProjectileSprite(this);
@@ -10,7 +10,6 @@ class Actor {
         this.spritesheetY = 0;
         this.setScaledDimensions(originalWidth, originalHeight);
         this.setMovementBoundaries(game);
-        this.limbs = {}; // Each limb has its own hitbox
         this.hitboxes = {};
     }
     draw(context) {
@@ -51,32 +50,13 @@ class Actor {
             "y": ui.canvas.height - this.height
         };
     }
-    setHitbox(limb) {
-        const xPosition = this.limbs[limb].xPosition;
-        const yPosition = this.limbs[limb].yPosition;
-        this.hitboxes[limb] = {
-            width: this.limbs[limb].width,
-            height: this.limbs[limb].height,
-            xPosition,
-            yPosition
-        };
-    }
-    setAllHitboxes(limbs) {
-        for (const limb in limbs) {
-            this.setHitbox(limb);
-        }
-    }
-    updateHitboxes(actor, limb, properties) {
-        Object.keys(properties).forEach(property => {
-            actor.hitboxes[limb][property] = properties[property];
-        });
-    }
     animate(actor, direction) {
+        const {spriteMngr, hitboxMngr} = this.game;
         const config = actor.hitboxConfig[direction];
-        //game.spriteMngr.cycleSprite(this, config.spriteCycle);
+        spriteMngr.cycleSprite(this, config.spritesheetY);
         Object.keys(config).forEach(limb => {
             if (limb !== "spritesheetY") {
-                this.updateHitboxes(actor, limb, config[limb]);
+                hitboxMngr.updateHitboxes(actor, limb, config[limb]);
             }
         });
     }

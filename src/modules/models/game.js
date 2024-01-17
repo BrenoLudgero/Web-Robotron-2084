@@ -2,6 +2,7 @@ export {Game};
 import {Score} from "./score.js";
 import {UserInterface} from "./ui.js";
 import {SpriteManager} from "../managers/sprite-mngr.js";
+import {HitboxManager} from "../managers/hitbox-mngr.js";
 import {UIManager} from "../managers/ui-mngr.js";
 import {SoundManager} from "../managers/sound-mngr.js";
 import {ActorManager} from "../managers/actor-mngr.js";
@@ -21,6 +22,7 @@ class Game {
         this.globalTimer = 0;
         this.score = new Score();
         this.spriteMngr = new SpriteManager();
+        this.hitboxMngr = new HitboxManager();
         this.ui = new UserInterface(this);
         this.uiMngr = new UIManager();
         this.soundMngr = new SoundManager();

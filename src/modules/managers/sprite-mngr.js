@@ -9,7 +9,7 @@ class SpriteManager {
     }
     nextSprite(actor) {
         const initialSpritesheetX = 0;
-        const maxSpritesheetX = actor.sprites.spritesheet.width - actor.width;
+        const maxSpritesheetX = actor.sprites.width - actor.width;
         if (this.notEndOfSheet(actor, maxSpritesheetX)) {
             actor.spritesheetX += actor.spritesheetIncrement;
             return;
@@ -22,9 +22,7 @@ class SpriteManager {
         }
     }
     cycleSprite(actor, spritesheetY) {
-        if (spritesheetY != undefined) {
-            actor.spritesheetY = spritesheetY;
-        }
+        actor.spritesheetY = spritesheetY;
         if (typeOfActor(actor, "Player")) {
             this.nextPlayerSprite(actor);
         }

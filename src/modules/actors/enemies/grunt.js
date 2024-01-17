@@ -15,8 +15,8 @@ class Grunt extends Enemy {
             rightArm: {width: 3, height: 12, xPosition: 0, yPosition: 12},
             leftArm: {width: 3, height: 12, xPosition: 24, yPosition: 12},
             legs: {width: 15, height: 10, xPosition: 6, yPosition: 23}
-        },
-        this.setAllHitboxes(this.limbs);
+        };
+        this.game.hitboxMngr.setAllHitboxes(this);
     }
     update(game) {
         this.move(game);
