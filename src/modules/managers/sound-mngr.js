@@ -36,18 +36,23 @@ class SoundManager {
             }, minimumDuration * 1000);
         }
     }
+    userInteractedWithPage() {
+        return navigator.userActivation.hasBeenActive;
+    }
     playSound(sound, priority, minimumDuration) {
         const {currentSound} = this;
-        if (this.shouldPlayNow(priority)) {
-            clearTimeout(currentSound.timeout);
-        } 
-        // Ignores any sound of lower priority than the current one
-        else if (currentSound.timeout !== null) {
-            return;
+        if (this.userInteractedWithPage()) {
+            if (this.shouldPlayNow(priority)) {
+                clearTimeout(currentSound.timeout);
+            } 
+            // Ignores any sound of lower priority than the current one
+            else if (currentSound.timeout !== null) {
+                return;
+            }
+            this.stopCurrentSound(currentSound);
+            this.createNewSound(soundFxIndex[sound], priority);
+            this.playNewSound(currentSound);
+            this.playExclusively(minimumDuration);
         }
-        this.stopCurrentSound(currentSound);
-        this.createNewSound(soundFxIndex[sound], priority);
-        this.playNewSound(currentSound);
-        this.playExclusively(minimumDuration);
     }
 }
