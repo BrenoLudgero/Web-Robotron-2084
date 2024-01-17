@@ -1,13 +1,11 @@
 export {Actor};
-import {Sprite} from "./sprite.js";
-import {cycleSprite} from "../helpers/globals.js";
 
 class Actor {
     constructor(game, originalWidth, originalHeight) {
-        this.game = game;
+        this.game = game; // REMOVE WITH DEBUGGER
         this.currentState = "alive";
-        this.sprites = new Sprite(this.getSpriteName());
-        this.projectileSprite = new Sprite(this.getProjectileSpriteName());
+        game.spriteMngr.setActorSprites(this);
+        game.spriteMngr.setProjectileSprite(this);
         this.spritesheetX = 0;
         this.spritesheetY = 0;
         this.setScaledDimensions(originalWidth, originalHeight);
@@ -17,7 +15,7 @@ class Actor {
     }
     draw(context) {
         context.drawImage(
-            this.sprites.spritesheet, 
+            this.sprites, 
             this.spritesheetX, 
             this.spritesheetY, 
             this.originalWidth, 
@@ -29,11 +27,8 @@ class Actor {
         );
         this.game.debuggerr.drawHitboxes(this, context);
     }
-    getSpriteName() {
-        return this.constructor.name.toLowerCase(); // e.g. player
-    }
-    getProjectileSpriteName() {
-        return `${this.getSpriteName()}Projectile`; // e.g. playerProjectile
+    getActorType() {
+        return this.constructor.name.toLowerCase(); // e.g. 'player'
     }
     updateState(state) {
         this.currentState = state;
@@ -78,9 +73,9 @@ class Actor {
     }
     animate(actor, direction) {
         const config = actor.hitboxConfig[direction];
-        cycleSprite(this, config.spriteCycle);
+        //game.spriteMngr.cycleSprite(this, config.spriteCycle);
         Object.keys(config).forEach(limb => {
-            if (limb !== "spriteCycle") {
+            if (limb !== "spritesheetY") {
                 this.updateHitboxes(actor, limb, config[limb]);
             }
         });

@@ -1,5 +1,4 @@
 export {UIManager};
-import {Sprite} from "../models/sprite.js";
 
 class UIManager {
     update(score, ui, actorMngr) {
@@ -47,10 +46,9 @@ class UIManager {
         let interfaceLivesCount = ui.livesElement.childElementCount;
         return interfaceLivesCount !== playerLives;
     }
-    createLifeIndicator() {
+    createLifeIndicator(ui) {
         const lifeIndicator = document.createElement("img");
-        const sprite = new Sprite("life").spritesheet;
-        lifeIndicator.src = sprite.src;
+        lifeIndicator.src = ui.lifeIndicatorSprite.src;
         lifeIndicator.alt = "Life Indicator";
         lifeIndicator.className = "life-indicator";
         lifeIndicator.width = "";
@@ -60,7 +58,7 @@ class UIManager {
     updateLifeIndicators(ui, currentLives) {
         ui.livesElement.innerHTML = "";
         for (let i = 0; i < currentLives; i++) {
-            let lifeIndicator = this.createLifeIndicator();
+            let lifeIndicator = this.createLifeIndicator(ui);
             ui.livesElement.appendChild(lifeIndicator);
         }
     }

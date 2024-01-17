@@ -1,11 +1,12 @@
 export {Game};
+import {Score} from "./score.js";
 import {UserInterface} from "./ui.js";
+import {SpriteManager} from "../managers/sprite-mngr.js";
 import {UIManager} from "../managers/ui-mngr.js";
 import {SoundManager} from "../managers/sound-mngr.js";
 import {ActorManager} from "../managers/actor-mngr.js";
 import {ProjectileManager} from "../managers/projectile-mngr.js";
 import {InputManager} from "../managers/input-mngr.js";
-import {Score} from "./score.js";
 import {CollisionManager} from "../managers/collision-mngr.js";
 import {StateManager} from "../managers/state-mngr.js";
 import {Debugger} from "./debugger.js";
@@ -19,7 +20,8 @@ class Game {
     constructor() {
         this.globalTimer = 0;
         this.score = new Score();
-        this.ui = new UserInterface(this.score);
+        this.spriteMngr = new SpriteManager();
+        this.ui = new UserInterface(this);
         this.uiMngr = new UIManager();
         this.soundMngr = new SoundManager();
         this.actorMngr = new ActorManager(this);

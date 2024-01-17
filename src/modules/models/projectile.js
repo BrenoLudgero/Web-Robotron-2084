@@ -28,7 +28,7 @@ class Projectile {
         context.save();
         context.translate(screenX + (width / 2), screenY + (height / 2));
         context.rotate(angle);
-        context.drawImage(this.sprite.spritesheet, -width / 2, -height / 2);
+        context.drawImage(this.sprite, -width / 2, -height / 2);
         context.restore();
         game.debuggerr.drawHitboxes(this, context);
     }

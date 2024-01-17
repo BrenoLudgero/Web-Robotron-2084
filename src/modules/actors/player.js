@@ -15,7 +15,7 @@ class Player extends Actor {
         this.projectileDelay = 7;
         this.hitboxConfig = {
             "left": {
-                spriteCycle: 51,
+                spritesheetY: 51,
                 head: {width: 11, xPosition: 4, yPosition: 3},
                 torso: {width: 10, height: 11, xPosition: 6, yPosition: 16},
                 leftArm: {width: 0, height: 0},
@@ -23,7 +23,7 @@ class Player extends Actor {
                 legs: {width: 6, height: 12, xPosition: 7}
             },
             "right": {
-                spriteCycle: 75,
+                spritesheetY: 75,
                 head: {width: 11, xPosition: 6, yPosition: 3},
                 torso: {width: 10, height: 11, xPosition: 6, yPosition: 16},
                 leftArm: {width: 0, height: 0},
@@ -31,14 +31,14 @@ class Player extends Actor {
                 legs: {width: 6, height: 12, xPosition: 8}
             },
             "up": {
-                spriteCycle: 26,
+                spritesheetY: 26,
                 head: {width: 17, xPosition: 2, yPosition: 1},
                 torso: {width: 15, height: 8, xPosition: 3, yPosition: 14},
                 leftArm: {width: 3, height: 9, xPosition: 18, yPosition: 17},
                 legs: {width: 9, height: 7, xPosition: 6}
             },
             "down": {
-                spriteCycle: 0,
+                spritesheetY: 0,
                 head: {width: 17, height: 9, xPosition: 2, yPosition: 3},
                 torso: {width: 15, height: 8, xPosition: 3, yPosition: 15},
                 rightArm: {width: 3, height: 9, xPosition: 0, yPosition: 17},

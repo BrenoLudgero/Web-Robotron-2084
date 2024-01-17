@@ -11,7 +11,7 @@ class Hulk extends Enemy {
         this.minHumanSpawnDistance = 90;
         this.hitboxConfig = {
             "left": {
-                spriteCycle: 33,
+                spritesheetY: 33,
                 head: {xPosition: 16, yPosition: 3},
                 neck: {xPosition: 18, yPosition: 7},
                 torso: {xPosition: 9, yPosition: 11},
@@ -20,7 +20,7 @@ class Hulk extends Enemy {
                 legs: {width: 14, height: 11, xPosition: 10, yPosition: 34}
             },
             "right": {
-                spriteCycle: 65,
+                spritesheetY: 65,
                 head: {xPosition: 14, yPosition: 1},
                 neck: {xPosition: 17, yPosition: 6},
                 torso: {xPosition: 9, yPosition: 11},
@@ -29,7 +29,7 @@ class Hulk extends Enemy {
                 legs: {width: 14, height: 11, xPosition: 15, yPosition: 33}
             },
             "up": {
-                spriteCycle: 0,
+                spritesheetY: 0,
                 head: {width: 9, height: 4, xPosition: 15, yPosition: 0},
                 neck: {width: 4, height: 4, xPosition: 17, yPosition: 4},
                 torso: {width: 22, height: 22, xPosition: 9, yPosition: 9},

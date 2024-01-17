@@ -1,5 +1,5 @@
 export {ArtificialIntelligence};
-import {RNG, cycleSprite} from "../helpers/globals.js";
+import {RNG} from "../helpers/globals.js";
 
 class ArtificialIntelligence {
     constructor() {
@@ -33,7 +33,7 @@ class ArtificialIntelligence {
         if (randomNumber === 1) {
             this.chasePlayer(grunt, game);
             game.soundMngr.playSound("gruntStep", 1);
-            cycleSprite(grunt);
+            //game.spriteMngr.cycleSprite(grunt);
             return true;
         }
     }

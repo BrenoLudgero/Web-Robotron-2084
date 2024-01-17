@@ -7,7 +7,7 @@ class Mommy extends Human {
         this.spritesheetIncrement = 16;
         this.hitboxConfig = {
             "left": {
-                spriteCycle: 59,
+                spritesheetY: 59,
                 head: {xPosition: 5, yPosition: 5},
                 torso: {width: 11, height: 11, xPosition: 5, yPosition: 16},
                 leftArm: {width: 0, height: 0},
@@ -15,7 +15,7 @@ class Mommy extends Human {
                 legs: {width: 9, height: 19, xPosition: 6}
             },
             "right": {
-                spriteCycle: 88,
+                spritesheetY: 88,
                 head: {xPosition: 6, yPosition: 3},
                 torso: {width: 11, height: 11, xPosition: 6, yPosition: 14},
                 leftArm: {width: 0, height: 0},
@@ -23,7 +23,7 @@ class Mommy extends Human {
                 legs: {width: 9, height: 19, xPosition: 7, yPosition: 21}
             },
             "up": {
-                spriteCycle: 30,
+                spritesheetY: 30,
                 head: {width: 9, height: 9, xPosition: 6, yPosition: 2},
                 torso: {width: 14, height: 10, xPosition: 4, yPosition: 12},
                 rightArm: {width: 3, height: 10, xPosition: 0, yPosition: 12},
@@ -41,7 +41,7 @@ class Mommy extends Human {
         this.hitboxConfig.upleft = {...this.hitboxConfig.left};
         this.hitboxConfig.upright = {...this.hitboxConfig.right};
         this.hitboxConfig.down = {...this.hitboxConfig.up};
-        this.hitboxConfig.down.spriteCycle = 0;
+        this.hitboxConfig.down.spritesheetY = 0;
         this.limbs = this.hitboxConfig.down;
         this.setAllHitboxes(this.limbs);
     }

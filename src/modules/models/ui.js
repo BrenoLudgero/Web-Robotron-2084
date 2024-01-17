@@ -1,14 +1,16 @@
 export {UserInterface};
 
 class UserInterface {
-    constructor(score) {
+    constructor(game) {
         this.canvas = document.querySelector("canvas");
         this.setCanvasScaledResolution(3);
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
         this.scoreElement = document.getElementById("score");
-        this.scoreElement.innerHTML = score.currentScore;
+        this.scoreElement.innerHTML = game.score.currentScore;
         this.livesElement = document.getElementById("lives");
+        this.lifeIndicator = document.getElementsByClassName("life-indicator");
+        this.lifeIndicatorSprite = game.spriteMngr.setSprite("life");
         this.FPSElement = document.getElementById("fps-counter");
     }
     // Initializes canvas.width and height with scaled dimensions
