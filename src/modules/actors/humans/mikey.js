@@ -7,7 +7,6 @@ class Mikey extends Human {
         this.spritesheetIncrement = 12;
         this.hitboxConfig = {
             "left": {
-                spritesheetY: 48,
                 head: {},
                 torso: {xPosition: 3, yPosition: 12},
                 leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
@@ -15,7 +14,6 @@ class Mikey extends Human {
                 legs: {height: 9}
             },
             "right": {
-                spritesheetY: 70,
                 head: {},
                 torso: {xPosition: 3, yPosition: 12},
                 leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
@@ -23,7 +21,6 @@ class Mikey extends Human {
                 legs: {height: 9}
             },
             "up": {
-                spritesheetY: 24,
                 head: {width: 9, height: 9, xPosition: 3, yPosition: 0},
                 torso: {width: 9, height: 9, xPosition: 4, yPosition: 12},
                 rightArm: {width: 3, height: 9, xPosition: 0, yPosition: 12},
@@ -41,7 +38,6 @@ class Mikey extends Human {
         this.hitboxConfig.upleft = {...this.hitboxConfig.left};
         this.hitboxConfig.upright = {...this.hitboxConfig.right};
         this.hitboxConfig.down = {...this.hitboxConfig.up};
-        this.hitboxConfig.down.spritesheetY = 0;
         this.limbs = this.hitboxConfig.down;
         game.hitboxMngr.setAllHitboxes(this);
     }

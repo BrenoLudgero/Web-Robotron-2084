@@ -52,12 +52,10 @@ class Actor {
     }
     animate(actor, direction) {
         const {spriteMngr, hitboxMngr} = this.game;
-        const config = actor.hitboxConfig[direction];
-        spriteMngr.cycleSprite(this, config.spritesheetY);
-        Object.keys(config).forEach(limb => {
-            if (limb !== "spritesheetY") {
-                hitboxMngr.updateHitboxes(actor, limb, config[limb]);
-            }
+        const hitboxConfig = actor.hitboxConfig[direction];
+        spriteMngr.cycleSprite(this, direction);
+        Object.keys(hitboxConfig).forEach(limb => {
+            hitboxMngr.updateHitboxes(actor, limb, hitboxConfig[limb]);
         });
     }
     touchingCeiling() {

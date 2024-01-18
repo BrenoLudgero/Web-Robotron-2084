@@ -1,4 +1,4 @@
-export {spritesIndex, soundFxIndex};
+export {spritesIndex, spritesheetYIndex, soundFxIndex};
 
 const imgPath = "../../src/images/";
 const soundFxPath = "../../src/sound_fx/";
@@ -12,6 +12,40 @@ const spritesIndex = {
     playerProjectile: imgPath + "projectiles/player_prjctl.png",
     life: imgPath + "ui/life.png"
 };
+const spritesheetYIndex = {
+    hulk: {
+        "up": 0,
+        "down": 0,
+        "left": 33,
+        "right": 65
+    },
+    mikey: {
+        "up": 24,
+        "down": 0,
+        "left": 48,
+        "right": 70,
+        "upleft": 48,
+        "upright": 70,
+        "downleft": 48,
+        "downright": 70
+    },
+    mommy: {
+        "up": 30,
+        "down": 0,
+        "left": 59,
+        "right": 88,
+        "upleft": 59,
+        "upright": 88,
+        "downleft": 59,
+        "downright": 88
+    },
+    player: {
+        "up": 26,
+        "down": 0,
+        "left": 51,
+        "right": 75
+    }
+}
 const soundFxIndex = {
     bounce: soundFxPath + "bounce.mp3",
     brainWave: soundFxPath + "brain_wave.mp3",

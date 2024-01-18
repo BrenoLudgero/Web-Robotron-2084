@@ -1,6 +1,6 @@
 export {SpriteManager};
 import {Sprite} from "../models/sprite.js";
-import {spritesIndex} from "../helpers/indexes.js";
+import {spritesIndex, spritesheetYIndex} from "../helpers/indexes.js";
 import {canMove, isActorOfType} from "../helpers/globals.js";
 
 class SpriteManager {
@@ -24,9 +24,11 @@ class SpriteManager {
     getActorName(actor) {
         return actor.constructor.name.toLowerCase(); // e.g. 'player'
     }
-    cycleSprite(actor, spritesheetY) {
-        if (spritesheetY !== undefined) {
-            actor.spritesheetY = spritesheetY;
+    cycleSprite(actor, direction) {
+        // Moves to the vertical position in the spritesheet that corresponds to the actor's current direction
+        if (direction !== undefined) {
+            const yPosition = spritesheetYIndex[this.getActorName(actor)][direction];
+            actor.spritesheetY = yPosition;
         }
         if (isActorOfType(actor, "Player")) {
             this.nextPlayerSprite(actor);
