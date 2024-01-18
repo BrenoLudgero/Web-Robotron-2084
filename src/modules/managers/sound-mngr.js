@@ -26,8 +26,13 @@ class SoundManager {
         this.currentSound.sound = newSound;
         this.currentSound.priority = priority;
     }
+    userInteractedWithPage() {
+        return navigator.userActivation.hasBeenActive;
+    }
     playNewSound(currentSound) {
-        currentSound.sound.play();
+        if (this.userInteractedWithPage()) { // Avoids an error
+            currentSound.sound.play();
+        }
     }
     playExclusively(minimumDuration) {
         if (minimumDuration) {
@@ -36,23 +41,18 @@ class SoundManager {
             }, minimumDuration * 1000);
         }
     }
-    userInteractedWithPage() {
-        return navigator.userActivation.hasBeenActive;
-    }
     playSound(sound, priority, minimumDuration) {
         const {currentSound} = this;
-        if (this.userInteractedWithPage()) {
-            if (this.shouldPlayNow(priority)) {
-                clearTimeout(currentSound.timeout);
-            } 
-            // Ignores any sound of lower priority than the current one
-            else if (currentSound.timeout !== null) {
-                return;
-            }
-            this.stopCurrentSound(currentSound);
-            this.createNewSound(soundFxIndex[sound], priority);
-            this.playNewSound(currentSound);
-            this.playExclusively(minimumDuration);
+        if (this.shouldPlayNow(priority)) {
+            clearTimeout(currentSound.timeout);
+        } 
+        // Ignores any sound of lower priority than the current one
+        else if (currentSound.timeout !== null) {
+            return;
         }
+        this.stopCurrentSound(currentSound);
+        this.createNewSound(soundFxIndex[sound], priority);
+        this.playNewSound(currentSound);
+        this.playExclusively(minimumDuration);
     }
 }

@@ -1,6 +1,6 @@
 export {ActorManager};
 import {Player} from "../actors/player.js";
-import {RNG, getDistance} from "../helpers/globals.js"
+import {RNG, getDistanceBetween} from "../helpers/globals.js"
 
 class ActorManager {
     constructor(game) {
@@ -30,7 +30,7 @@ class ActorManager {
     awayFromOthers(actor, otherActors, minDistance) {
         let away = true;
         otherActors.forEach(otherActor => {
-            if (getDistance(actor, otherActor) < minDistance) {
+            if (getDistanceBetween(actor, otherActor) < minDistance) {
                 away = false;
             }
         });
@@ -49,7 +49,7 @@ class ActorManager {
         let safeToSpawn = false;
         while (!safeToSpawn) {
             this.setRandomScreenPosition(newActor);
-            let playerDistance = getDistance(newActor, player);
+            let playerDistance = getDistanceBetween(newActor, player);
             let awayFromPlayer = playerDistance >= minPlayerSpawnDistance;
             let awayFromHumans = this.awayFromOthers(newActor, humans, minHumanSpawnDistance);
             let awayFromEnemies = this.awayFromOthers(newActor, enemies, minEnemySpawnDistance);

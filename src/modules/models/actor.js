@@ -26,9 +26,6 @@ class Actor {
         );
         this.game.debuggerr.drawHitboxes(this, context);
     }
-    getActorType() {
-        return this.constructor.name.toLowerCase(); // e.g. 'player'
-    }
     updateState(state) {
         this.currentState = state;
     }

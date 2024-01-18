@@ -1,7 +1,7 @@
 export {SpriteManager};
 import {Sprite} from "../models/sprite.js";
 import {spritesIndex} from "../helpers/indexes.js";
-import {canMove, typeOfActor} from "../helpers/globals.js";
+import {canMove, isActorOfType} from "../helpers/globals.js";
 
 class SpriteManager {
     notEndOfSheet(actor, maxSpritesheetX) {
@@ -21,9 +21,14 @@ class SpriteManager {
             this.nextSprite(player);
         }
     }
+    getActorName(actor) {
+        return actor.constructor.name.toLowerCase(); // e.g. 'player'
+    }
     cycleSprite(actor, spritesheetY) {
-        actor.spritesheetY = spritesheetY;
-        if (typeOfActor(actor, "Player")) {
+        if (spritesheetY !== undefined) {
+            actor.spritesheetY = spritesheetY;
+        }
+        if (isActorOfType(actor, "Player")) {
             this.nextPlayerSprite(actor);
         }
         else {
@@ -34,14 +39,14 @@ class SpriteManager {
         return new Sprite(spriteScr, spritesIndex).spritesheet;
     }
     setActorSprites(actor) {
-        actor.sprites = new Sprite(actor.getActorType(), spritesIndex).spritesheet;
+        actor.sprites = new Sprite(this.getActorName(actor), spritesIndex).spritesheet;
     }
     spriteFound(spriteSrc) {
         return spritesIndex.hasOwnProperty(spriteSrc);
     }
     // Sets an Actor projectileSprite if found in spritesIndex
     setProjectileSprite(actor) {
-        let spriteScr = `${actor.getActorType()}Projectile`; // e.g. 'playerProjectile'
+        let spriteScr = `${this.getActorName(actor)}Projectile`; // e.g. 'playerProjectile'
         if (this.spriteFound(spriteScr)) {
             actor.projectileSprite = new Sprite(spriteScr, spritesIndex).spritesheet;
         }

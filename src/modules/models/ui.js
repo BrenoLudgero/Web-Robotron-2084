@@ -4,8 +4,8 @@ class UserInterface {
     constructor(game) {
         this.canvas = document.querySelector("canvas");
         this.setCanvasScaledResolution(3);
-        this.ctx = this.canvas.getContext("2d");
-        this.ctx.imageSmoothingEnabled = false;
+        this.context = this.canvas.getContext("2d");
+        this.context.imageSmoothingEnabled = false;
         this.scoreElement = document.getElementById("score");
         this.scoreElement.innerHTML = game.score.currentScore;
         this.livesElement = document.getElementById("lives");

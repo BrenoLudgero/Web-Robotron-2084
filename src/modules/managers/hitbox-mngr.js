@@ -8,8 +8,10 @@ class HitboxManager {
     }
     setAllHitboxes(actor) {
         for (const limb in actor.limbs) {
-            const {width, height, xPosition, yPosition} = actor.limbs[limb];
-            this.setHitbox(actor, limb, width, height, xPosition, yPosition);
+            if (limb !== "spritesheetY") {
+                const {width, height, xPosition, yPosition} = actor.limbs[limb];
+                this.setHitbox(actor, limb, width, height, xPosition, yPosition);
+            }
         }
     }
     updateHitboxes(actor, limb, properties) {

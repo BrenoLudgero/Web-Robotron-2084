@@ -7,8 +7,8 @@ class UIManager {
     }
     // Removes sprites from the previous frame
     clear(ui) {
-        const {ctx, canvas} = ui;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const {context, canvas} = ui;
+        context.clearRect(0, 0, canvas.width, canvas.height);
     }
     // Creates a string indicating the amount of lives beyond 20
     createSurplusLivesIndicator(ui) {

@@ -43,6 +43,6 @@ class Mommy extends Human {
         this.hitboxConfig.down = {...this.hitboxConfig.up};
         this.hitboxConfig.down.spritesheetY = 0;
         this.limbs = this.hitboxConfig.down;
-        this.game.hitboxMngr.setAllHitboxes(this);
+        game.hitboxMngr.setAllHitboxes(this);
     }
 }

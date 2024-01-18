@@ -1,5 +1,5 @@
 export {CollisionManager};
-import {typeOfActor} from "../helpers/globals.js";
+import {isActorOfType} from "../helpers/globals.js";
 
 class CollisionManager {
     update(game) {
@@ -88,7 +88,7 @@ class CollisionManager {
     }
     checkHumanEnemyCollision(humans, enemies) {
         for (const enemy of enemies) {
-            if (typeOfActor(enemy, "Hulk")) {
+            if (isActorOfType(enemy, "Hulk")) {
                 for (const human of humans) {
                     if (this.checkSingleCollision(human, enemy)) {
                         human.updateState("destroyed");
@@ -107,7 +107,7 @@ class CollisionManager {
         for (const projectile of projectiles) {
             for (const enemy of enemies) {
                 if (this.checkSingleCollision(projectile, enemy)) {
-                    if (!typeOfActor(enemy, "Hulk")) {
+                    if (!isActorOfType(enemy, "Hulk")) {
                         enemy.updateState("destroyed");
                     } else {
                         projectile.knockback(enemy);

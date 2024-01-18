@@ -52,7 +52,7 @@ class Debugger {
                     );
                 }
             }
-            context.strokeStyle = "blue";
+            context.strokeStyle = "lightgrey";
             context.stroke();
             context.setTransform(1, 0, 0, 1, 0, 0); // Resets the context transformation
         }
