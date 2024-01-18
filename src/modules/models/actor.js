@@ -73,14 +73,16 @@ class Actor {
         return this.screenX >= this.movementBoundaries.x;
     }
     stayWithinCanvas() {
+        const ceilingY = 2;
+        const leftWallX = 2;
         if (this.touchingCeiling()) {
-            this.screenY = 2;
+            this.screenY = ceilingY;
         } 
         else if (this.touchingFloor()) {
             this.screenY = this.movementBoundaries.y;
         }
         if (this.touchingLeftWall()) {
-            this.screenX = 2;
+            this.screenX = leftWallX;
         } 
         else if (this.touchingRightWall()) {
             this.screenX = this.movementBoundaries.x;

@@ -56,7 +56,7 @@ class Projectile {
         hulk.screenX += knockbackXDirection * this.knockbackForce;
         hulk.screenY += knockbackYDirection * this.knockbackForce;
     }
-    // Height is adjusted to eliminate gaps between hitboxes
+    // Height is adjusted to eliminate gaps between hitboxes (sprite is unchanged)
     moveUp() {
         this.angle = 0;
         this.height = 24;

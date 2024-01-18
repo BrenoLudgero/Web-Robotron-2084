@@ -29,28 +29,28 @@ class InputManager {
     }
     processShootingKeys(player) {
         if (this.pressingUpOnly()) {
-            player.shoot("up", 0);
+            player.shoot("up");
         } 
         else if (this.pressingUpAndLeft()) {
-            player.shoot("upleft", 0);
+            player.shoot("upleft");
         } 
         else if (this.pressingUpAndRight()) {
-            player.shoot("upright", 0);
+            player.shoot("upright");
         }
         if (this.pressingDownOnly()) {
-            player.shoot("down", 16);
+            player.shoot("down");
         } 
         else if (this.pressingDownAndRight()) {
-            player.shoot("downright", 16);
+            player.shoot("downright");
         } 
         else if (this.pressingDownAndLeft()) {
-            player.shoot("downleft", 16);
+            player.shoot("downleft");
         }
         if (this.pressingLeftOnly()) {
-            player.shoot("left", 9);
+            player.shoot("left");
         } 
         else if (this.pressingRightOnly()) {
-            player.shoot("right", 9);
+            player.shoot("right");
         }
     }
     //   Shooting methods

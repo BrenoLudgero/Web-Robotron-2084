@@ -53,17 +53,32 @@ class Player extends Actor {
     update() {
         this.updateProjectileTimer();
     }
+    getProjectileOffsets(direction) {
+        const offsets = {
+            "up": {x: 9, y: 0},
+            "upleft": {x: 16, y: 0},
+            "upright": {x: 0, y: 0},
+            "down": {x: 9, y: 16},
+            "downleft": {x: 16, y: 0},
+            "downright": {x: 0, y: 0},
+            "left": {x: 9, y: 9},
+            "right": {x: 9, y: 9},
+        };
+        return offsets[direction];
+    }
     // Called in inputMngr.processShootingKeys
-    shoot(direction, yOffset) {
+    shoot(direction) {
         const {projectileMngr, soundMngr} = this.game;
         const {screenX, screenY, projectileSprite, projectileSpeed, projectileDelay} = this;
-        const xOffset = 9;
+        const {x: xOffset, y: yOffset} = this.getProjectileOffsets(direction);
         const playerX = screenX + xOffset;
         const playerY = screenY + yOffset;
         if (this.canShoot()) {
             projectileMngr.createProjectile(projectileSprite, playerX, playerY, projectileSpeed, direction);
             this.projectileTimer = projectileDelay;
-            soundMngr.playSound("playerShot", 2, 0.1);
+            const soundPriority = 2;
+            const minDuration = 0.1;
+            soundMngr.playSound("playerShot", soundPriority, minDuration);
         }
     }
     // Methods below called in inputMngr.processMovementKeys

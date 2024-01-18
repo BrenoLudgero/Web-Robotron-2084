@@ -34,7 +34,7 @@ class SoundManager {
             currentSound.sound.play();
         }
     }
-    playExclusively(minimumDuration) {
+    playExclusively(minimumDuration) { // Seconds
         if (minimumDuration) {
             this.currentSound.timeout = setTimeout(() => {
                 this.currentSound.timeout = null;

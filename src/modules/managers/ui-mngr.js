@@ -5,7 +5,7 @@ class UIManager {
         this.updateScoreElement(ui, score.currentScore);
         this.updateLivesElement(ui, actorMngr);
     }
-    // Removes sprites from the previous frame
+    // Clears the screen of previous frame elements
     clear(ui) {
         const {context, canvas} = ui;
         context.clearRect(0, 0, canvas.width, canvas.height);

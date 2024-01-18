@@ -19,13 +19,16 @@ class StateManager {
         if (this.actorDestroyed(this.player)) {
             this.player.lives--;
             this.score.resetRescueBonus();
-            this.soundMngr.playSound("playerDestroyed", 6);
+            const soundPriority = 6;
+            this.soundMngr.playSound("playerDestroyed", soundPriority);
             this.projectileMngr.eraseAllProjectiles();
         }
     }
     humanDestroyed(human) {
         if (this.actorDestroyed(human)) {
-            this.soundMngr.playSound("humanDestroyed", 4, 0.36);
+            const soundPriority = 4;
+            const minDuration = 0.36;
+            this.soundMngr.playSound("humanDestroyed", soundPriority, minDuration);
         }
     }
     humanWasRecued(human) {
@@ -34,7 +37,9 @@ class StateManager {
     humanRescued(human) {
         if (this.humanWasRecued(human)) {
             this.score.awardRecuePoints(human);
-            this.soundMngr.playSound("humanRescued", 4, 0.4);
+            const soundPriority = 4;
+            const minDuration = 0.4;
+            this.soundMngr.playSound("humanRescued", soundPriority, minDuration);
         }
     }
     handleHumanStates() {
@@ -46,7 +51,9 @@ class StateManager {
     enemyDestroyed(enemy) {
         if (this.actorDestroyed(enemy)) {
             this.score.awardEnemyPoints(enemy);
-            this.soundMngr.playSound("enemyDestroyed", 3, 0.086);
+            const soundPriority = 3;
+            const minDuration = 0.086;
+            this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
         }
     }
     handleEnemyStates() {
