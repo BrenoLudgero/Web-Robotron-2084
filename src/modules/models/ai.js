@@ -3,11 +3,11 @@ import {RNG} from "../helpers/globals.js";
 
 class ArtificialIntelligence {
     constructor() {
-        this.directions = ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
+        this.directions = ["up", "down", "left", "right", "upleft", "upright", "downleft", "downright"];
         this.previousDirections = [];
     }
     // [Player]  [Grunt]
-    atPlayerRight(grunt, player) {
+    atPlayerLeft(grunt, player) {
         return grunt.screenX > player.screenX;
     }
     belowPlayer(grunt, player) {
@@ -16,7 +16,7 @@ class ArtificialIntelligence {
     // Grunts only. Step towards the player
     chasePlayer(grunt, game) {
         const player = game.actorMngr.actors.player;
-        if (this.atPlayerRight(grunt, player)) {
+        if (this.atPlayerLeft(grunt, player)) {
             grunt.screenX -= grunt.movementSpeed;
         } else {
             grunt.screenX += grunt.movementSpeed;
@@ -39,14 +39,14 @@ class ArtificialIntelligence {
     }
     moveActor(actor) {
         switch(actor.currentDirection) {
-            case("left"):
-                actor.screenX -= actor.movementSpeed; break;
-            case("right"):
-                actor.screenX += actor.movementSpeed; break;
             case("up"):
                 actor.screenY -= actor.movementSpeed; break;
             case("down"):
                 actor.screenY += actor.movementSpeed; break;
+            case("left"):
+                actor.screenX -= actor.movementSpeed; break;
+            case("right"):
+                actor.screenX += actor.movementSpeed; break;
             case("upleft"):
                 actor.screenY -= (actor.movementSpeed * 0.8); 
                 actor.screenX -= (actor.movementSpeed * 0.8); break;

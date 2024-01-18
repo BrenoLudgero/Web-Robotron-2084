@@ -3,7 +3,7 @@ export {Input};
 class Input {
     constructor(game) { // REMOVE GAME WITH DEBUGGER
         this.keysPressed = [];
-        this.playerControls = ["w", "a", "s", "d", "arrowup", "arrowleft", "arrowdown", "arrowright"];
+        this.playerControls = ["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"];
         this.listenToPlayerControls(game);
     }
     unstoredPlayerKey(key) {

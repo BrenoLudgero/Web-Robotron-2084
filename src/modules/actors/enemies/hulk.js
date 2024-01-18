@@ -10,6 +10,14 @@ class Hulk extends Enemy {
         this.movementAnimationDelay = 9;
         this.minHumanSpawnDistance = 90;
         this.hitboxConfig = {
+            "up": {
+                head: {width: 9, height: 4, xPosition: 15, yPosition: 0},
+                torso: {width: 22, height: 22, xPosition: 9, yPosition: 9},
+                rightArm: {width: 9, height: 24, xPosition: 30, yPosition: 9},
+                leftArm: {width: 9, height: 24, xPosition: 0, yPosition: 9},
+                legs: {width: 15, height: 7, xPosition: 12, yPosition: 31}
+            },
+            "down": {},
             "left": {
                 head: {xPosition: 15, yPosition: 3},
                 torso: {xPosition: 9, yPosition: 11},
@@ -23,15 +31,7 @@ class Hulk extends Enemy {
                 rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
                 leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
                 legs: {width: 14, height: 11, xPosition: 15, yPosition: 33}
-            },
-            "up": {
-                head: {width: 9, height: 4, xPosition: 15, yPosition: 0},
-                torso: {width: 22, height: 22, xPosition: 9, yPosition: 9},
-                rightArm: {width: 9, height: 24, xPosition: 30, yPosition: 9},
-                leftArm: {width: 9, height: 24, xPosition: 0, yPosition: 9},
-                legs: {width: 15, height: 7, xPosition: 12, yPosition: 31}
-            },
-            "down": {}
+            }
         };
         this.hitboxConfig.down = {...this.hitboxConfig.up};
         this.limbs = this.hitboxConfig.down;

@@ -44,13 +44,13 @@ class Projectile {
     knockback(hulk) {
         const directionMap = {
             "up": {x: 0, y: -1},
-            "upright": {x: 1, y: -1},
-            "upleft": {x: -1, y: -1},
+            "down": {x: 0, y: 1},
             "left": {x: -1, y: 0},
             "right": {x: 1, y: 0},
-            "down": {x: 0, y: 1},
-            "downright": {x: 1, y: 1},
+            "upleft": {x: -1, y: -1},
+            "upright": {x: 1, y: -1},
             "downleft": {x: -1, y: 1},
+            "downright": {x: 1, y: 1},
         };
         const {x: knockbackXDirection, y: knockbackYDirection} = directionMap[this.direction];
         hulk.screenX += knockbackXDirection * this.knockbackForce;
@@ -74,6 +74,23 @@ class Projectile {
         this.screenX += this.speed;
         this.screenY -= this.speed;
     }
+    moveDown() {
+        this.angle = 0;
+        this.height = 24;
+        this.screenY += this.speed;
+    }
+    moveDownLeft() {
+        this.angle = 3 * (-Math.PI / 4);
+        this.height = 34;
+        this.screenX -= this.speed;
+        this.screenY += this.speed;
+    }
+    moveDownRight() {
+        this.angle = 3 * (Math.PI / 4);
+        this.height = 34;
+        this.screenX += this.speed;
+        this.screenY += this.speed;
+    }
     moveLeft() {
         this.angle = -Math.PI / 2;
         this.height = 24;
@@ -83,23 +100,6 @@ class Projectile {
         this.angle = Math.PI / 2;
         this.height = 24;
         this.screenX += this.speed;
-    }
-    moveDownLeft() {
-        this.angle = 3 * (-Math.PI / 4);
-        this.height = 34;
-        this.screenX -= this.speed;
-        this.screenY += this.speed;
-    }
-    moveDown() {
-        this.angle = 0;
-        this.height = 24;
-        this.screenY += this.speed;
-    }
-    moveDownRight() {
-        this.angle = 3 * (Math.PI / 4);
-        this.height = 34;
-        this.screenX += this.speed;
-        this.screenY += this.speed;
     }
     moveProjectile() {
         if (this.direction === "up") {

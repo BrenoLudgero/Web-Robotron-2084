@@ -24,8 +24,8 @@ class InputManager {
     processMovementKeys(player) {
         this.processKeyFunction(player, "w", "moveUp");
         this.processKeyFunction(player, "s", "moveDown");
-        this.processKeyFunction(player, "d", "moveRight");
         this.processKeyFunction(player, "a", "moveLeft");
+        this.processKeyFunction(player, "d", "moveRight");
     }
     processShootingKeys(player) {
         if (this.pressingUpOnly()) {
@@ -40,12 +40,12 @@ class InputManager {
         if (this.pressingDownOnly()) {
             player.shoot("down");
         } 
-        else if (this.pressingDownAndRight()) {
-            player.shoot("downright");
-        } 
         else if (this.pressingDownAndLeft()) {
             player.shoot("downleft");
         }
+        else if (this.pressingDownAndRight()) {
+            player.shoot("downright");
+        } 
         if (this.pressingLeftOnly()) {
             player.shoot("left");
         } 
@@ -80,30 +80,30 @@ class InputManager {
             && !this.pressing("arrowright")
         );
     }
-    pressingDownAndRight() {
-        return (
-            this.pressing("arrowdown") 
-            && this.pressing("arrowright")
-        );
-    }
     pressingDownAndLeft() {
         return (
             this.pressing("arrowdown") 
             && this.pressing("arrowleft")
         );
     }
+    pressingDownAndRight() {
+        return (
+            this.pressing("arrowdown") 
+            && this.pressing("arrowright")
+        );
+    }
     pressingLeftOnly() {
         return (
             this.pressing("arrowleft") 
-            && !this.pressing("arrowdown") 
             && !this.pressing("arrowup")
+            && !this.pressing("arrowdown") 
         );
     }
     pressingRightOnly() {
         return (
             this.pressing("arrowright") 
-            && !this.pressing("arrowdown") 
             && !this.pressing("arrowup")
+            && !this.pressing("arrowdown") 
         );
     }
     //   Movement methods
@@ -117,11 +117,11 @@ class InputManager {
         && !this.pressing("w") 
         && !this.pressing("a");
     }
-    notPressingD() {
-        return !this.pressing("d");
-    }
     notPressingA() {
         return !this.pressing("a");
+    }
+    notPressingD() {
+        return !this.pressing("d");
     }
     pressingDnA() {
         return this.pressingCombination(["d", "a"]);
