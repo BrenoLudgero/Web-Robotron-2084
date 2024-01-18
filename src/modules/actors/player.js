@@ -18,22 +18,23 @@ class Player extends Actor {
                 spritesheetY: 51,
                 head: {width: 11, xPosition: 4, yPosition: 2},
                 torso: {width: 8, height: 11, xPosition: 6, yPosition: 16},
-                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
-                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
                 legs: {width: 6, height: 12, xPosition: 7}
             },
             "right": {
                 spritesheetY: 75,
                 head: {width: 11, xPosition: 6, yPosition: 2},
                 torso: {width: 8, height: 11, xPosition: 7, yPosition: 16},
-                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
-                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
                 legs: {width: 6, height: 12, xPosition: 8}
             },
             "up": {
                 spritesheetY: 26,
                 head: {width: 17, xPosition: 2, yPosition: 1},
                 torso: {width: 15, height: 8, xPosition: 3, yPosition: 14},
+                rightArm: {width: 3, height: 9, xPosition: 0, yPosition: 17},
                 leftArm: {width: 3, height: 9, xPosition: 18, yPosition: 17},
                 legs: {width: 9, height: 7, xPosition: 6}
             },

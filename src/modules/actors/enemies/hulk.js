@@ -12,26 +12,23 @@ class Hulk extends Enemy {
         this.hitboxConfig = {
             "left": {
                 spritesheetY: 33,
-                head: {xPosition: 16, yPosition: 3},
-                neck: {xPosition: 18, yPosition: 7},
+                head: {xPosition: 15, yPosition: 3},
                 torso: {xPosition: 9, yPosition: 11},
-                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
-                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
                 legs: {width: 14, height: 11, xPosition: 10, yPosition: 34}
             },
             "right": {
                 spritesheetY: 65,
-                head: {xPosition: 14, yPosition: 1},
-                neck: {xPosition: 17, yPosition: 6},
+                head: {xPosition: 15, yPosition: 2},
                 torso: {xPosition: 9, yPosition: 11},
-                rightArm: {width: 0, height: 0, xPosition: null, yPosition: null},
-                leftArm: {width: 0, height: 0, xPosition: null, yPosition: null},
+                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
                 legs: {width: 14, height: 11, xPosition: 15, yPosition: 33}
             },
             "up": {
                 spritesheetY: 0,
                 head: {width: 9, height: 4, xPosition: 15, yPosition: 0},
-                neck: {width: 4, height: 4, xPosition: 17, yPosition: 4},
                 torso: {width: 22, height: 22, xPosition: 9, yPosition: 9},
                 rightArm: {width: 9, height: 24, xPosition: 30, yPosition: 9},
                 leftArm: {width: 9, height: 24, xPosition: 0, yPosition: 9},
