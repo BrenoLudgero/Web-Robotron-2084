@@ -13,8 +13,8 @@ class ArtificialIntelligence {
     belowPlayer(grunt, player) {
         return grunt.screenY > player.screenY;
     }
-    // Grunts only. Step towards the player
-    chasePlayer(grunt, game) {
+    // Grunts only
+    stepTowardsPlayer(grunt, game) {
         const player = game.actorMngr.actors.player;
         if (this.atPlayerLeft(grunt, player)) {
             grunt.screenX -= grunt.movementSpeed;
@@ -27,11 +27,11 @@ class ArtificialIntelligence {
             grunt.screenY += grunt.movementSpeed;
         }
     }
-    // Grunts only. 50% change to chasePlayer
+    // Grunts only. 50% change to stepTowardsPlayer
     moveAtRandomIntervals(grunt, game) {
         let randomNumber = RNG(1, 2);
         if (randomNumber === 1) {
-            this.chasePlayer(grunt, game);
+            this.stepTowardsPlayer(grunt, game);
             game.soundMngr.playSound("gruntStep", 1);
             game.spriteMngr.cycleSprite(grunt);
             return true;

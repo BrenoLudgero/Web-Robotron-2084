@@ -41,7 +41,8 @@ class Debugger {
                 context.translate(centerX, centerY);
                 context.rotate(actor.angle);
                 context.rect(-halfWidth, -halfHeight, actor.width, actor.height);
-            } else {
+            } 
+            else {
                 for (const limb in actor.hitboxes) {
                     const hitbox = actor.hitboxes[limb];
                     context.rect(

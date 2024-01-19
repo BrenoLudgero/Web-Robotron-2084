@@ -47,7 +47,7 @@ class SpriteManager {
     spriteFound(spriteSrc) {
         return spritesIndex.hasOwnProperty(spriteSrc);
     }
-    // Sets an Actor projectileSprite if found in spritesIndex
+    // Sets the actor's projectileSprite if found in spritesIndex
     setProjectileSprite(actor) {
         let spriteScr = `${this.getActorName(actor)}Projectile`; // e.g. 'playerProjectile'
         if (this.spriteFound(spriteScr)) {
