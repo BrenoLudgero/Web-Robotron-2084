@@ -16,15 +16,15 @@ class Mommy extends Human {
             "left": {
                 head: {yPosition: 5},
                 torso: {width: 9, height: 9, xPosition: 6, yPosition: 14},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {width: 7, height: 19, xPosition: 6, yPosition: 21}
             },
             "right": {
                 head: {yPosition: 3},
                 torso: {width: 9, height: 9, xPosition: 6, yPosition: 13},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {width: 7, height: 19, xPosition: 8, yPosition: 21}
             },
             "upleft": {},

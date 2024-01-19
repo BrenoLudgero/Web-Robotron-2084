@@ -11,9 +11,8 @@ class Actor {
         this.setScaledDimensions(originalWidth, originalHeight);
         this.setMovementBoundaries(game);
         this.hitboxes = {};
-        // Used for hiding hitboxes
-        this.centerX = this.width / 2;
-        this.centerY = this.height / 2;
+        // X and Y position for hidden hitboxes
+        this.hidden = 2000;
     }
     draw(context) {
         context.drawImage(

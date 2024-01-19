@@ -16,15 +16,15 @@ class Mikey extends Human {
             "left": {
                 head: {},
                 torso: {xPosition: 3, yPosition: 12},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {height: 9}
             },
             "right": {
                 head: {},
                 torso: {xPosition: 3, yPosition: 12},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {height: 9}
             },
             "upleft": {},

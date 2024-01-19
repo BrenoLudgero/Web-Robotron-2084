@@ -20,15 +20,15 @@ class Hulk extends Enemy {
             "left": {
                 head: {xPosition: 15, yPosition: 3},
                 torso: {xPosition: 9, yPosition: 12},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {width: 12, height: 11, xPosition: 11, yPosition: 34}
             },
             "right": {
                 head: {xPosition: 15, yPosition: 2},
                 torso: {xPosition: 9, yPosition: 11},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {width: 12, height: 11, xPosition: 15, yPosition: 33}
             }
         };

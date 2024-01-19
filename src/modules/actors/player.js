@@ -30,15 +30,15 @@ class Player extends Actor {
             "left": {
                 head: {width: 11, xPosition: 4, yPosition: 2},
                 torso: {width: 8, height: 11, xPosition: 6, yPosition: 16},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {width: 6, height: 12, xPosition: 7}
             },
             "right": {
                 head: {width: 11, xPosition: 6, yPosition: 2},
                 torso: {width: 8, height: 11, xPosition: 7, yPosition: 16},
-                rightArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
-                leftArm: {width: 0, height: 0, xPosition: this.centerX, yPosition: this.centerY},
+                rightArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
+                leftArm: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden},
                 legs: {width: 6, height: 12, xPosition: 8}
             }
         };
@@ -71,7 +71,7 @@ class Player extends Actor {
             projectileMngr.createProjectile(projectileSprite, playerX, playerY, projectileSpeed, direction);
             this.projectileTimer = projectileDelay;
             const soundPriority = 2;
-            const minDuration = 0.1;
+            const minDuration = 0.12;
             soundMngr.playSound("playerShot", soundPriority, minDuration);
         }
     }
