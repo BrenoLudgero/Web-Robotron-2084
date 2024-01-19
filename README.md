@@ -33,7 +33,7 @@ Will chase humans and convert them into Progs on contact
 Progs (or reprogrammed humans) will relentlessly chase the player
 
 ### ![Quark](/github-images/quark.png) Quarks (1,000 Points)
-Quarks behave similarly to Spheroids, but they will create Tanks
+Quarks behave similarly to Spheroids, but create Tanks instead
 
 ### ![Tank](/github-images/tank.png) Tank (200 Points)
 Tanks move relatively slowly and fire Bounce Bombs (25 Points) that bounce upon touching a wall
