@@ -4,6 +4,7 @@ const imgPath = "../../src/images/";
 const soundFxPath = "../../src/sound_fx/";
 
 const spritesIndex = {
+    daddy: imgPath + "actors/humans/daddy.png",
     grunt: imgPath + "actors/enemies/grunt.png",
     hulk: imgPath + "actors/enemies/hulk.png",
     mikey: imgPath + "actors/humans/mikey_alt.png",
@@ -13,6 +14,16 @@ const spritesIndex = {
     life: imgPath + "ui/life.png"
 };
 const spritesheetYIndex = {
+    daddy: {
+        "up": 28,
+        "down": 0,
+        "left": 56,
+        "right": 82,
+        "upleft": 56,
+        "upright": 82,
+        "downleft": 56,
+        "downright": 82
+    },
     hulk: {
         "up": 0,
         "down": 0,

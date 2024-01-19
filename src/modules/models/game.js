@@ -15,6 +15,7 @@ import {Debugger} from "./debugger.js";
 import {Grunt} from "../actors/enemies/grunt.js";
 import {Hulk} from "../actors/enemies/hulk.js";
 import {Mommy} from "../actors/humans/mommy.js";
+import {Daddy} from "../actors/humans/daddy.js";
 import {Mikey} from "../actors/humans/mikey.js";
 
 // Updates and draws all game elements. Instantiated in main.js
@@ -57,9 +58,10 @@ class Game {
     // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const {actorMngr} = this;
+        actorMngr.addActors(10, Daddy);
         actorMngr.addActors(5, Mommy);
-        actorMngr.addActors(20, Mikey);
-        actorMngr.addActors(5, Hulk);
-        actorMngr.addActors(5, Grunt);
+        actorMngr.addActors(5, Mikey);
+        actorMngr.addActors(10, Hulk);
+        actorMngr.addActors(15, Grunt);
     }
 }
