@@ -4,7 +4,6 @@ import {Human} from "../../models/human.js";
 class Mommy extends Human {
     constructor(game) {
         super(game, 14, 28);
-        this.spritesheetIncrement = 16;
         this.hitboxConfig = {
             "up": {
                 head: {width: 9, height: 9, xPosition: 6, yPosition: 2},

@@ -5,7 +5,6 @@ class Grunt extends Enemy {
     constructor(game) {
         super(game, 18, 27);
         this.points = 100;
-        this.spritesheetIncrement = 20;
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE ELAPSED TIME (TAKING TOO LONG)
         this.movementTimer = 0;
         this.movementInterval = 10; // DECREASES ACCORDING TO WAVE ELAPSED TIME

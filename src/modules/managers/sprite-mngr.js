@@ -11,7 +11,8 @@ class SpriteManager {
         const initialSpritesheetX = 0;
         const maxSpritesheetX = actor.sprites.width - actor.width;
         if (this.notEndOfSheet(actor, maxSpritesheetX)) {
-            actor.spritesheetX += actor.spritesheetIncrement;
+            // Sprites in the spritesheet are always horizontaly separated by 2 pixels
+            actor.spritesheetX += actor.originalWidth + 2;
             return;
         }
         actor.spritesheetX = initialSpritesheetX;
