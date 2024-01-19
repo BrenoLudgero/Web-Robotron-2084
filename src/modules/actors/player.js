@@ -16,15 +16,15 @@ class Player extends Actor {
             "up": {
                 head: {width: 17, xPosition: 2, yPosition: 1},
                 torso: {width: 15, height: 8, xPosition: 3, yPosition: 14},
-                rightArm: {width: 3, height: 9, xPosition: 0, yPosition: 17},
-                leftArm: {width: 3, height: 9, xPosition: 18, yPosition: 17},
+                rightArm: {width: 3, height: 6, xPosition: 0, yPosition: 18},
+                leftArm: {width: 3, height: 6, xPosition: 18, yPosition: 18},
                 legs: {width: 9, height: 7, xPosition: 6}
             },
             "down": {
                 head: {width: 17, height: 9, xPosition: 2, yPosition: 3},
                 torso: {width: 15, height: 8, xPosition: 3, yPosition: 15},
-                rightArm: {width: 3, height: 9, xPosition: 0, yPosition: 17},
-                leftArm: {width: 3, height: 9, xPosition: 18, yPosition: 17},
+                rightArm: {width: 3, height: 6, xPosition: 0, yPosition: 18},
+                leftArm: {width: 3, height: 6, xPosition: 18, yPosition: 18},
                 legs: {width: 9, height: 7, xPosition: 6, yPosition: 23}
             },
             "left": {
