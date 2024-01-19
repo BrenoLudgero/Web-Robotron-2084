@@ -7,6 +7,7 @@ class SpriteManager {
     notEndOfSheet(actor, maxSpritesheetX) {
         return actor.spritesheetX < maxSpritesheetX;
     }
+    // Method used for spritesheets with one row of sprites
     nextSprite(actor) {
         const initialSpritesheetX = 0;
         const maxSpritesheetX = actor.sprites.width - actor.width;
@@ -17,6 +18,17 @@ class SpriteManager {
         }
         actor.spritesheetX = initialSpritesheetX;
     }
+    // Called directly in Spawner
+    nextSpawnerSprite(spawner) {
+        const initialSpritesheetX = 0;
+        if (spawner.currentSprite < spawner.finalSprite) {
+            spawner.spritesheetX += spawner.originalWidth + 2;
+            spawner.currentSprite ++;
+            return
+        }
+        spawner.currentSprite = 1;
+        spawner.spritesheetX = initialSpritesheetX;
+    }
     nextPlayerSprite(player) {
         if (canMove(player)) { // Unrelated to the ability to move in this specific case
             this.nextSprite(player);
@@ -25,12 +37,11 @@ class SpriteManager {
     getActorName(actor) {
         return actor.constructor.name.toLowerCase(); // e.g. 'player'
     }
+    // Method used for spritesheets with multiple rows of sprites
+    // Points to the vertical position in the spritesheet that corresponds to the actor's current direction
     cycleSprite(actor, direction) {
-        // Moves to the vertical position in the spritesheet that corresponds to the actor's current direction
-        if (direction !== undefined) {
-            const yPosition = spritesheetYIndex[this.getActorName(actor)][direction];
-            actor.spritesheetY = yPosition;
-        }
+        const yPosition = spritesheetYIndex[this.getActorName(actor)][direction];
+        actor.spritesheetY = yPosition;
         if (isActorOfType(actor, "Player")) {
             this.nextPlayerSprite(actor);
         }

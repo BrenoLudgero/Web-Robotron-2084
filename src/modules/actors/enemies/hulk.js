@@ -5,6 +5,7 @@ import {canMove} from "../../helpers/globals.js";
 class Hulk extends Enemy {
     constructor(game) {
         super(game, 26, 32);
+        this.movementType = 1; // 4 directions
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.movementAnimationDelay = 9;
         this.minHumanSpawnDistance = 90;

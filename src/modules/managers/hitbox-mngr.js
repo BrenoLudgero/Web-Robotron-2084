@@ -13,6 +13,9 @@ class HitboxManager {
             this.setHitbox(actor, limb, width, height, xPosition, yPosition);
         }
     }
+    updateSpawnerHitbox(spawner) {
+        spawner.hitboxes = spawner.hitboxConfig[spawner.currentSprite];
+    }
     updateHitboxes(actor, limb, properties) {
         Object.keys(properties).forEach(property => {
             actor.hitboxes[limb][property] = properties[property];

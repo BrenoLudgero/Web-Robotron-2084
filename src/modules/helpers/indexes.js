@@ -4,14 +4,15 @@ const imgPath = "../../src/images/";
 const soundFxPath = "../../src/sound_fx/";
 
 const spritesIndex = {
+    life: imgPath + "ui/life.png",
     daddy: imgPath + "actors/humans/daddy.png",
     grunt: imgPath + "actors/enemies/grunt.png",
     hulk: imgPath + "actors/enemies/hulk.png",
     mikey: imgPath + "actors/humans/mikey_alt.png",
     mommy: imgPath + "actors/humans/mommy.png",
     player: imgPath + "actors/player.png",
-    playerProjectile: imgPath + "projectiles/player_prjctl.png",
-    life: imgPath + "ui/life.png"
+    spheroid: imgPath + "actors/enemies/spheroid.png",
+    playerProjectile: imgPath + "projectiles/player_prjctl.png"
 };
 const spritesheetYIndex = {
     daddy: {

@@ -66,6 +66,7 @@ class ActorManager {
             case("Human"):
                 this.actors.humans.add(newActor); break;
             case("Enemy"):
+            case("Spawner"):
                 this.actors.enemies.add(newActor); break;
             case("Obstacle"):
                 this.actors.obtacles.add(newActor); break;
@@ -77,6 +78,14 @@ class ActorManager {
             if (this.safeToSpawn(newActor)) {
                 this.addActor(newActor, actorType);
             }
+        }
+    }
+    addSpawnerEnemy(spawner, numberEnemies, enemyType) {
+        for (let i = 0; i < numberEnemies; i++) {
+            const newEnemy = new enemyType(this.game);
+            newEnemy.screenX = spawner.screenX;
+            newEnemy.screenY = spawner.screenY;
+            this.addActor(newEnemy, enemyType);
         }
     }
     updateActors(actors) {

@@ -7,7 +7,6 @@ class Enemy extends Actor {
         super(game, originalWidth, originalHeight);
         this.ai = new ArtificialIntelligence();
         this.points = 0; // Awarded by collisionMngr.checkProjectileCollisions
-        this.movementType = 1; // 4 directions
         this.minPlayerSpawnDistance = 180; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = this.width;
         this.minEnemySpawnDistance = 70; // CHANGES ACCORDING TO WAVE
