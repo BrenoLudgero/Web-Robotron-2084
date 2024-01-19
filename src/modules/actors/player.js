@@ -43,7 +43,6 @@ class Player extends Actor {
                 legs: {width: 6, height: 12, xPosition: 8}
             }
         };
-        this.limbs = this.hitboxConfig.down;
         game.hitboxMngr.setAllHitboxes(this);
     }
     update() {

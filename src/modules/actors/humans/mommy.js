@@ -38,7 +38,6 @@ class Mommy extends Human {
         this.hitboxConfig.upright = {...this.hitboxConfig.right};
         this.hitboxConfig.downleft = {...this.hitboxConfig.left};
         this.hitboxConfig.downright = {...this.hitboxConfig.right};
-        this.limbs = this.hitboxConfig.down;
         game.hitboxMngr.setAllHitboxes(this);
     }
 }

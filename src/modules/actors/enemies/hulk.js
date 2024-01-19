@@ -34,7 +34,6 @@ class Hulk extends Enemy {
             }
         };
         this.hitboxConfig.down = {...this.hitboxConfig.up};
-        this.limbs = this.hitboxConfig.down;
         game.hitboxMngr.setAllHitboxes(this);
     }
     update() {

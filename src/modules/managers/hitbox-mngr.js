@@ -7,8 +7,9 @@ class HitboxManager {
         actor.hitboxes[limb] = hitbox;
     }
     setAllHitboxes(actor) {
-        for (const limb in actor.limbs) {
-            const {width, height, xPosition, yPosition} = actor.limbs[limb];
+        const hitboxConfig = actor.hitboxConfig.down;
+        for (const limb in hitboxConfig) {
+            const {width, height, xPosition, yPosition} = hitboxConfig[limb];
             this.setHitbox(actor, limb, width, height, xPosition, yPosition);
         }
     }
