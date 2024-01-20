@@ -60,9 +60,38 @@ class StateManager {
             this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
         }
     }
+    enemyIsSpawner(enemy) {
+        return (
+            isActorOfType(enemy, "Spheroid")
+            || isActorOfType(enemy, "Quark")
+        );
+    }
+    spawnerSpawning(enemy) {
+        return enemy.currentState === "spawning";
+    }
+    handleSpawnerSpawning(enemy) {
+        if (this.spawnerSpawning(enemy)) {
+            enemy.startingSprite = 0;
+            enemy.lastSprite = 8;
+            enemy.animationDelay = 4;
+            enemy.spawnEnemies();
+        }
+    }
+    spawnerVanished(spawner) {
+        return spawner.currentState === "vanished";
+    }
+    handleSpawnerVanishing(spawner) {
+        if (this.spawnerVanished(spawner)) {
+            this.actors.enemies.delete(spawner);
+        }
+    }
     handleEnemyStates() {
         for (const enemy of this.actors.enemies) {
             this.handleEnemyDestroyed(enemy);
+            if (this.enemyIsSpawner(enemy)) {
+                this.handleSpawnerSpawning(enemy);
+                this.handleSpawnerVanishing(enemy);
+            }
         }
     }
     handleAllStates() {

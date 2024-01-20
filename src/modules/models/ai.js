@@ -1,5 +1,5 @@
 export {ArtificialIntelligence};
-import {RNG} from "../helpers/globals.js";
+import {RNG, getDistanceBetween} from "../helpers/globals.js";
 
 class ArtificialIntelligence {
     constructor() {
@@ -13,7 +13,6 @@ class ArtificialIntelligence {
     belowPlayer(grunt, player) {
         return grunt.screenY > player.screenY;
     }
-    // Grunts only
     stepTowardsPlayer(grunt, game) {
         const player = game.actorMngr.actors.player;
         if (this.atPlayerLeft(grunt, player)) {
@@ -36,6 +35,21 @@ class ArtificialIntelligence {
             game.spriteMngr.nextSprite(grunt);
             return true;
         }
+    }
+    // Move the spawner away from the player based on normalized distances
+    avoidPlayer(spawner, game) {
+        const player = game.actorMngr.actors.player;
+        const distanceX = player.screenX - spawner.screenX;
+        const distanceY = player.screenY - spawner.screenY;
+        const distance = getDistanceBetween(spawner, player); // Ranges from 40 to 1092
+        const normalizedDistanceX = distanceX / distance;
+        const normalizedDistanceY = distanceY / distance;
+        // Adjusts movement speed based on distance (closer = faster)
+        const distanceToKeep = 100;
+        const speedMultiplier = distanceToKeep / distance;
+        const effectiveSpeed = spawner.movementSpeed * speedMultiplier;
+        spawner.screenX -= normalizedDistanceX * effectiveSpeed;
+        spawner.screenY -= normalizedDistanceY * effectiveSpeed;
     }
     moveActor(actor) {
         switch(actor.currentDirection) {

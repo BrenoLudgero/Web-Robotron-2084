@@ -1,9 +1,14 @@
 export {Spheroid};
 import {Spawner} from "../../models/spawner.js";
+import {Grunt} from "./grunt.js";
 
 class Spheroid extends Spawner {
     constructor(game) {
         super(game, 30, 30);
+        this.movementSpeed = 4;
+        this.enemyToSpawn = Grunt;
+        this.spawnAmount = 5; // CHANGES ACCORDING TO WAVE
+        this.spawnSound = "enforcerSpawn";
         // Hitbox based on the currentSprite
         this.hitboxConfig = {
             1: {itself: {width: 4, height: 4, xPosition: 20, yPosition: 20}},
@@ -16,5 +21,10 @@ class Spheroid extends Spawner {
             8: {itself: {width: 0, height: 0, xPosition: this.hidden, yPosition: this.hidden}}
         };
         this.hitboxes = this.hitboxConfig[1];
+    }
+    update() {
+        this.animate();
+        this.ai.avoidPlayer(this, this.game);
+        this.stayWithinCanvas();
     }
 }

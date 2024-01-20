@@ -1,6 +1,6 @@
 export {Spawner};
 import {Enemy} from "./enemy.js";
-import {Grunt} from "../actors/enemies/grunt.js";
+import {canAnimate} from "../helpers/globals.js";
 
 class Spawner extends Enemy {
     constructor(game, originalWidth, originalHeight) {
@@ -8,43 +8,34 @@ class Spawner extends Enemy {
         this.points = 1000;
         this.animationDelay = 5;
         this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
-        this.secondsBeforeSpawning = 5; // Start spawning enemies after this amount of seconds
-        this.enemiesToSpawn = 3;
-        this.updatesBetweenSpawns = 0;
+        this.secondsBeforeSpawningStarts = 4; // CHANGES ACCORDING TO WAVE
+        this.secondsBetweenSpawns = 1.5; // Initial time between animation change and first spawn
         this.currentSprite = 1;
         setTimeout(() => {
-            this.startingSprite = 0;
-            this.finalSprite = 8;
-            this.animationDelay = 4;
             this.updateState("spawning");
-        }, this.secondsBeforeSpawning * 1000);
-    }
-    update() {
-        this.animate();
-        this.spawnEnemies();
-    }
-    spawnEnemies() {
-        const {actorMngr} = this.game;
-        if (this.currentState === "spawning") {
-            if (this.enemiesToSpawn > 0) {
-                if (this.updatesBetweenSpawns <= 0) {
-                    actorMngr.addSpawnerEnemy(this, 1, Grunt);
-                    this.enemiesToSpawn --;
-                    this.updatesBetweenSpawns = 180; // 3 seconds
-                }
-                else {
-                    this.updatesBetweenSpawns --;
-                }
-            }
-            else {
-                this.updateState("destroyed");
-            }
-        }
+        }, this.secondsBeforeSpawningStarts * 1000);
     }
     animate() {
-        if (this.game.globalTimer % this.animationDelay === 0) {
+        if (canAnimate(this)) {
             this.game.spriteMngr.nextSpawnerSprite(this);
             this.game.hitboxMngr.updateSpawnerHitbox(this);
+        }
+    }
+    spawnEnemies() {
+        const {actorMngr, soundMngr} = this.game;
+        if (this.spawnAmount <= 0) {
+            this.updateState("vanished");
+            return;
+        }
+        if (this.secondsBetweenSpawns <= 0) {
+            actorMngr.addSpawnerEnemy(this, 1, this.enemyToSpawn);
+            const soundPriority = 4;
+            const minDuration = 0.3;
+            soundMngr.playSound(this.spawnSound, soundPriority, minDuration)
+            this.spawnAmount--;
+            this.secondsBetweenSpawns = 3; // Time untill the next spawn
+        } else {
+            this.secondsBetweenSpawns -= 1 / 60;
         }
     }
 }
