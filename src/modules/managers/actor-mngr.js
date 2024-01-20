@@ -17,7 +17,6 @@ class ActorManager {
         if (debuggerr.shouldUpdateActors) {
             this.updateActors(enemies);
             this.updateActors(humans);
-            this.deleteDestroyedOrRescued(enemies, humans);
         }
         player.update();
     }
@@ -97,22 +96,5 @@ class ActorManager {
         actors.forEach(actor => {
             actor.draw(context);
         });
-    }
-    wasDestroyed(actor) {
-        return actor.currentState === "destroyed";
-    }
-    wasRescued(human) {
-        return human.currentState === "rescued";
-    }
-    deleteActors(actors) {
-        actors.forEach(actor => {
-            if (this.wasDestroyed(actor) || this.wasRescued(actor)) {
-                actors.delete(actor);
-            }
-        });
-    }
-    deleteDestroyedOrRescued(enemies, humans) {
-        this.deleteActors(enemies);
-        this.deleteActors(humans);
     }
 }

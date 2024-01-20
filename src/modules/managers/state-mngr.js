@@ -1,4 +1,5 @@
 export {StateManager};
+import {isActorOfType} from "../helpers/globals.js";
 
 class StateManager {
     constructor(game) {
@@ -24,8 +25,9 @@ class StateManager {
             this.projectileMngr.eraseAllProjectiles();
         }
     }
-    humanDestroyed(human) {
+    handleHumanDestroyed(human) {
         if (this.actorDestroyed(human)) {
+            this.actors.humans.delete(human);
             const soundPriority = 4;
             const minDuration = 0.36;
             this.soundMngr.playSound("humanDestroyed", soundPriority, minDuration);
@@ -34,9 +36,10 @@ class StateManager {
     humanWasRecued(human) {
         return human.currentState === "rescued";
     }
-    humanRescued(human) {
+    handleHumanRescued(human) {
         if (this.humanWasRecued(human)) {
             this.score.awardRecuePoints(human);
+            this.actors.humans.delete(human);
             const soundPriority = 4;
             const minDuration = 0.4;
             this.soundMngr.playSound("humanRescued", soundPriority, minDuration);
@@ -44,13 +47,14 @@ class StateManager {
     }
     handleHumanStates() {
         for (const human of this.actors.humans) {
-            this.humanDestroyed(human);
-            this.humanRescued(human);
+            this.handleHumanDestroyed(human);
+            this.handleHumanRescued(human);
         }
     }
-    enemyDestroyed(enemy) {
+    handleEnemyDestroyed(enemy) {
         if (this.actorDestroyed(enemy)) {
             this.score.awardEnemyPoints(enemy);
+            this.actors.enemies.delete(enemy);
             const soundPriority = 3;
             const minDuration = 0.086;
             this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
@@ -58,7 +62,7 @@ class StateManager {
     }
     handleEnemyStates() {
         for (const enemy of this.actors.enemies) {
-            this.enemyDestroyed(enemy);
+            this.handleEnemyDestroyed(enemy);
         }
     }
     handleAllStates() {
