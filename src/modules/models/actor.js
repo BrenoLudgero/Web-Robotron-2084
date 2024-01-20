@@ -3,7 +3,7 @@ export {Actor};
 class Actor {
     constructor(game, originalWidth, originalHeight) {
         this.game = game;
-        this.currentState = "alive";
+        this.currentState = "alive"; // Actions related to all actors' state found in State Manager
         game.spriteMngr.setActorSprites(this);
         game.spriteMngr.setProjectileSprite(this);
         this.spritesheetX = 0;
@@ -90,7 +90,7 @@ class Actor {
     }
     updateProjectileTimer() {
         if (this.projectileTimer > 0) {
-            this.projectileTimer --;
+            this.projectileTimer--;
         }
     }
 }

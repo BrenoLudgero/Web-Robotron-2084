@@ -1,13 +1,13 @@
 export {Hulk};
 import {Enemy} from "../../models/enemy.js";
-import {canMove} from "../../helpers/globals.js";
+import {canAnimate} from "../../helpers/globals.js";
 
 class Hulk extends Enemy {
     constructor(game) {
         super(game, 26, 32);
         this.movementType = 1; // 4 directions
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
-        this.movementAnimationDelay = 9;
+        this.animationDelay = 9;
         this.minHumanSpawnDistance = 90;
         this.hitboxConfig = {
             "up": {
@@ -37,7 +37,7 @@ class Hulk extends Enemy {
         game.hitboxMngr.setAllHitboxes(this);
     }
     update() {
-        if (canMove(this)) {
+        if (canAnimate(this)) {
             this.ai.moveRandomly(this);
             this.animate(this, this.currentDirection);
         }

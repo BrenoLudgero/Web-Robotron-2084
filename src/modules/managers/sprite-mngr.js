@@ -1,7 +1,7 @@
 export {SpriteManager};
 import {Sprite} from "../models/sprite.js";
 import {spritesIndex, spritesheetYIndex} from "../helpers/indexes.js";
-import {canMove, isActorOfType} from "../helpers/globals.js";
+import {canAnimate, isActorOfType} from "../helpers/globals.js";
 
 class SpriteManager {
     notEndOfSheet(actor, maxSpritesheetX) {
@@ -21,16 +21,16 @@ class SpriteManager {
     // Called directly in Spawner
     nextSpawnerSprite(spawner) {
         const initialSpritesheetX = 0;
-        if (spawner.currentSprite < spawner.finalSprite) {
+        if (spawner.currentSprite < spawner.lastSprite) {
             spawner.spritesheetX += spawner.originalWidth + 2;
-            spawner.currentSprite ++;
+            spawner.currentSprite++;
             return
         }
         spawner.currentSprite = 1;
         spawner.spritesheetX = initialSpritesheetX;
     }
     nextPlayerSprite(player) {
-        if (canMove(player)) { // Unrelated to the ability to move in this specific case
+        if (canAnimate(player)) {
             this.nextSprite(player);
         }
     }

@@ -7,7 +7,7 @@ class Spawner extends Enemy {
         super(game, originalWidth, originalHeight);
         this.points = 1000;
         this.animationDelay = 5;
-        this.finalSprite = 5; // Stops on the fifth sprite
+        this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
         this.secondsBeforeSpawning = 5; // Start spawning enemies after this amount of seconds
         this.enemiesToSpawn = 3;
         this.updatesBetweenSpawns = 0;

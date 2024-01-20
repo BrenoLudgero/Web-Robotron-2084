@@ -8,7 +8,7 @@ class Player extends Actor {
         this.screenY = (game.ui.canvas.height / 2) - this.height;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
         this.movementSpeed = 3.8;
-        this.movementAnimationDelay = 2;
+        this.animationDelay = 2;
         this.projectileSpeed = 25;
         this.projectileTimer = 0;
         this.projectileDelay = 7;

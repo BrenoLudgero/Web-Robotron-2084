@@ -1,6 +1,6 @@
 export {Human};
 import {Actor} from "./actor.js";
-import {canMove} from "../helpers/globals.js";
+import {canAnimate} from "../helpers/globals.js";
 import {ArtificialIntelligence} from "./ai.js";
 
 class Human extends Actor {
@@ -10,13 +10,13 @@ class Human extends Actor {
         this.ai = new ArtificialIntelligence();
         this.movementType = 2; // 8 directions
         this.movementSpeed = 4;
-        this.movementAnimationDelay = 9;
+        this.animationDelay = 9;
         this.minPlayerSpawnDistance = 100; // SHRINKS ACCORDING TO WAVE (TEST LIMITS)
         this.minHumanSpawnDistance = 50;
         // screenX and screenY positions defined in actorMngr.addHuman
     }
     update() {
-        if (canMove(this)) {
+        if (canAnimate(this)) {
             this.ai.moveRandomly(this);
             this.animate(this, this.currentDirection);
         }
