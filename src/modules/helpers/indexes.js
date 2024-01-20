@@ -76,7 +76,7 @@ const soundFxIndex = {
     progConversion: soundFxPath + "prog_conversion.mp3",
     regularWave: soundFxPath + "regular_wave.mp3",
     sparkShot: soundFxPath + "spark_shot.mp3",
-    spheroidDestroyed: soundFxPath + "spheroid_shot.mp3",
+    spheroidDestroyed: soundFxPath + "spheroid_destroyed.mp3",
     tankShot: soundFxPath + "tank_shot.mp3",
     tankSpawn: soundFxPath + "tank_spawn.mp3"
 };

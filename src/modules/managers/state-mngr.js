@@ -57,7 +57,11 @@ class StateManager {
             this.actors.enemies.delete(enemy);
             const soundPriority = 3;
             const minDuration = 0.086;
-            this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
+            if (!isActorOfType(enemy, "Spheroid")) {
+                this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
+                return
+            }
+            this.soundMngr.playSound("spheroidDestroyed", soundPriority, minDuration);
         }
     }
     enemyIsSpawner(enemy) {
