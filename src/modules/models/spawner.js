@@ -41,4 +41,9 @@ class Spawner extends Enemy {
             this.secondsBetweenSpawns -= 1 / 60;
         }
     }
+    fadeOut() {
+        this.hitboxes.itself.xPosition = this.hidden;
+        this.hitboxes.itself.yPosition = this.hidden;
+        this.animationDelay = 6;
+    }
 }

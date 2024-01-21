@@ -87,9 +87,12 @@ class StateManager {
     }
     handleSpawnerVanishing(spawner) {
         if (this.spawnerVanished(spawner)) {
-            spawner.hitboxes = null;
-            //spawner.animateVanish();
-            this.actors.enemies.delete(spawner);
+            spawner.fadeOut();
+            if (spawner.currentSprite === spawner.lastSprite) {
+                setTimeout(() => {
+                    this.actors.enemies.delete(spawner);
+                }, 80);
+            }
         }
     }
     handleEnemyStates() {

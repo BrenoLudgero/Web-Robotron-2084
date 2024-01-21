@@ -6,7 +6,7 @@ class Spheroid extends Spawner {
     constructor(game) {
         super(game, 30, 30);
         this.enemyToSpawn = Grunt;
-        this.spawnAmount = 5; // CHANGES ACCORDING TO WAVE
+        this.spawnAmount = 1; // CHANGES ACCORDING TO WAVE
         this.spawnSound = "enforcerSpawn";
         // Hitbox based on the currentSprite
         this.hitboxConfig = {
