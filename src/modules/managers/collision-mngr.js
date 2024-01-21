@@ -31,10 +31,12 @@ class CollisionManager {
         const halfHeight = projectile.height / 2;
         const centerX = projectile.screenX + halfWidth;
         const centerY = projectile.screenY + halfHeight;
-        const rotatedX1 = (centerX - (halfWidth * Math.abs(Math.cos(projectile.angle)))) - (halfHeight * Math.abs(Math.sin(projectile.angle)));
-        const rotatedX2 = (centerX + (halfWidth * Math.abs(Math.cos(projectile.angle)))) + (halfHeight * Math.abs(Math.sin(projectile.angle)));
-        const rotatedY1 = (centerY - (halfWidth * Math.abs(Math.sin(projectile.angle)))) - (halfHeight * Math.abs(Math.cos(projectile.angle)));
-        const rotatedY2 = (centerY + (halfWidth * Math.abs(Math.sin(projectile.angle)))) + (halfHeight * Math.abs(Math.cos(projectile.angle)));
+        const cosAngle = Math.cos(projectile.angle);
+        const sinAngle = Math.sin(projectile.angle);
+        const rotatedX1 = (centerX - (halfWidth * Math.abs(cosAngle))) - (halfHeight * Math.abs(sinAngle));
+        const rotatedX2 = (centerX + (halfWidth * Math.abs(cosAngle))) + (halfHeight * Math.abs(sinAngle));
+        const rotatedY1 = (centerY - (halfWidth * Math.abs(sinAngle))) - (halfHeight * Math.abs(cosAngle));
+        const rotatedY2 = (centerY + (halfWidth * Math.abs(sinAngle))) + (halfHeight * Math.abs(cosAngle));
         return {
             left: Math.min(rotatedX1, rotatedX2),
             right: Math.max(rotatedX1, rotatedX2),
@@ -52,23 +54,25 @@ class CollisionManager {
     }
     // Checks collision between two actors
     checkSingleCollision(actor, target) {
-        for (const targetLimb in target.hitboxes) {
-            const targetHitbox = this.getLimbHitbox(target, targetLimb);
-            if (this.isProjectile(actor)) {
-                const projectileHitbox = this.getRotatedHitbox(actor);
+        if (this.isProjectile(actor)) {
+            const projectileHitbox = this.getRotatedHitbox(actor);
+            for (const targetLimb in target.hitboxes) {
+                const targetHitbox = this.getLimbHitbox(target, targetLimb);
                 if (this.collisionDetected(projectileHitbox, targetHitbox)) {
                     return true;
                 }
-            } else {
-                for (const actorLimb in actor.hitboxes) {
-                    const actorHitbox = this.getLimbHitbox(actor, actorLimb);
+            }
+        } else {
+            for (const actorLimb in actor.hitboxes) {
+                const actorHitbox = this.getLimbHitbox(actor, actorLimb);
+                for (const targetLimb in target.hitboxes) {
+                    const targetHitbox = this.getLimbHitbox(target, targetLimb);
                     if (this.collisionDetected(actorHitbox, targetHitbox)) {
                         return true;
                     }
                 }
             }
         }
-        return false;
     }
     checkPlayerCollisions(player, enemies) {
         for (const enemy of enemies) {
