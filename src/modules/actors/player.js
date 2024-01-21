@@ -4,8 +4,8 @@ import {Actor} from "../models/actor.js";
 class Player extends Actor {
     constructor(game) {
         super(game, 14, 24);
-        this.screenX = (game.ui.canvas.width / 2) - this.width;
-        this.screenY = (game.ui.canvas.height / 2) - this.height;
+        this.screenX = (game.ui.canvas.width / 2) - this.originalWidth;
+        this.screenY = (game.ui.canvas.height / 2) - this.originalHeight;
         this.lives = 3; // Updated in collisionMngr.checkPlayerCollision
         this.movementSpeed = 3.8;
         this.animationDelay = 2;
