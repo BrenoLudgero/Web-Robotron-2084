@@ -1,16 +1,17 @@
 export {Spawner};
 import {Enemy} from "./enemy.js";
-import {canAnimate} from "../helpers/globals.js";
+import {RNG, canAnimate} from "../helpers/globals.js";
 
 class Spawner extends Enemy {
     constructor(game, originalWidth, originalHeight) {
         super(game, originalWidth, originalHeight);
         this.points = 1000;
-        this.animationDelay = 5;
+        this.movementSpeed = RNG(1, 3);
+        this.animationDelay = 3;
         this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
         this.secondsBeforeSpawningStarts = 4; // CHANGES ACCORDING TO WAVE
         this.secondsBetweenSpawns = 1.5; // Initial time between animation change and first spawn
-        this.currentSprite = 1;
+        this.currentSprite = RNG(1, 4);
         setTimeout(() => {
             this.updateState("spawning");
         }, this.secondsBeforeSpawningStarts * 1000);

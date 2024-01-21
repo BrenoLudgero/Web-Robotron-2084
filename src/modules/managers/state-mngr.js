@@ -77,7 +77,7 @@ class StateManager {
         if (this.spawnerSpawning(enemy)) {
             enemy.startingSprite = 0;
             enemy.lastSprite = 8;
-            enemy.animationDelay = 4;
+            enemy.animationDelay = 3;
             enemy.spawnEnemies();
         }
     }

@@ -31,25 +31,29 @@ class ArtificialIntelligence {
         let randomNumber = RNG(1, 2);
         if (randomNumber === 1) {
             this.stepTowardsPlayer(grunt, game);
-            game.soundMngr.playSound("gruntStep", 1);
+            // game.soundMngr.playSound("gruntStep", 1);
             game.spriteMngr.nextSprite(grunt);
-            return true;
         }
     }
-    // Move the spawner away from the player based on normalized distances
-    avoidPlayer(spawner, game) {
+    // Move the spheroid away from the player with variable speeds
+    avoidPlayer(spheroid, game) {
         const player = game.actorMngr.actors.player;
-        const distanceX = player.screenX - spawner.screenX;
-        const distanceY = player.screenY - spawner.screenY;
-        const distance = getDistanceBetween(spawner, player); // Ranges from 40 to 1092
-        const normalizedDistanceX = distanceX / distance;
-        const normalizedDistanceY = distanceY / distance;
+        const distanceX = player.screenX - spheroid.screenX;
+        const distanceY = player.screenY - spheroid.screenY;
+        const distance = getDistanceBetween(spheroid, player); // Ranges from 40 to 1092
+        const distanceToKeep = 400;
         // Adjusts movement speed based on distance (closer = faster)
-        const distanceToKeep = 100;
         const speedMultiplier = distanceToKeep / distance;
-        const effectiveSpeed = spawner.movementSpeed * speedMultiplier;
-        spawner.screenX -= normalizedDistanceX * effectiveSpeed;
-        spawner.screenY -= normalizedDistanceY * effectiveSpeed;
+        const effectiveSpeed = spheroid.movementSpeed * speedMultiplier;
+        const avoidanceMultiplier = effectiveSpeed / distance;
+        // Move away from the player
+        spheroid.screenX -= distanceX * avoidanceMultiplier;
+        spheroid.screenY -= distanceY * avoidanceMultiplier;
+        if (distance <= distanceToKeep) {
+            // Rotate clockwise
+            spheroid.screenX = spheroid.screenX + distanceY * avoidanceMultiplier;
+            spheroid.screenY = spheroid.screenY - distanceX * avoidanceMultiplier;
+        }
     }
     moveActor(actor) {
         switch(actor.currentDirection) {

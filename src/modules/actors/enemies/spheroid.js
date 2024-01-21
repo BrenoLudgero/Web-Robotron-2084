@@ -5,7 +5,6 @@ import {Grunt} from "./grunt.js";
 class Spheroid extends Spawner {
     constructor(game) {
         super(game, 30, 30);
-        this.movementSpeed = 4;
         this.enemyToSpawn = Grunt;
         this.spawnAmount = 5; // CHANGES ACCORDING TO WAVE
         this.spawnSound = "enforcerSpawn";
