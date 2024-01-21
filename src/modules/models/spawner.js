@@ -6,7 +6,9 @@ class Spawner extends Enemy {
     constructor(game, originalWidth, originalHeight) {
         super(game, originalWidth, originalHeight);
         this.points = 1000;
-        this.movementSpeed = RNG(1, 3);
+        this.minMoveSpeed = 1; // CHANGES ACCORDING TO WAVE
+        this.maxMoveSpeed = 4; // CHANGES ACCORDING TO WAVE
+        this.movementSpeed = RNG(this.minMoveSpeed, this.maxMoveSpeed);
         this.animationDelay = 3;
         this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
         this.secondsBeforeSpawningStarts = 4; // CHANGES ACCORDING TO WAVE

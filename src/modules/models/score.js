@@ -32,7 +32,7 @@ class Score {
     // Awards an extra life when the score is divisible by 25,000
     awardExtraLife(player, soundMngr) {
         if (this.extraLifeScoreAchieved()) {
-            player.lives ++;
+            player.lives++;
             this.nextExtraLife += 25000;
             const soundPriority = 5;
             const minDuration = 0.604;

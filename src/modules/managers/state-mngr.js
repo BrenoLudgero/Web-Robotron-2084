@@ -55,12 +55,13 @@ class StateManager {
         if (this.actorDestroyed(enemy)) {
             this.score.awardEnemyPoints(enemy);
             this.actors.enemies.delete(enemy);
-            const soundPriority = 3;
+            let soundPriority = 3
             const minDuration = 0.086;
             if (!isActorOfType(enemy, "Spheroid")) {
                 this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
                 return
             }
+            soundPriority = 4;
             this.soundMngr.playSound("spheroidDestroyed", soundPriority, minDuration);
         }
     }
@@ -86,6 +87,8 @@ class StateManager {
     }
     handleSpawnerVanishing(spawner) {
         if (this.spawnerVanished(spawner)) {
+            spawner.hitboxes = null;
+            //spawner.animateVanish();
             this.actors.enemies.delete(spawner);
         }
     }
