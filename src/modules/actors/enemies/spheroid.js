@@ -8,6 +8,7 @@ class Spheroid extends Spawner {
         this.enemyToSpawn = Grunt;
         this.spawnAmount = 1; // CHANGES ACCORDING TO WAVE
         this.spawnSound = "enforcerSpawn";
+        this.minDistanceFromPlayer = 700;
         // Hitbox based on the currentSprite
         this.hitboxConfig = {
             1: {itself: {width: 4, height: 4, xPosition: 20, yPosition: 20}},
@@ -23,7 +24,7 @@ class Spheroid extends Spawner {
     }
     update() {
         this.animate();
-        this.ai.avoidPlayer(this, this.game);
+        this.ai.moveInRelationToPlayer(this, this.game); // Avoids Player
         this.stayWithinCanvas();
     }
 }

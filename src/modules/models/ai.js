@@ -35,24 +35,23 @@ class ArtificialIntelligence {
             game.spriteMngr.nextSprite(grunt);
         }
     }
-    // Move the spheroid away from the player with variable speeds
-    avoidPlayer(spheroid, game) {
+    // Spheroids and Enforcers only
+    moveInRelationToPlayer(actor, game, closer = false) {
         const player = game.actorMngr.actors.player;
-        const distanceX = player.screenX - spheroid.screenX;
-        const distanceY = player.screenY - spheroid.screenY;
-        const distance = getDistanceBetween(spheroid, player); // Ranges from 40 to 1092
-        const distanceToKeep = 400;
-        // Adjusts movement speed based on distance (closer = faster)
-        const speedMultiplier = distanceToKeep / distance;
-        const effectiveSpeed = spheroid.movementSpeed * speedMultiplier;
-        const avoidanceMultiplier = effectiveSpeed / distance;
-        // Move away from the player
-        spheroid.screenX -= distanceX * avoidanceMultiplier;
-        spheroid.screenY -= distanceY * avoidanceMultiplier;
-        if (distance <= distanceToKeep) {
-            // Rotate clockwise
-            spheroid.screenX = spheroid.screenX + distanceY * avoidanceMultiplier;
-            spheroid.screenY = spheroid.screenY - distanceX * avoidanceMultiplier;
+        const distanceX = player.screenX - actor.screenX;
+        const distanceY = player.screenY - actor.screenY;
+        const distance = getDistanceBetween(actor, player); // Ranges from 40 to 1092
+        const distanceToKeep = actor.minDistanceFromPlayer;
+        // Adjusts movement speed based on distance
+        const speedMultiplier = closer ? distance / distanceToKeep : distanceToKeep / distance;
+        const effectiveSpeed = actor.movementSpeed * speedMultiplier;
+        const movementMultiplier = effectiveSpeed / distance;
+        actor.screenX += (closer ? distanceX : -distanceX) * movementMultiplier;
+        actor.screenY += (closer ? distanceY : -distanceY) * movementMultiplier;
+        // Spheroid rotates clockwise in relation to the Player if closer than distanceToKeep
+        if (!closer && distance <= distanceToKeep) {
+            actor.screenX += distanceY * movementMultiplier;
+            actor.screenY -= distanceX * movementMultiplier;
         }
     }
     moveActor(actor) {

@@ -56,7 +56,7 @@ class Game {
         projectileMngr.draw(this, ui.context);
     }
     // TEMPORARY. WAVE METHOD
-    // ALWAYS SPAWN HUMANS -> OBSTACLES -> HULKS -> ELSE
+    // HUMANS -> SPAWNERS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const {actorMngr} = this;
         actorMngr.addActors(5, Spheroid);
