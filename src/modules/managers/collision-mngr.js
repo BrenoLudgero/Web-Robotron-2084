@@ -108,7 +108,7 @@ class CollisionManager {
     }
     // Checks collision between all projectiles and enemies
     checkProjectileCollisions(projectiles, enemies) {
-        for (const projectile of projectiles) {
+        for (const projectile of projectiles.player) {
             for (const enemy of enemies) {
                 if (this.checkSingleCollision(projectile, enemy)) {
                     if (!isActorOfType(enemy, "Hulk")) {

@@ -1,4 +1,4 @@
-export {RNG, isActorOfType, canAnimate, getDistanceBetween};
+export {RNG, isActorOfType, canAnimate, getDistanceBetween, getActorName};
 
 // Generates a random integer between (and including) min and max
 function RNG(min, max) {
@@ -14,4 +14,7 @@ function getDistanceBetween(actorA, actorB) {
     const distanceX = actorB.screenX - actorA.screenX;
     const distanceY = actorB.screenY - actorA.screenY;
     return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+}
+function getActorName(actor) {
+    return actor.constructor.name.toLowerCase(); // e.g. 'player'
 }

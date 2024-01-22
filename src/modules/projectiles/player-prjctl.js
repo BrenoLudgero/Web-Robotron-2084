@@ -14,7 +14,6 @@ class PlayerProjectile extends Projectile {
         this.direction = direction;
         this.speed = speed;
         this.knockbackForce = 6;
-        // Speed defined by each actor
     }
     knockback(hulk) {
         const directionMap = {

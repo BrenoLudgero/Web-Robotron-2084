@@ -63,12 +63,12 @@ class Player extends Actor {
     // Called in inputMngr.processShootingKeys
     shoot(direction) {
         const {projectileMngr, soundMngr} = this.game;
-        const {screenX, screenY, projectileSprite, projectileSpeed, projectileDelay} = this;
+        const {screenX, screenY, projectileSpeed, projectileDelay} = this;
         const {x: xOffset, y: yOffset} = this.getProjectileOffsets(direction);
         const playerX = screenX + xOffset;
         const playerY = screenY + yOffset;
         if (this.canShoot()) {
-            projectileMngr.createPlayerProjectile(projectileSprite, playerX, playerY, projectileSpeed, direction);
+            projectileMngr.createProjectile(this, playerX, playerY, projectileSpeed, direction);
             this.projectileTimer = projectileDelay;
             const soundPriority = 2;
             const minDuration = 0.12;

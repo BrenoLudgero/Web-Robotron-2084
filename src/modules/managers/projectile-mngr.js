@@ -1,27 +1,47 @@
 export {ProjectileManager};
 import {PlayerProjectile} from "../projectiles/player-prjctl.js";
+import {getActorName} from "../helpers/globals.js"
 
 class ProjectileManager {
     constructor() {
-        this.projectiles = new Set();
+        this.projectiles = {
+            player: new Set(),
+            enemies: new Set()
+        };
     }
     update(game) {
         const {projectiles} = this;
-        projectiles.forEach(projectile => {
-            projectile.update(game.ui);
-            if (projectile.mustDelete) {
-                projectiles.delete(projectile);
-            }
+        Object.values(projectiles).forEach((projectileSet) => {
+            projectileSet.forEach((projectile) => {
+                projectile.update(game.ui);
+                if (projectile.mustDelete) {
+                    projectileSet.delete(projectile);
+                }
+            });
         });
     }
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
-        this.projectiles.forEach(projectile => projectile.draw(game, context));
+        const {projectiles} = this;
+        Object.values(projectiles).forEach((projectileSet) => {
+            projectileSet.forEach((projectile) => {
+                projectile.draw(game, context);
+            });
+        });
     }
-    createPlayerProjectile(spriteSrc, screenX, screenY, speed, direction) {
-        const projectile = new PlayerProjectile(spriteSrc, screenX, screenY, speed, direction);
-        this.projectiles.add(projectile);
+    createProjectile(actor, screenX, screenY, speed, direction) {
+        let projectile;
+        const actorName = getActorName(actor);
+        switch (actorName) {
+            case "player":
+                projectile = new PlayerProjectile(actor.projectileSprite, screenX, screenY, speed, direction);
+                this.projectiles.player.add(projectile);
+                break;
+        }
+        return projectile;
     }
     eraseAllProjectiles() {
-        this.projectiles.clear();
+        Object.values(this.projectiles).forEach((projectileSet) => {
+            projectileSet.clear();
+        });
     }
 }
