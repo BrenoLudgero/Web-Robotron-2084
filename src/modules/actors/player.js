@@ -68,7 +68,7 @@ class Player extends Actor {
         const playerX = screenX + xOffset;
         const playerY = screenY + yOffset;
         if (this.canShoot()) {
-            projectileMngr.createProjectile(projectileSprite, playerX, playerY, projectileSpeed, direction);
+            projectileMngr.createPlayerProjectile(projectileSprite, playerX, playerY, projectileSpeed, direction);
             this.projectileTimer = projectileDelay;
             const soundPriority = 2;
             const minDuration = 0.12;

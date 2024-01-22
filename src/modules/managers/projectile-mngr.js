@@ -1,5 +1,5 @@
 export {ProjectileManager};
-import {Projectile} from "../models/projectile.js";
+import {PlayerProjectile} from "../projectiles/player-prjctl.js";
 
 class ProjectileManager {
     constructor() {
@@ -17,8 +17,8 @@ class ProjectileManager {
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
         this.projectiles.forEach(projectile => projectile.draw(game, context));
     }
-    createProjectile(spriteSrc, screenX, screenY, speed, direction) {
-        const projectile = new Projectile(spriteSrc, screenX, screenY, speed, direction);
+    createPlayerProjectile(spriteSrc, screenX, screenY, speed, direction) {
+        const projectile = new PlayerProjectile(spriteSrc, screenX, screenY, speed, direction);
         this.projectiles.add(projectile);
     }
     eraseAllProjectiles() {
