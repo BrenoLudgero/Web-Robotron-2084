@@ -34,7 +34,7 @@ class Spawner extends Enemy {
         if (this.secondsBetweenSpawns <= 0) {
             actorMngr.addSpawnerEnemy(this, 1, this.enemyToSpawn);
             const soundPriority = 4;
-            const minDuration = 0.3;
+            const minDuration = 0.2;
             soundMngr.playSound(this.spawnSound, soundPriority, minDuration)
             this.spawnAmount--;
             this.secondsBetweenSpawns = RNG(1, 3); // Time untill the next spawn

@@ -6,6 +6,7 @@ const soundFxPath = "../../src/sound_fx/";
 const spritesIndex = {
     life: imgPath + "ui/life.png",
     daddy: imgPath + "actors/humans/daddy.png",
+    enforcer: imgPath + "actors/enemies/enforcer.png",
     grunt: imgPath + "actors/enemies/grunt.png",
     hulk: imgPath + "actors/enemies/hulk.png",
     mikey: imgPath + "actors/humans/mikey_alt.png",
