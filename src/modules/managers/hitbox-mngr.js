@@ -48,4 +48,14 @@ class HitboxManager {
             bottom: Math.max(rotatedY1, rotatedY2)
         };
     }
+    isProjectile(actor) {
+        return actor.angle !== undefined;
+    }
+    getInitialHitboxes(actor) {
+        console.log(Object.getPrototypeOf(actor).name)
+        return this.isProjectile(actor) ? this.getRotatedHitbox(actor) : actor.hitboxes;
+    }
+    getLimbsHitboxes(actor, actorHitboxes, actorLimb) {
+        return this.isProjectile(actor) ? actorHitboxes : this.getLimbHitbox(actor, actorLimb)
+    }
 }
