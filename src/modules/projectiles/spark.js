@@ -13,16 +13,23 @@ class Spark extends Projectile {
         this.screenX = screenX;
         this.screenY = screenY;
         this.speed = speed;
+        this.timeOnScreen = 180; // Time in updates (3 seconds)
     }
-    rotateProjectile(game) {
+    rotate(game) {
         if (canAnimate(this, game)) {
             this.angle += 45;
         }
     }
-    // Moves to the player's position at the time of shooting (plus or minus 0-80 pixels)
+    vanishAfterTimeElapsed() {
+        if (this.timeOnScreen <= 0) {
+            this.updateState("vanished");
+        }
+    }
+    // Moves to the player's position at the time of shooting (plus or minus randomOffset)
     moveProjectile(game) {
         const {player} = game.actorMngr.actors;
         if (!this.fired) {
+            this.setMovementBoundaries(game);
             const randomOffset = RNG(0, 80);
             const distanceX = player.screenX - (this.screenX + randomOffset);
             const distanceY = player.screenY - (this.screenY + randomOffset);
@@ -35,6 +42,44 @@ class Spark extends Projectile {
         }
         this.screenX += this.directionX * this.speed;
         this.screenY += this.directionY * this.speed;
-        this.rotateProjectile(game);
+        this.rotate(game);
+        this.stayWithinCanvas();
+        this.timeOnScreen--;
+        this.vanishAfterTimeElapsed();
+    }
+    setMovementBoundaries(game) {
+        const {ui} = game;
+        this.movementBoundaries = {
+            "x": ui.canvas.width - this.width,
+            "y": ui.canvas.height - this.height
+        };
+    }
+    touchingCeiling() {
+        return this.screenY <= 2;
+    }
+    touchingFloor() {
+        return this.screenY >= this.movementBoundaries.y;
+    }
+    touchingLeftWall() {
+        return this.screenX <= 2;
+    }
+    touchingRightWall() {
+        return this.screenX >= this.movementBoundaries.x;
+    }
+    stayWithinCanvas() {
+        const ceilingY = 2;
+        const leftWallX = 2;
+        if (this.touchingCeiling()) {
+            this.screenY = ceilingY;
+        } 
+        else if (this.touchingFloor()) {
+            this.screenY = this.movementBoundaries.y;
+        }
+        if (this.touchingLeftWall()) {
+            this.screenX = leftWallX;
+        } 
+        else if (this.touchingRightWall()) {
+            this.screenX = this.movementBoundaries.x;
+        }
     }
 }

@@ -14,11 +14,11 @@ class StateManager {
     update() {
         this.handleAllStates();
     }
-    actorDestroyed(actor) {
+    wasDestroyed(actor) {
         return actor.currentState === "destroyed";
     }
     handlePlayerDestroyed() {
-        if (this.actorDestroyed(this.player)) {
+        if (this.wasDestroyed(this.player)) {
             this.player.lives--;
             this.score.resetRescueBonus();
             const soundPriority = 6;
@@ -27,7 +27,7 @@ class StateManager {
         }
     }
     handleHumanDestroyed(human) {
-        if (this.actorDestroyed(human)) {
+        if (this.wasDestroyed(human)) {
             this.actors.humans.delete(human);
             const soundPriority = 4;
             const minDuration = 0.36;
@@ -53,7 +53,7 @@ class StateManager {
         }
     }
     handleEnemyDestroyed(enemy) {
-        if (this.actorDestroyed(enemy)) {
+        if (this.wasDestroyed(enemy)) {
             this.score.awardPoints(enemy);
             this.actors.enemies.delete(enemy);
             let soundPriority = 3
@@ -86,6 +86,7 @@ class StateManager {
     spawnerVanished(spawner) {
         return spawner.currentState === "vanished";
     }
+    // Wait for the last sprite before vanishing
     handleSpawnerVanishing(spawner) {
         if (this.spawnerVanished(spawner)) {
             spawner.fadeOut();
@@ -109,6 +110,7 @@ class StateManager {
         return (
             projectile.currentState === "outOfBounds"
             || projectile.currentState === "destroyed"
+            || projectile.currentState === "vanished"
         )
     }
     handleProjectileStates() {
@@ -116,7 +118,7 @@ class StateManager {
             projectileSet.forEach((projectile) => {
                 if (this.shouldDeleteProjectile(projectile)) {
                     projectileSet.delete(projectile);
-                    if (projectile.points) {
+                    if (projectile.points && this.wasDestroyed(projectile)) {
                         this.game.score.awardPoints(projectile);
                     }
                 }

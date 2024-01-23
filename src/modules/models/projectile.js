@@ -13,6 +13,7 @@ class Projectile {
         this.angle = 0;
         // Speed defined by each actor
     }
+    // Updated in stateMngr.handleProjectileStates
     update(game) {
         this.moveProjectile(game);
         if (this.outOfBounds(game.ui)) {
