@@ -10,17 +10,6 @@ class ProjectileManager {
             enemies: new Set()
         };
     }
-    update(game) {
-        const {projectiles} = this;
-        Object.values(projectiles).forEach((projectileSet) => {
-            projectileSet.forEach((projectile) => {
-                projectile.update(game);
-                if (projectile.mustDelete) {
-                    projectileSet.delete(projectile);
-                }
-            });
-        });
-    }
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
         const {projectiles} = this;
         Object.values(projectiles).forEach((projectileSet) => {

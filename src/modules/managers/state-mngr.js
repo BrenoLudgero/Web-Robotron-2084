@@ -8,6 +8,7 @@ class StateManager {
         this.soundMngr = game.soundMngr;
         this.projectileMngr = game.projectileMngr;
         this.actors = game.actorMngr.actors;
+        this.projectiles = game.projectileMngr.projectiles;
         this.player = this.actors.player;
     }
     update() {
@@ -53,7 +54,7 @@ class StateManager {
     }
     handleEnemyDestroyed(enemy) {
         if (this.actorDestroyed(enemy)) {
-            this.score.awardEnemyPoints(enemy);
+            this.score.awardPoints(enemy);
             this.actors.enemies.delete(enemy);
             let soundPriority = 3
             const minDuration = 0.086;
@@ -104,9 +105,31 @@ class StateManager {
             }
         }
     }
+    shouldDeleteProjectile(projectile) {
+        return (
+            projectile.currentState === "outOfBounds"
+            || projectile.currentState === "destroyed"
+        )
+    }
+    handleProjectileStates() {
+        Object.values(this.projectiles).forEach((projectileSet) => {
+            projectileSet.forEach((projectile) => {
+                if (this.shouldDeleteProjectile(projectile)) {
+                    projectileSet.delete(projectile);
+                    if (projectile.points) {
+                        this.game.score.awardPoints(projectile);
+                    }
+                }
+                else {
+                    projectile.update(this.game);
+                }
+            });
+        });
+    }
     handleAllStates() {
         this.handlePlayerDestroyed();
         this.handleHumanStates();
         this.handleEnemyStates();
+        this.handleProjectileStates();
     }
 }

@@ -5,6 +5,7 @@ import {RNG, canAnimate, getDistanceBetween} from "../helpers/globals.js";
 class Spark extends Projectile {
     constructor(sprite, screenX, screenY, speed) {
         super(sprite, screenX, screenY, speed)
+        this.points = 25;
         this.width = 21;
         this.height = 21;
         this.sprite = sprite;

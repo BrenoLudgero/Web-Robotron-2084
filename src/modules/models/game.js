@@ -42,7 +42,6 @@ class Game {
         if (!stateMngr.actorDestroyed(player)) {
             actorMngr.update();
             this.inputMngr.update(player);
-            this.projectileMngr.update(this);
             this.collisionMngr.update(this);
             score.update(player, soundMngr);
             stateMngr.update();

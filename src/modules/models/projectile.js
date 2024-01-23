@@ -3,6 +3,7 @@ export {Projectile};
 // Instantiated in projectileMngr
 class Projectile {
     constructor(sprite, screenX, screenY, speed) {
+        this.currentState = "moving";
         this.sprite = sprite;
         this.spritesheetX = 0;
         this.spritesheetY = 0;
@@ -10,13 +11,12 @@ class Projectile {
         this.screenY = screenY;
         this.speed = speed;
         this.angle = 0;
-        this.mustDelete = false;
         // Speed defined by each actor
     }
     update(game) {
         this.moveProjectile(game);
         if (this.outOfBounds(game.ui)) {
-            this.mustDelete = true;
+            this.updateState("outOfBounds");
         }
     }
     draw(game, context) { // REMOVE GAME WITH DEBUGGER
@@ -36,5 +36,8 @@ class Projectile {
             || screenY > ui.canvas.height + 10 
             || screenY < -10
         );
+    }
+    updateState(state) {
+        this.currentState = state;
     }
 }

@@ -74,7 +74,7 @@ class CollisionManager {
         } else {
             playerProjectile.knockback(enemy);
         }
-        playerProjectile.mustDelete = true;
+        playerProjectile.updateState("destroyed");
     }
     handlePlayerProjectileEnemyCollisions(playerProjectiles, enemies, hitboxMngr) {
         for (const playerProjectile of playerProjectiles) {
@@ -90,8 +90,8 @@ class CollisionManager {
         for (const playerProjectile of playerProjectiles) {
             for (const enemyProjectile of enemyProjectiles) {
                 if (this.checkSingleCollision(playerProjectile, enemyProjectile, hitboxMngr)) {
-                    playerProjectile.mustDelete = true;
-                    enemyProjectile.mustDelete = true;
+                    playerProjectile.updateState("destroyed");
+                    enemyProjectile.updateState("destroyed");
                     break;
                 }
             }

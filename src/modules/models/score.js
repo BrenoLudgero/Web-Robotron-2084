@@ -23,8 +23,8 @@ class Score {
             this.rescueBonus += 1000;
         }
     }
-    awardEnemyPoints(enemy) {
-        this.currentScore += enemy.points;
+    awardPoints(actor) {
+        this.currentScore += actor.points;
     }
     extraLifeScoreAchieved() {
         return this.currentScore >= this.nextExtraLife;
