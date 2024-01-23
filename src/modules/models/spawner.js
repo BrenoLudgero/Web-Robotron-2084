@@ -13,7 +13,7 @@ class Spawner extends Enemy {
         this.currentSprite = RNG(1, 4);
         this.animationDelay = 3;
         this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
-        this.secondsBeforeSpawningStarts = 4; // CHANGES ACCORDING TO WAVE
+        this.secondsBeforeSpawningStarts = RNG(2, 4); // CHANGES ACCORDING TO WAVE
         this.secondsBetweenSpawns = RNG(1, 4); // Initial time between animation change and first spawn
         setTimeout(() => {
             this.updateState("spawning");

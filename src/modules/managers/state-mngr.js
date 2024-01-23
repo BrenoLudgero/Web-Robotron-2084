@@ -60,7 +60,7 @@ class StateManager {
             const minDuration = 0.086;
             if (!isActorOfType(enemy, "Spheroid")) {
                 this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
-                return
+                return;
             }
             soundPriority = 4;
             this.soundMngr.playSound("spheroidDestroyed", soundPriority, minDuration);
@@ -111,14 +111,20 @@ class StateManager {
             projectile.currentState === "outOfBounds"
             || projectile.currentState === "destroyed"
             || projectile.currentState === "vanished"
-        )
+        );
+    }
+    destroyedProjectileAwardsPoints(projectile) {
+        return (
+            projectile.points 
+            && this.wasDestroyed(projectile)
+        );
     }
     handleProjectileStates() {
         Object.values(this.projectiles).forEach((projectileSet) => {
             projectileSet.forEach((projectile) => {
                 if (this.shouldDeleteProjectile(projectile)) {
                     projectileSet.delete(projectile);
-                    if (projectile.points && this.wasDestroyed(projectile)) {
+                    if (this.destroyedProjectileAwardsPoints(projectile)) {
                         this.game.score.awardPoints(projectile);
                     }
                 }

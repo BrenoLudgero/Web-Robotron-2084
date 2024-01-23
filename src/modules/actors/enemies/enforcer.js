@@ -12,7 +12,8 @@ class Enforcer extends Enemy {
         this.movementSpeed = 1 // RNG(this.minMoveSpeed, this.maxMoveSpeed);
         this.minDistanceFromPlayer = RNG(500, 1000);
         this.currentSprite = 1;
-        this.animationDelay = 6;
+        this.lastSprite = 6; // Full size
+        this.animationDelay = 5;
         this.projectileSpeed = RNG(4, 6);
         this.projectileTimer = RNG(5, 20);
         this.projectileDelay = RNG(100, 300);
@@ -25,26 +26,21 @@ class Enforcer extends Enemy {
         };
     }
     update() {
-        if (!this.initialized) {
-            this.initialize();
+        if (!this.isFullSize()) {
+            this.fadeIn();
             return;
         }
         this.ai.moveInRelationToPlayer(this, this.game, true); // Follows Player
         this.updateProjectileTimer();
         this.shoot();
     }
+    isFullSize() {
+        return this.currentSprite === this.lastSprite;
+    }
     fadeIn() {
-        if (this.currentSprite !== 6) {
+        if (canAnimate(this)) {
             this.game.spriteMngr.nextSprite(this);
             this.currentSprite++;
-        }
-        else {
-            this.initialized = true;
-        }
-    }
-    initialize() {
-        if (canAnimate(this)) {
-            this.fadeIn();
         }
     }
     shoot() {

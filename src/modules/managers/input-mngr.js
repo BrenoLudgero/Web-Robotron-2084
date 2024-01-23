@@ -108,14 +108,18 @@ class InputManager {
     }
     //   Movement methods
     pressingWOnly() {
-        return !this.pressing("d") 
-        && !this.pressing("a") 
-        && !this.pressing("s");
+        return (
+            !this.pressing("d") 
+            && !this.pressing("a") 
+            && !this.pressing("s")
+        );
     }
     pressingSOnly() {
-        return !this.pressing("d") 
-        && !this.pressing("w") 
-        && !this.pressing("a");
+        return (
+            !this.pressing("d") 
+            && !this.pressing("w") 
+            && !this.pressing("a")
+        );
     }
     notPressingA() {
         return !this.pressing("a");
