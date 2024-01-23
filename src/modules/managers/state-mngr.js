@@ -22,7 +22,7 @@ class StateManager {
             this.score.resetRescueBonus();
             const soundPriority = 6;
             this.soundMngr.playSound("playerDestroyed", soundPriority);
-            this.projectileMngr.eraseAllProjectiles();
+            this.projectileMngr.eraseAllPlayerProjectiles();
         }
     }
     handleHumanDestroyed(human) {

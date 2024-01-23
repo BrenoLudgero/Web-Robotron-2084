@@ -63,7 +63,7 @@ class Game {
         // actorMngr.addActors(5, Mommy);
         // actorMngr.addActors(5, Mikey);
         actorMngr.addActors(3, Spheroid);
-        // actorMngr.addActors(10, Hulk);
-        // actorMngr.addActors(15, Grunt);
+        // actorMngr.addActors(7, Hulk);
+        // actorMngr.addActors(20, Grunt);
     }
 }

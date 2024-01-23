@@ -37,7 +37,7 @@ class ArtificialIntelligence {
     }
     // Spheroids and Enforcers only
     moveInRelationToPlayer(actor, game, closer = false) {
-        const player = game.actorMngr.actors.player;
+        const {player} = game.actorMngr.actors;
         const distanceX = player.screenX - actor.screenX;
         const distanceY = player.screenY - actor.screenY;
         const distance = getDistanceBetween(actor, player); // Ranges from 40 to 1092
@@ -53,6 +53,7 @@ class ArtificialIntelligence {
             actor.screenX += distanceY * movementMultiplier;
             actor.screenY -= distanceX * movementMultiplier;
         }
+        actor.stayWithinCanvas(); // Might leave canvas' borders if in actor.update
     }
     moveActor(actor) {
         switch(actor.currentDirection) {

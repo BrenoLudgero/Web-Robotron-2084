@@ -52,7 +52,6 @@ class HitboxManager {
         return actor.angle !== undefined;
     }
     getInitialHitboxes(actor) {
-        console.log(Object.getPrototypeOf(actor).name)
         return this.isProjectile(actor) ? this.getRotatedHitbox(actor) : actor.hitboxes;
     }
     getLimbsHitboxes(actor, actorHitboxes, actorLimb) {

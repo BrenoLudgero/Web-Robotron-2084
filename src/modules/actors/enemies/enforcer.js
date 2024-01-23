@@ -27,15 +27,10 @@ class Enforcer extends Enemy {
     update() {
         if (!this.initialized) {
             this.initialize();
-            return
+            return;
         }
         this.ai.moveInRelationToPlayer(this, this.game, true); // Follows Player
         this.stayWithinCanvas();
-    }
-    initialize() {
-        if (!this.initialized && canAnimate(this)) {
-            this.fadeIn();
-        }
     }
     fadeIn() {
         if (this.currentSprite !== 6) {
@@ -44,6 +39,11 @@ class Enforcer extends Enemy {
         }
         else {
             this.initialized = true;
+        }
+    }
+    initialize() {
+        if (canAnimate(this)) {
+            this.fadeIn();
         }
     }
 }

@@ -13,7 +13,7 @@ class ProjectileManager {
         const {projectiles} = this;
         Object.values(projectiles).forEach((projectileSet) => {
             projectileSet.forEach((projectile) => {
-                projectile.update(game.ui);
+                projectile.update(game);
                 if (projectile.mustDelete) {
                     projectileSet.delete(projectile);
                 }
@@ -39,9 +39,7 @@ class ProjectileManager {
         }
         return projectile;
     }
-    eraseAllProjectiles() {
-        Object.values(this.projectiles).forEach((projectileSet) => {
-            projectileSet.clear();
-        });
+    eraseAllPlayerProjectiles() {
+        this.projectiles.player.clear();
     }
 }

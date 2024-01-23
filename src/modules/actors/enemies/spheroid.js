@@ -25,6 +25,5 @@ class Spheroid extends Spawner {
     update() {
         this.animate();
         this.ai.moveInRelationToPlayer(this, this.game); // Avoids Player
-        this.stayWithinCanvas();
     }
 }

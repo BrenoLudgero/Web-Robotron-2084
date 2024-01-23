@@ -14,8 +14,8 @@ class Projectile {
         // Speed defined by each actor
     }
     update(game) {
-        this.moveProjectile();
-        if (this.outOfBounds(game)) {
+        this.moveProjectile(game);
+        if (this.outOfBounds(game.ui)) {
             this.mustDelete = true;
         }
     }
