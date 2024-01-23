@@ -7,10 +7,10 @@ class Enforcer extends Enemy {
         super(game, 18, 22);
         this.initialized = false;
         this.points = 150;
-        this.minMoveSpeed = 1; // CHANGES ACCORDING TO WAVE
-        this.maxMoveSpeed = 3; // CHANGES ACCORDING TO WAVE
-        this.movementSpeed = RNG(this.minMoveSpeed, this.maxMoveSpeed);
-        this.minDistanceFromPlayer = RNG(300, 600);
+        // this.minMoveSpeed = 1; // CHANGES ACCORDING TO WAVE
+        // this.maxMoveSpeed = 2; // CHANGES ACCORDING TO WAVE
+        this.movementSpeed = 1 // RNG(this.minMoveSpeed, this.maxMoveSpeed);
+        this.minDistanceFromPlayer = RNG(500, 1000);
         this.currentSprite = 1;
         this.animationDelay = 6;
         this.projectileSpeed = 2;
