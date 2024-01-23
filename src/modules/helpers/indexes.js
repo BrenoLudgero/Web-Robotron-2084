@@ -13,6 +13,7 @@ const spritesIndex = {
     mommy: imgPath + "actors/humans/mommy.png",
     player: imgPath + "actors/player.png",
     spheroid: imgPath + "actors/enemies/spheroid.png",
+    enforcerProjectile: imgPath + "projectiles/spark.png",
     playerProjectile: imgPath + "projectiles/player_prjctl.png"
 };
 const spritesheetYIndex = {

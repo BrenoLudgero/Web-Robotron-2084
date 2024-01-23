@@ -13,7 +13,7 @@ class Enforcer extends Enemy {
         this.minDistanceFromPlayer = RNG(500, 1000);
         this.currentSprite = 1;
         this.animationDelay = 6;
-        this.projectileSpeed = 2;
+        this.projectileSpeed = RNG(4, 6);
         this.projectileTimer = RNG(5, 20);
         this.projectileDelay = RNG(100, 300);
         this.hitboxes = {
@@ -30,7 +30,8 @@ class Enforcer extends Enemy {
             return;
         }
         this.ai.moveInRelationToPlayer(this, this.game, true); // Follows Player
-        this.stayWithinCanvas();
+        this.updateProjectileTimer();
+        this.shoot();
     }
     fadeIn() {
         if (this.currentSprite !== 6) {
@@ -44,6 +45,19 @@ class Enforcer extends Enemy {
     initialize() {
         if (canAnimate(this)) {
             this.fadeIn();
+        }
+    }
+    shoot() {
+        const {projectileMngr, soundMngr} = this.game;
+        const {projectileSpeed, projectileDelay} = this;
+        const projectileX = this.screenX + (this.width / 2);
+        const projectileY = this.screenY + (this.height / 2);
+        if (this.canShoot()) {
+            projectileMngr.createProjectile(this, projectileX, projectileY, projectileSpeed);
+            this.projectileTimer = projectileDelay;
+            const soundPriority = 3;
+            const minDuration = 0.2;
+            soundMngr.playSound("sparkShot", soundPriority, minDuration);
         }
     }
 }

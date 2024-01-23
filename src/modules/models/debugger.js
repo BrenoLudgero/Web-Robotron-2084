@@ -53,7 +53,7 @@ class Debugger {
                     );
                 }
             }
-            context.strokeStyle = "lightgrey";
+            context.strokeStyle = "yellow";
             context.stroke();
             context.setTransform(1, 0, 0, 1, 0, 0); // Resets the context transformation
         }

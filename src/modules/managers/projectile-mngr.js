@@ -1,4 +1,5 @@
 export {ProjectileManager};
+import {Spark} from "../projectiles/spark.js";
 import {PlayerProjectile} from "../projectiles/player-prjctl.js";
 import {getActorName} from "../helpers/globals.js"
 
@@ -32,6 +33,10 @@ class ProjectileManager {
         let projectile;
         const actorName = getActorName(actor);
         switch (actorName) {
+            case "enforcer":
+                projectile = new Spark(actor.projectileSprite, screenX, screenY, speed);
+                this.projectiles.enemies.add(projectile);
+                break;
             case "player":
                 projectile = new PlayerProjectile(actor.projectileSprite, screenX, screenY, speed, direction);
                 this.projectiles.player.add(projectile);

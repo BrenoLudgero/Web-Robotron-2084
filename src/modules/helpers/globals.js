@@ -7,8 +7,13 @@ function RNG(min, max) {
 function isActorOfType(actor, type) {
     return actor.constructor.name === type;
 }
-function canAnimate(actor) {
-    return actor.game.globalTimer % actor.animationDelay === 0;
+function canAnimate(actor, game) {
+    if (actor.game) {
+        return actor.game.globalTimer % actor.animationDelay === 0;
+    }
+    else {
+        return game.globalTimer % actor.animationDelay === 0;
+    }
 }
 function getDistanceBetween(actorA, actorB) {
     const distanceX = actorB.screenX - actorA.screenX;
