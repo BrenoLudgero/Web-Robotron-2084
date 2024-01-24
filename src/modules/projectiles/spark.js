@@ -9,11 +9,11 @@ class Spark extends Projectile {
         this.width = 21;
         this.height = 21;
         this.sprite = sprite;
-        this.animationDelay = 5;
+        this.animationDelay = speed;
         this.screenX = screenX;
         this.screenY = screenY;
         this.speed = speed;
-        this.timeOnScreen = 180; // Time in updates (3 seconds)
+        this.timeOnScreen = 150; // Time in updates (2.5 seconds)
     }
     rotate(game) {
         if (canAnimate(this, game)) {
@@ -30,9 +30,10 @@ class Spark extends Projectile {
         const {player} = game.actorMngr.actors;
         if (!this.fired) {
             this.setMovementBoundaries(game);
-            const randomOffset = RNG(0, 80);
-            const distanceX = player.screenX - (this.screenX + randomOffset);
-            const distanceY = player.screenY - (this.screenY + randomOffset);
+            const randomXOffset = RNG(0, 40);
+            const randomYOffset = RNG(0, 20);
+            const distanceX = player.screenX - (this.screenX + randomXOffset);
+            const distanceY = player.screenY - (this.screenY + randomYOffset);
             const distance = getDistanceBetween(this, player);
             const directionX = distanceX / distance;
             const directionY = distanceY / distance;
