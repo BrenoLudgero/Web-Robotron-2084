@@ -35,12 +35,12 @@ class HitboxManager {
         const halfHeight = projectile.height / 2;
         const centerX = projectile.screenX + halfWidth;
         const centerY = projectile.screenY + halfHeight;
-        const cosAngle = Math.cos(projectile.angle);
-        const sinAngle = Math.sin(projectile.angle);
-        const rotatedX1 = (centerX - (halfWidth * Math.abs(cosAngle))) - (halfHeight * Math.abs(sinAngle));
-        const rotatedX2 = (centerX + (halfWidth * Math.abs(cosAngle))) + (halfHeight * Math.abs(sinAngle));
-        const rotatedY1 = (centerY - (halfWidth * Math.abs(sinAngle))) - (halfHeight * Math.abs(cosAngle));
-        const rotatedY2 = (centerY + (halfWidth * Math.abs(sinAngle))) + (halfHeight * Math.abs(cosAngle));
+        const cosiseAngle = Math.cos(projectile.angle);
+        const sineAngle = Math.sin(projectile.angle);
+        const rotatedX1 = (centerX - (halfWidth * Math.abs(cosiseAngle))) - (halfHeight * Math.abs(sineAngle));
+        const rotatedX2 = (centerX + (halfWidth * Math.abs(cosiseAngle))) + (halfHeight * Math.abs(sineAngle));
+        const rotatedY1 = (centerY - (halfWidth * Math.abs(sineAngle))) - (halfHeight * Math.abs(cosiseAngle));
+        const rotatedY2 = (centerY + (halfWidth * Math.abs(sineAngle))) + (halfHeight * Math.abs(cosiseAngle));
         return {
             left: Math.min(rotatedX1, rotatedX2),
             right: Math.max(rotatedX1, rotatedX2),
