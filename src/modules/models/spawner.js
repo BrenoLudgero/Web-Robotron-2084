@@ -11,7 +11,7 @@ class Spawner extends Enemy {
         this.minMoveSpeed = 2; // CHANGES ACCORDING TO WAVE
         this.maxMoveSpeed = 3; // CHANGES ACCORDING TO WAVE
         this.movementSpeed = RNG(this.minMoveSpeed, this.maxMoveSpeed);
-        this.secondsBeforeSpawningStarts = RNG(2, 4); // CHANGES ACCORDING TO WAVE
+        this.secondsBeforeSpawningStarts = RNG(3, 4); // CHANGES ACCORDING TO WAVE
         this.secondsBetweenSpawns = RNG(1, 4); // Initial time between animation change and first spawn
         // Hitbox based on the currentSprite
         this.hitboxConfig = {
@@ -52,8 +52,8 @@ class Spawner extends Enemy {
         }
     }
     fadeOut() {
-        this.hitboxes.itself.xPosition = this.hidden;
-        this.hitboxes.itself.yPosition = this.hidden;
-        this.animationDelay = 6;
+        this.animationDelay = 9;
+        this.hitboxes = null;
+        this.lastSprite = 8;
     }
 }

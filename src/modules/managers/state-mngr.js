@@ -72,15 +72,15 @@ class StateManager {
             || isActorOfType(enemy, "Quark")
         );
     }
-    spawnerSpawning(enemy) {
-        return enemy.currentState === "spawning";
+    spawnerSpawning(spawner) {
+        return spawner.currentState === "spawning";
     }
-    handleSpawnerSpawning(enemy) {
-        if (this.spawnerSpawning(enemy)) {
-            enemy.startingSprite = 0;
-            enemy.lastSprite = 8;
-            enemy.animationDelay = 3;
-            enemy.spawnEnemies();
+    handleSpawnerSpawning(spawner) {
+        if (this.spawnerSpawning(spawner)) {
+            spawner.startingSprite = 0;
+            spawner.lastSprite = 7;
+            spawner.animationDelay = 3;
+            spawner.spawnEnemies();
         }
     }
     spawnerVanished(spawner) {

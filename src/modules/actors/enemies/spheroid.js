@@ -9,7 +9,7 @@ class Spheroid extends Spawner {
         this.enemyToSpawn = Enforcer;
         this.spawnAmount = 3; // CHANGES ACCORDING TO WAVE
         this.spawnSound = "enforcerSpawn";
-        this.animationDelay = 3;
+        this.animationDelay = 4;
         this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
     }
     update() {
