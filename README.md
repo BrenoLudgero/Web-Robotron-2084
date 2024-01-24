@@ -19,7 +19,7 @@ The Ground Roving Unit Network Terminator moves at increasing speeds towards the
 ### ![Hulk](/github-images/hulk.png) Hulk
 Hulks are indestructible and will destroy humans on contact but can be pushed back with your projectiles
 
-### ![Spheroid](/github-images/spheroid.png) Spheroids (1,000 Points)
+### ![Spheroid](/github-images/spheroid.png) Spheroid (1,000 Points)
 A Spheroid roams around the screen. Given enough time, it'll create Enforcers
 
 ### ![Enforcer](/github-images/enforcer.png) Enforcer (150 Points)
@@ -32,7 +32,7 @@ Will chase humans and convert them into Progs on contact
 ### ![Prog](/github-images/prog.png) Prog (100 Points)
 Progs (or reprogrammed humans) will relentlessly chase the player
 
-### ![Quark](/github-images/quark.png) Quarks (1,000 Points)
+### ![Quark](/github-images/quark.png) Quark (1,000 Points)
 Quarks behave similarly to Spheroids, but create Tanks instead
 
 ### ![Tank](/github-images/tank.png) Tank (200 Points)
