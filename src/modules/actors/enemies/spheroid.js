@@ -1,6 +1,6 @@
 export {Spheroid};
 import {Spawner} from "../../models/spawner.js";
-import {Enforcer} from "../enemies/enforcer.js";
+import {Enforcer} from "./enforcer.js";
 
 class Spheroid extends Spawner {
     constructor(game) {

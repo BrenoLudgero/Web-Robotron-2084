@@ -7,7 +7,7 @@ class SpriteManager {
     notEndOfSheet(actor, maxSpritesheetX) {
         return actor.spritesheetX < maxSpritesheetX;
     }
-    // Method used for spritesheets with one row of sprites
+    // Method used for static movement sprites
     nextSprite(actor) {
         const initialSpritesheetX = 0;
         const maxSpritesheetX = actor.sprites.width - actor.width;
@@ -34,8 +34,7 @@ class SpriteManager {
             this.nextSprite(player);
         }
     }
-    // Method used for spritesheets with multiple rows of sprites
-    // Points to the vertical position in the spritesheet that corresponds to the actor's current direction
+    // Method used for sprites that change based on the actor's direction
     cycleSprite(actor, direction) {
         const yPosition = spritesheetYIndex[getActorName(actor)][direction];
         actor.spritesheetY = yPosition;
