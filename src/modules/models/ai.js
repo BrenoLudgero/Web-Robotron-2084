@@ -56,6 +56,7 @@ class ArtificialIntelligence {
         actor.stayWithinCanvas(); // Might leave canvas' borders if in actor.update
     }
     moveActor(actor) {
+        const reducedMovementSpeed = actor.movementSpeed * 0.8;
         switch(actor.currentDirection) {
             case("up"):
                 actor.screenY -= actor.movementSpeed; break;
@@ -66,17 +67,17 @@ class ArtificialIntelligence {
             case("right"):
                 actor.screenX += actor.movementSpeed; break;
             case("upleft"):
-                actor.screenY -= (actor.movementSpeed * 0.8); 
-                actor.screenX -= (actor.movementSpeed * 0.8); break;
+                actor.screenY -= reducedMovementSpeed; 
+                actor.screenX -= reducedMovementSpeed; break;
             case("upright"):
-                actor.screenX += (actor.movementSpeed * 0.8); 
-                actor.screenY -= (actor.movementSpeed * 0.8); break;
+                actor.screenX += reducedMovementSpeed; 
+                actor.screenY -= reducedMovementSpeed; break;
             case("downleft"):
-                actor.screenX -= (actor.movementSpeed * 0.8); 
-                actor.screenY += (actor.movementSpeed * 0.8); break;
+                actor.screenX -= reducedMovementSpeed; 
+                actor.screenY += reducedMovementSpeed; break;
             case("downright"):
-                actor.screenX += (actor.movementSpeed * 0.8); 
-                actor.screenY += (actor.movementSpeed * 0.8); break;
+                actor.screenX += reducedMovementSpeed; 
+                actor.screenY += reducedMovementSpeed; break;
         }
         actor.remainingWalkingDistance--;
     }

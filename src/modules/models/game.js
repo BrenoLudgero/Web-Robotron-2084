@@ -18,6 +18,7 @@ import {Mommy} from "../actors/humans/mommy.js";
 import {Daddy} from "../actors/humans/daddy.js";
 import {Mikey} from "../actors/humans/mikey.js";
 import {Spheroid} from "../actors/enemies/spheroid.js";
+import {Quark} from "../actors/enemies/quark.js";
 
 // Updates and draws all game elements. Instantiated in main.js
 class Game {
@@ -61,7 +62,8 @@ class Game {
         // actorMngr.addActors(5, Daddy);
         // actorMngr.addActors(5, Mommy);
         // actorMngr.addActors(5, Mikey);
-        actorMngr.addActors(3, Spheroid);
+        // actorMngr.addActors(3, Spheroid);
+        actorMngr.addActors(6, Quark);
         // actorMngr.addActors(7, Hulk);
         // actorMngr.addActors(20, Grunt);
     }

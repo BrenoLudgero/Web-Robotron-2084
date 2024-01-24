@@ -12,6 +12,7 @@ const spritesIndex = {
     mikey: imgPath + "actors/humans/mikey_alt.png",
     mommy: imgPath + "actors/humans/mommy.png",
     player: imgPath + "actors/player.png",
+    quark: imgPath + "actors/enemies/quark.png",
     spheroid: imgPath + "actors/enemies/spheroid.png",
     enforcerProjectile: imgPath + "projectiles/spark.png",
     playerProjectile: imgPath + "projectiles/player_prjctl.png"
