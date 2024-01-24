@@ -14,6 +14,7 @@ const spritesIndex = {
     player: imgPath + "actors/player.png",
     quark: imgPath + "actors/enemies/quark.png",
     spheroid: imgPath + "actors/enemies/spheroid.png",
+    tank: imgPath + "actors/enemies/tank.png",
     enforcerProjectile: imgPath + "projectiles/spark.png",
     playerProjectile: imgPath + "projectiles/player_prjctl.png"
 };

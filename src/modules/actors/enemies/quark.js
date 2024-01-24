@@ -1,11 +1,11 @@
 export {Quark};
 import {Spawner} from "../../models/spawner.js";
-import {Enforcer} from "../enemies/enforcer.js";
+import {Tank} from "./tank.js";
 
 class Quark extends Spawner {
     constructor(game) {
         super(game);
-        this.enemyToSpawn = Enforcer;
+        this.enemyToSpawn = Tank;
         this.spawnAmount = 3; // CHANGES ACCORDING TO WAVE
         this.spawnSound = "tankSpawn";
         this.animationDelay = 7;

@@ -81,9 +81,16 @@ class ArtificialIntelligence {
         }
         actor.remainingWalkingDistance--;
     }
-    setRandomWalkDistance(actor) {
-        const minDistance = 16;
-        const maxDistance = 50;
+    setRandomWalkDistance(actor, extended = false) {
+        let minDistance, maxDistance;
+        if (extended) {
+            minDistance = 60;
+            maxDistance = 120;
+        }
+        else {
+            minDistance = 16;
+            maxDistance = 50;
+        }
         actor.remainingWalkingDistance = RNG(minDistance, maxDistance);
     }
     // Returns one of 4 or 8 directions based on the actor's movementType if not found in previousDirections
@@ -112,11 +119,11 @@ class ArtificialIntelligence {
         this.storeDirection(actor, previousDirections);
     }
     // Moves to a random direction for a random distance
-    moveToRandomDirection(actor) {
+    moveToRandomDirection(actor, extended) {
         if (actor.remainingWalkingDistance > 0) {
             this.moveActor(actor);
         } else {
-            this.setRandomWalkDistance(actor);
+            this.setRandomWalkDistance(actor, extended);
             this.setRandomDirection(actor);
         }
     }
@@ -129,15 +136,15 @@ class ArtificialIntelligence {
             || screenY <= 2
         );
     }
-    moveAwayFromWall(actor) {
+    moveAwayFromWall(actor, extended) {
         if (this.isActorAgainstWall(actor)) {
             this.setRandomDirection(actor);
-            this.setRandomWalkDistance(actor);
+            this.setRandomWalkDistance(actor, extended);
         }
     }
-    moveRandomly(actor) {
-        this.moveAwayFromWall(actor);
-        this.moveToRandomDirection(actor);
+    moveRandomly(actor, extended) {
+        this.moveAwayFromWall(actor, extended);
+        this.moveToRandomDirection(actor, extended);
         actor.stayWithinCanvas();
     }
 }
