@@ -3,7 +3,7 @@ import {Projectile} from "../models/projectile.js";
 
 class PlayerProjectile extends Projectile {
     constructor(sprite, screenX, screenY, speed, direction) {
-        super(sprite, screenX, screenY, speed)
+        super(sprite, screenX, screenY, speed);
         this.width = 3;
         this.height = 20;
         this.sprite = sprite;
@@ -14,6 +14,32 @@ class PlayerProjectile extends Projectile {
         this.direction = direction;
         this.speed = speed;
         this.pushForce = 6;
+    }
+    move() {
+        if (this.direction === "up") {
+            this.moveUp();
+        } 
+        else if (this.direction === "upleft") {
+            this.moveUpLeft();
+        } 
+        else if (this.direction === "upright") {
+            this.moveUpRight();
+        } 
+        if (this.direction === "down") {
+            this.moveDown();
+        } 
+        else if (this.direction === "downleft") {
+            this.moveDownLeft();
+        } 
+        else if (this.direction === "downright") {
+            this.moveDownRight();
+        } 
+        if (this.direction === "left") {
+            this.moveLeft();
+        } 
+        else if (this.direction === "right") {
+            this.moveRight();
+        }
     }
     push(hulk) {
         const directionMap = {
@@ -74,31 +100,5 @@ class PlayerProjectile extends Projectile {
         this.angle = Math.PI / 2;
         this.height = 24;
         this.screenX += this.speed;
-    }
-    move() {
-        if (this.direction === "up") {
-            this.moveUp();
-        } 
-        else if (this.direction === "upleft") {
-            this.moveUpLeft();
-        } 
-        else if (this.direction === "upright") {
-            this.moveUpRight();
-        } 
-        if (this.direction === "down") {
-            this.moveDown();
-        } 
-        else if (this.direction === "downleft") {
-            this.moveDownLeft();
-        } 
-        else if (this.direction === "downright") {
-            this.moveDownRight();
-        } 
-        if (this.direction === "left") {
-            this.moveLeft();
-        } 
-        else if (this.direction === "right") {
-            this.moveRight();
-        }
     }
 }
