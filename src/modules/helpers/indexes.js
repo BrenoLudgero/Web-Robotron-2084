@@ -16,7 +16,8 @@ const spritesIndex = {
     spheroid: imgPath + "actors/enemies/spheroid.png",
     tank: imgPath + "actors/enemies/tank.png",
     enforcerProjectile: imgPath + "projectiles/spark.png",
-    playerProjectile: imgPath + "projectiles/player_prjctl.png"
+    playerProjectile: imgPath + "projectiles/player_prjctl.png",
+    tankProjectile: imgPath + "projectiles/bounce_bomb.png"
 };
 const spritesheetYIndex = {
     daddy: {

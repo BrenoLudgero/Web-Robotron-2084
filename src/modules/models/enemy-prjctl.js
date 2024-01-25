@@ -1,6 +1,6 @@
 export {EnemyProjectile};
 import {Projectile} from "./projectile.js";
-import {RNG, getDistanceBetween} from "../helpers/globals.js";
+import {RNG, getDistanceBetween, getActorName} from "../helpers/globals.js";
 
 class EnemyProjectile extends Projectile {
     constructor(sprite, screenX, screenY, speed) {
@@ -11,18 +11,18 @@ class EnemyProjectile extends Projectile {
         this.screenX = screenX;
         this.screenY = screenY;
         this.speed = speed;
-        this.setMovementBoundaries(game);
     }
-    // Moves to the player's position at the time of shooting (plus or minus randomOffset)
     move(game) {
-        this.shoot();
+        this.setMovementBoundaries(game);
+        this.shoot(game);
         this.moveToDirection();
-        this.rotate(game);
+        this.executeExclusiveBehavior(game)
         this.stayWithinCanvas();
         this.elapseTimeOnScreen();
         this.vanishAfterTimeElapsed();
     }
-    shoot() {
+    // Moves to the player's position at the time of shooting (plus or minus randomOffset)
+    shoot(game) {
         const {player} = game.actorMngr.actors;
         if (!this.fired) {
             const randomXOffset = RNG(0, 40);
@@ -52,11 +52,22 @@ class EnemyProjectile extends Projectile {
         }
     }
     setMovementBoundaries(game) {
-        const {ui} = game;
-        this.movementBoundaries = {
-            "x": ui.canvas.width - this.width,
-            "y": ui.canvas.height - this.height
-        };
+        if (!this.movementBoundaries) {
+            const {ui} = game;
+            this.movementBoundaries = {
+                "x": ui.canvas.width - this.width,
+                "y": ui.canvas.height - this.height
+            };
+        }
+    }
+    executeExclusiveBehavior(game) {
+        const actorName = getActorName(this);
+        switch (actorName) {
+            case "spark":
+                this.rotate(game); break;
+            case "bouncebomb":
+                this.bounce(game); break;
+        }
     }
     touchingCeiling() {
         return this.screenY <= 2;

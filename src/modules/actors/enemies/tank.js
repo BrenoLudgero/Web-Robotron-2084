@@ -6,13 +6,13 @@ class Tank extends Enemy {
     constructor(game) {
         super(game, 26, 32);
         this.initialized = false;
-        this.points = 150;
+        this.points = 200;
         this.minMoveSpeed = 1; // CHANGES ACCORDING TO WAVE
         this.maxMoveSpeed = 2; // CHANGES ACCORDING TO WAVE
         this.movementSpeed = RNG(this.minMoveSpeed, this.maxMoveSpeed);
         this.currentSprite = 1;
-        this.lastSprite = 4; // Full size
-        this.projectileSpeed = RNG(4, 6);
+        this.lastSprite = 4;
+        this.projectileSpeed = RNG(5, 7);
         this.projectileTimer = RNG(5, 20);
         this.projectileDelay = RNG(100, 300);
         this.shotSound = "bombShot";
@@ -35,6 +35,6 @@ class Tank extends Enemy {
         }
         this.ai.moveRandomly(this, true);
         this.updateProjectileTimer();
-        // this.shoot();
+        this.shoot();
     }
 }
