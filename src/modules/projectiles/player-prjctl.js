@@ -13,9 +13,9 @@ class PlayerProjectile extends Projectile {
         this.screenY = screenY;
         this.direction = direction;
         this.speed = speed;
-        this.knockbackForce = 6;
+        this.pushForce = 6;
     }
-    knockback(hulk) {
+    push(hulk) {
         const directionMap = {
             "up": {x: 0, y: -1},
             "down": {x: 0, y: 1},
@@ -26,9 +26,9 @@ class PlayerProjectile extends Projectile {
             "downleft": {x: -1, y: 1},
             "downright": {x: 1, y: 1},
         };
-        const {x: knockbackXDirection, y: knockbackYDirection} = directionMap[this.direction];
-        hulk.screenX += knockbackXDirection * this.knockbackForce;
-        hulk.screenY += knockbackYDirection * this.knockbackForce;
+        const {x: pushXDirection, y: pushYDirection} = directionMap[this.direction];
+        hulk.screenX += pushXDirection * this.pushForce;
+        hulk.screenY += pushYDirection * this.pushForce;
     }
     // Height is adjusted to eliminate gaps between hitboxes (sprite is unchanged)
     moveUp() {
@@ -75,7 +75,7 @@ class PlayerProjectile extends Projectile {
         this.height = 24;
         this.screenX += this.speed;
     }
-    moveProjectile() {
+    move() {
         if (this.direction === "up") {
             this.moveUp();
         } 

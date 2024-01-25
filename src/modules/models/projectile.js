@@ -15,7 +15,7 @@ class Projectile {
     }
     // Updated in stateMngr.handleProjectileStates
     update(game) {
-        this.moveProjectile(game);
+        this.move(game);
         if (this.outOfBounds(game.ui)) {
             this.updateState("outOfBounds");
         }

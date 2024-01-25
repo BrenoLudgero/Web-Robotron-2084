@@ -56,14 +56,18 @@ class StateManager {
         if (this.wasDestroyed(enemy)) {
             this.score.awardPoints(enemy);
             this.actors.enemies.delete(enemy);
-            let soundPriority = 3
-            const minDuration = 0.086;
-            if (!isActorOfType(enemy, "Spheroid")) {
-                this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
+            let soundPriority = 4;
+            const minDuration = 0.09;
+            if (isActorOfType(enemy, "Spheroid")) {
+                this.soundMngr.playSound("spheroidDestroyed", soundPriority, minDuration);
                 return;
             }
-            soundPriority = 4;
-            this.soundMngr.playSound("spheroidDestroyed", soundPriority, minDuration);
+            if (isActorOfType(enemy, "Quark")) {
+                this.soundMngr.playSound("quarkDestroyed", soundPriority, minDuration);
+                return;
+            }
+            soundPriority = 3;
+            this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
         }
     }
     enemyIsSpawner(enemy) {
@@ -126,6 +130,9 @@ class StateManager {
                     projectileSet.delete(projectile);
                     if (this.destroyedProjectileAwardsPoints(projectile)) {
                         this.game.score.awardPoints(projectile);
+                        const soundPriority = 3;
+                        const minDuration = 0.1;
+                        this.soundMngr.playSound("projectileDestroyed", soundPriority, minDuration);
                     }
                 }
                 else {

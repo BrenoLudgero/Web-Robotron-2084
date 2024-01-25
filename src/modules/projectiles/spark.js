@@ -26,7 +26,7 @@ class Spark extends Projectile {
         }
     }
     // Moves to the player's position at the time of shooting (plus or minus randomOffset)
-    moveProjectile(game) {
+    move(game) {
         const {player} = game.actorMngr.actors;
         if (!this.fired) {
             this.setMovementBoundaries(game);
