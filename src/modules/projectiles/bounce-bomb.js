@@ -9,17 +9,13 @@ class BounceBomb extends EnemyProjectile {
         this.timeOnScreen = 180; // Time in updates (3 seconds)
     }
     bounce(game) {
-        const soundPriority = 2;
-        const minDuration = 0.1;
-        if (this.touchingCeiling()
-            || this.touchingFloor()) {
-            this.directionY *= -1;
-            game.soundMngr.playSound("bombBounce", soundPriority, minDuration);
+        if (this.touchingCeiling() || this.touchingFloor()) {
+            this.reverseYDirection();
+            game.soundMngr.playSound("bombBounce");
         }
-        else if (this.touchingLeftWall()
-        || this.touchingRightWall()) {
-            this.directionX *= -1;
-            game.soundMngr.playSound("bombBounce", soundPriority, minDuration);
+        else if (this.touchingLeftWall() || this.touchingRightWall()) {
+            this.reverseXDirection();
+            game.soundMngr.playSound("bombBounce");
         }
     }
     touchingWall() {
@@ -29,5 +25,11 @@ class BounceBomb extends EnemyProjectile {
             || this.touchingLeftWall()
             || this.touchingRightWall()
         );
+    }
+    reverseYDirection() {
+        this.directionY *= -1;
+    }
+    reverseXDirection() {
+        this.directionX *= -1;
     }
 }

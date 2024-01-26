@@ -62,29 +62,30 @@ const spritesheetYIndex = {
         "left": 51,
         "right": 75
     }
-}
+};
 const soundFxIndex = {
-    bombBounce: soundFxPath + "bomb_bounce.mp3",
-    bombShot: soundFxPath + "bomb_shot.mp3",
+    // Sound file, sound priority, minimum sound duration
+    bombBounce: [soundFxPath + "bomb_bounce.mp3", 2, 0.12],
+    bombShot: [soundFxPath + "bomb_shot.mp3", 3, 0.16],
     brainWave: soundFxPath + "brain_wave.mp3",
     cruiseDestroyed: soundFxPath + "cruise_destroyed.mp3",
     cruiseShot: soundFxPath + "cruise_shot.mp3",
-    enemyDestroyed: soundFxPath + "enemy_destroyed.mp3",
-    enforcerSpawn: soundFxPath + "enforcer_spawn.mp3",
-    extraLife: soundFxPath + "extra_life.mp3",
+    enemyDestroyed: [soundFxPath + "enemy_destroyed.mp3", 3, 0.09],
+    enforcerSpawn: [soundFxPath + "enforcer_spawn.mp3", 4, 0.2],
+    extraLife: [soundFxPath + "extra_life.mp3", 5, 0.604],
     gameStart: soundFxPath + "game_start.mp3",
     highscore: soundFxPath + "highscore.mp3",
-    hulkPushed: soundFxPath + "hulk_pushed.mp3",
-    humanDestroyed: soundFxPath + "human_destroyed.mp3",
-    humanRescued: soundFxPath + "human_rescued.mp3",
+    hulkPushed: [soundFxPath + "hulk_pushed.mp3", 3, 0.15],
+    humanDestroyed: [soundFxPath + "human_destroyed.mp3", 4, 0.36],
+    humanRescued: [soundFxPath + "human_rescued.mp3", 4, 0.4],
     obstacleDestroyed: soundFxPath + "obstacle_destroyed.mp3",
-    playerDestroyed: soundFxPath + "player_destroyed.mp3",
-    playerShot: soundFxPath + "player_shot.mp3",
+    playerDestroyed: [soundFxPath + "player_destroyed.mp3", 6, 2],
+    playerShot: [soundFxPath + "player_shot.mp3", 2, 0.12],
     progConversion: soundFxPath + "prog_conversion.mp3",
-    projectileDestroyed: soundFxPath + "projectile_destroyed.mp3",
-    quarkDestroyed: soundFxPath + "quark_destroyed.mp3",
+    projectileDestroyed: [soundFxPath + "projectile_destroyed.mp3", 3, 0.1],
+    quarkDestroyed: [soundFxPath + "quark_destroyed.mp3", 4, 0.09],
     regularWave: soundFxPath + "regular_wave.mp3",
-    sparkShot: soundFxPath + "spark_shot.mp3",
-    spheroidDestroyed: soundFxPath + "spheroid_destroyed.mp3",
-    tankSpawn: soundFxPath + "tank_spawn.mp3"
-};
+    sparkShot: [soundFxPath + "spark_shot.mp3", 3, 0.2],
+    spheroidDestroyed: [soundFxPath + "spheroid_destroyed.mp3", 4, 0.09],
+    tankSpawn: [soundFxPath + "tank_spawn.mp3", 4, 0.2]
+}

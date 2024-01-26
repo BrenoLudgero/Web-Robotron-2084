@@ -21,8 +21,8 @@ class SoundManager {
             currentSound.sound = null;
         }
     }
-    createNewSound(sound, priority) {
-        const newSound = new Audio(sound);
+    createNewSound(soundFile, priority) {
+        const newSound = new Audio(soundFile);
         this.currentSound.sound = newSound;
         this.currentSound.priority = priority;
     }
@@ -41,8 +41,11 @@ class SoundManager {
             }, minimumDuration * 1000);
         }
     }
-    playSound(sound, priority, minimumDuration) {
+    playSound(sound) {
         const {currentSound} = this;
+        const soundFile = soundFxIndex[sound][0];
+        const priority = soundFxIndex[sound][1];
+        const minimumDuration = soundFxIndex[sound][2];
         if (this.shouldPlayNow(priority)) {
             clearTimeout(currentSound.timeout);
         } 
@@ -51,7 +54,7 @@ class SoundManager {
             return;
         }
         this.stopCurrentSound(currentSound);
-        this.createNewSound(soundFxIndex[sound], priority);
+        this.createNewSound(soundFile, priority);
         this.playNewSound(currentSound);
         this.playExclusively(minimumDuration);
     }

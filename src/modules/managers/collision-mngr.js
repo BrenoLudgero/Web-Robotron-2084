@@ -73,9 +73,7 @@ class CollisionManager {
             enemy.updateState("destroyed");
         } else {
             playerProjectile.push(enemy);
-            const soundPriority = 3;
-            const minDuration = 0.15;
-            game.soundMngr.playSound("hulkPushed", soundPriority, minDuration)
+            game.soundMngr.playSound("hulkPushed")
         }
         playerProjectile.updateState("destroyed");
     }

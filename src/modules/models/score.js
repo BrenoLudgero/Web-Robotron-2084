@@ -34,9 +34,7 @@ class Score {
         if (this.extraLifeScoreAchieved()) {
             player.lives++;
             this.nextExtraLife += 25000;
-            const soundPriority = 5;
-            const minDuration = 0.604;
-            soundMngr.playSound("extraLife", soundPriority, minDuration);
+            soundMngr.playSound("extraLife");
         }
     }
 }

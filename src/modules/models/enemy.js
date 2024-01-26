@@ -30,9 +30,7 @@ class Enemy extends Actor {
         if (this.canShoot()) {
             projectileMngr.createProjectile(this, projectileX, projectileY, projectileSpeed);
             this.projectileTimer = projectileDelay;
-            const soundPriority = 3;
-            const minDuration = 0.2;
-            soundMngr.playSound(this.shotSound, soundPriority, minDuration);
+            soundMngr.playSound(this.shotSound);
         }
     }
 }

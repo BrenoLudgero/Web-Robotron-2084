@@ -70,9 +70,7 @@ class Player extends Actor {
         if (this.canShoot()) {
             projectileMngr.createProjectile(this, playerX, playerY, projectileSpeed, direction);
             this.projectileTimer = projectileDelay;
-            const soundPriority = 2;
-            const minDuration = 0.12;
-            soundMngr.playSound("playerShot", soundPriority, minDuration);
+            soundMngr.playSound("playerShot");
         }
     }
     // Methods below called in inputMngr.processMovementKeys

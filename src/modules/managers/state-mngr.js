@@ -21,17 +21,14 @@ class StateManager {
         if (this.wasDestroyed(this.player)) {
             this.player.lives--;
             this.score.resetRescueBonus();
-            const soundPriority = 6;
-            this.soundMngr.playSound("playerDestroyed", soundPriority);
+            this.soundMngr.playSound("playerDestroyed");
             this.projectileMngr.eraseAllPlayerProjectiles();
         }
     }
     handleHumanDestroyed(human) {
         if (this.wasDestroyed(human)) {
             this.actors.humans.delete(human);
-            const soundPriority = 4;
-            const minDuration = 0.36;
-            this.soundMngr.playSound("humanDestroyed", soundPriority, minDuration);
+            this.soundMngr.playSound("humanDestroyed");
         }
     }
     humanWasRecued(human) {
@@ -41,9 +38,7 @@ class StateManager {
         if (this.humanWasRecued(human)) {
             this.score.awardRecuePoints(human);
             this.actors.humans.delete(human);
-            const soundPriority = 4;
-            const minDuration = 0.4;
-            this.soundMngr.playSound("humanRescued", soundPriority, minDuration);
+            this.soundMngr.playSound("humanRescued");
         }
     }
     handleHumanStates() {
@@ -56,18 +51,15 @@ class StateManager {
         if (this.wasDestroyed(enemy)) {
             this.score.awardPoints(enemy);
             this.actors.enemies.delete(enemy);
-            let soundPriority = 4;
-            const minDuration = 0.09;
             if (isActorOfType(enemy, "Spheroid")) {
-                this.soundMngr.playSound("spheroidDestroyed", soundPriority, minDuration);
+                this.soundMngr.playSound("spheroidDestroyed");
                 return;
             }
             if (isActorOfType(enemy, "Quark")) {
-                this.soundMngr.playSound("quarkDestroyed", soundPriority, minDuration);
+                this.soundMngr.playSound("quarkDestroyed");
                 return;
             }
-            soundPriority = 3;
-            this.soundMngr.playSound("enemyDestroyed", soundPriority, minDuration);
+            this.soundMngr.playSound("enemyDestroyed");
         }
     }
     enemyIsSpawner(enemy) {
@@ -130,9 +122,7 @@ class StateManager {
                     projectileSet.delete(projectile);
                     if (this.destroyedProjectileAwardsPoints(projectile)) {
                         this.game.score.awardPoints(projectile);
-                        const soundPriority = 3;
-                        const minDuration = 0.1;
-                        this.soundMngr.playSound("projectileDestroyed", soundPriority, minDuration);
+                        this.soundMngr.playSound("projectileDestroyed");
                     }
                 }
                 else {
