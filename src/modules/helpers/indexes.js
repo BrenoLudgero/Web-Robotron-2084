@@ -88,4 +88,4 @@ const soundFxIndex = {
     sparkShot: [soundFxPath + "spark_shot.mp3", 3, 0.2],
     spheroidDestroyed: [soundFxPath + "spheroid_destroyed.mp3", 4, 0.09],
     tankSpawn: [soundFxPath + "tank_spawn.mp3", 4, 0.2]
-}
+};

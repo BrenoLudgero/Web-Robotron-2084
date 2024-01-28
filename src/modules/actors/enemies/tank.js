@@ -12,7 +12,7 @@ class Tank extends Enemy {
         this.movementSpeed = RNG(this.minMoveSpeed, this.maxMoveSpeed);
         this.currentSprite = 1;
         this.lastSprite = 4;
-        this.projectileSpeed = RNG(5, 7);
+        this.projectileSpeed = RNG(6, 8);
         this.projectileTimer = RNG(5, 20);
         this.projectileDelay = RNG(100, 300);
         this.shotSound = "bombShot";
