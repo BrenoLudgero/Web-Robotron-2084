@@ -6,13 +6,13 @@ class CollisionManager {
         const {actorMngr, projectileMngr, hitboxMngr, debuggerr} = game;
         const {player, enemies, humans} = actorMngr.actors;
         if (!debuggerr.actorInvincibility) {
-            this.handleAllCollisions(player, enemies, humans, projectileMngr, hitboxMngr, game);
+            this.handleAllCollisions(player, enemies, humans, projectileMngr, hitboxMngr);
         }
     }
-    handleAllCollisions(player, enemies, humans, projectileMngr, hitboxMngr, game) {
+    handleAllCollisions(player, enemies, humans, projectileMngr, hitboxMngr) {
         this.handlePlayerEnemyCollision(player, enemies, hitboxMngr);
         this.handleHumanCollisions(player, enemies, humans, hitboxMngr);
-        this.handleProjectileCollisions(projectileMngr.projectiles, enemies, player, hitboxMngr, game);
+        this.handleProjectileCollisions(projectileMngr.projectiles, enemies, player, hitboxMngr);
     }
     collisionDetected(actor, target) {
         return (
@@ -68,20 +68,19 @@ class CollisionManager {
             }
         }
     }
-    handleCollisionOutcome(playerProjectile, enemy, game) {
+    handleCollisionOutcome(playerProjectile, enemy) {
         if (!isActorOfType(enemy, "Hulk")) {
             enemy.updateState("destroyed");
         } else {
             playerProjectile.push(enemy);
-            game.soundMngr.playSound("hulkPushed")
         }
         playerProjectile.updateState("destroyed");
     }
-    handlePlayerProjectileEnemyCollisions(playerProjectiles, enemies, hitboxMngr, game) {
+    handlePlayerProjectileEnemyCollisions(playerProjectiles, enemies, hitboxMngr) {
         for (const playerProjectile of playerProjectiles) {
             for (const enemy of enemies) {
                 if (this.checkSingleCollision(playerProjectile, enemy, hitboxMngr)) {
-                    this.handleCollisionOutcome(playerProjectile, enemy, game);
+                    this.handleCollisionOutcome(playerProjectile, enemy);
                     break;
                 }
             }
@@ -107,8 +106,8 @@ class CollisionManager {
         }
     }
     // Handles collision of all projectiles against enemies, other projectiles and the player
-    handleProjectileCollisions(projectiles, enemies, player, hitboxMngr, game) {
-        this.handlePlayerProjectileEnemyCollisions(projectiles.player, enemies, hitboxMngr, game);
+    handleProjectileCollisions(projectiles, enemies, player, hitboxMngr) {
+        this.handlePlayerProjectileEnemyCollisions(projectiles.player, enemies, hitboxMngr);
         this.handleProjectileOnProjectileCollisions(projectiles.player, projectiles.enemies, hitboxMngr);
         this.handleEnemyProjectilePlayerCollision(projectiles.enemies, player, hitboxMngr);
     }

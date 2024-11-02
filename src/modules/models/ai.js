@@ -31,6 +31,7 @@ class ArtificialIntelligence {
         let randomNumber = RNG(1, 2);
         if (randomNumber === 1) {
             this.stepTowardsPlayer(grunt, game);
+            game.soundMngr.playSound("gruntStep", 1);
             game.spriteMngr.nextSprite(grunt);
         }
     }
