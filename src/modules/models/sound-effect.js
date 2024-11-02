@@ -1,4 +1,4 @@
-export {SoundEffect};
+export { SoundEffect };
 
 class SoundEffect {
     constructor() {

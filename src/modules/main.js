@@ -21,7 +21,7 @@ CHECK CROSS-BROWSER SUPPORT
 ADD MOUSE FIRE SUPPORT
 ADD JOYSTICK SUPPORT */
 
-import {Game} from "./models/game.js";
+import { Game } from "./models/game.js";
 
 window.addEventListener("load", () => {
     const game = new Game();
@@ -47,13 +47,16 @@ window.addEventListener("load", () => {
         }
         // Updates framerate indicator
         if (currentFrame - lastFPSUpdate >= 1000) {
-            const FPS = Math.round((framesThisSecond * 1000) / (currentFrame - lastFPSUpdate));
+            const FPS = Math.round(
+                (framesThisSecond * 1000) / (currentFrame - lastFPSUpdate)
+            );
             game.uiMngr.updateFPSElement(game.ui, FPS);
             framesThisSecond = 0;
             lastFPSUpdate = currentFrame;
         }
         requestAnimationFrame(runGame);
     }
+    
     // Called once
     runGame();
     game.spawnActors();

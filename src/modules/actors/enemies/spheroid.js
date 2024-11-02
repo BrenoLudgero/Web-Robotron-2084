@@ -1,6 +1,6 @@
-export {Spheroid};
-import {Spawner} from "../../models/spawner.js";
-import {Enforcer} from "./enforcer.js";
+export { Spheroid };
+import { Spawner } from "../../models/spawner.js";
+import { Enforcer } from "./enforcer.js";
 
 class Spheroid extends Spawner {
     constructor(game) {
@@ -12,6 +12,7 @@ class Spheroid extends Spawner {
         this.animationDelay = 4;
         this.lastSprite = 5; // Sprite animation stops on this sprite before restarting
     }
+
     update() {
         this.animate();
         this.ai.moveInRelationToPlayer(this, this.game); // Avoids Player

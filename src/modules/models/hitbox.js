@@ -1,4 +1,4 @@
-export {Hitbox};
+export { Hitbox };
 
 class Hitbox {
     constructor(width, height, xPosition, yPosition) {

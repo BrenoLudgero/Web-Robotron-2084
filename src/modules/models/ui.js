@@ -1,4 +1,4 @@
-export {UserInterface};
+export { UserInterface };
 
 class UserInterface {
     constructor(game) {
@@ -13,9 +13,10 @@ class UserInterface {
         this.lifeIndicatorSprite = game.spriteMngr.setSprite("life");
         this.FPSElement = document.getElementById("fps-counter");
     }
+
     // Initializes canvas.width and height with scaled dimensions
     setCanvasScaledResolution(scaleFactor) {
-        const {canvas} = this;
+        const { canvas } = this;
         const originalWidth = 292;
         const originalHeight = 240;
         const aspectRatio = originalWidth / originalHeight;

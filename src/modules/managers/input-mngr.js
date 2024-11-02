@@ -1,133 +1,138 @@
-export {InputManager};
-import {Input} from "../models/input.js";
+export { InputManager };
+import { Input } from "../models/input.js";
 
 class InputManager {
-    constructor(game) { // REMOVE GAME WITH DEBUGGER
+    constructor(game) {
+        // REMOVE GAME WITH DEBUGGER
         this.input = new Input(game);
     }
+
     update(player) {
         this.processMovementKeys(player);
         this.processShootingKeys(player);
     }
-    pressing(key) {
+
+    isKeyPressed(key) {
         return this.input.keysPressed.includes(key);
     }
-    pressingCombination(keys) {
-        return keys.every(key => this.pressing(key));
+
+    isPressingCombination(keys) {
+        return keys.every((key) => this.isKeyPressed(key));
     }
+
     processKeyFunction(player, key, method) {
-        if (this.pressing(key)) {
+        if (this.isKeyPressed(key)) {
             player[method](this);
             player.stayWithinCanvas(); // Causes visual glitch if in player.update
         }
     }
+
     processMovementKeys(player) {
         this.processKeyFunction(player, "w", "moveUp");
         this.processKeyFunction(player, "s", "moveDown");
         this.processKeyFunction(player, "a", "moveLeft");
         this.processKeyFunction(player, "d", "moveRight");
     }
+
     processShootingKeys(player) {
-        if (this.pressingUpOnly()) {
+        if (this.isPressingUpOnly()) {
             player.shoot("up");
-        } 
-        else if (this.pressingUpAndLeft()) {
+        } else if (this.isPressingUpAndLeft()) {
             player.shoot("upleft");
-        } 
-        else if (this.pressingUpAndRight()) {
+        } else if (this.isPressingUpAndRight()) {
             player.shoot("upright");
         }
-        if (this.pressingDownOnly()) {
+        if (this.isPressingDownOnly()) {
             player.shoot("down");
-        } 
-        else if (this.pressingDownAndLeft()) {
+        } else if (this.isPressingDownAndLeft()) {
             player.shoot("downleft");
-        }
-        else if (this.pressingDownAndRight()) {
+        } else if (this.isPressingDownAndRight()) {
             player.shoot("downright");
-        } 
-        if (this.pressingLeftOnly()) {
+        }
+        if (this.isPressingLeftOnly()) {
             player.shoot("left");
-        } 
-        else if (this.pressingRightOnly()) {
+        } else if (this.isPressingRightOnly()) {
             player.shoot("right");
         }
     }
+
     //   Shooting methods
-    pressingUpOnly() {
+    isPressingUpOnly() {
         return (
-            this.pressing("arrowup") 
-            && !this.pressing("arrowleft")
-            && !this.pressing("arrowright")
+            this.isKeyPressed("arrowup") &&
+            !this.isKeyPressed("arrowleft") &&
+            !this.isKeyPressed("arrowright")
         );
     }
-    pressingUpAndLeft() {
+
+    isPressingUpAndLeft() {
+        return this.isKeyPressed("arrowup") && this.isKeyPressed("arrowleft");
+    }
+
+    isPressingUpAndRight() {
+        return this.isKeyPressed("arrowup") && this.isKeyPressed("arrowright");
+    }
+
+    isPressingDownOnly() {
         return (
-            this.pressing("arrowup") 
-            && this.pressing("arrowleft")
+            this.isKeyPressed("arrowdown") &&
+            !this.isKeyPressed("arrowleft") &&
+            !this.isKeyPressed("arrowright")
         );
     }
-    pressingUpAndRight() {
+
+    isPressingDownAndLeft() {
+        return this.isKeyPressed("arrowdown") && this.isKeyPressed("arrowleft");
+    }
+
+    isPressingDownAndRight() {
         return (
-            this.pressing("arrowup") 
-            && this.pressing("arrowright")
+            this.isKeyPressed("arrowdown") && this.isKeyPressed("arrowright")
         );
     }
-    pressingDownOnly() {
+
+    isPressingLeftOnly() {
         return (
-            this.pressing("arrowdown") 
-            && !this.pressing("arrowleft") 
-            && !this.pressing("arrowright")
+            this.isKeyPressed("arrowleft") &&
+            !this.isKeyPressed("arrowup") &&
+            !this.isKeyPressed("arrowdown")
         );
     }
-    pressingDownAndLeft() {
+
+    isPressingRightOnly() {
         return (
-            this.pressing("arrowdown") 
-            && this.pressing("arrowleft")
+            this.isKeyPressed("arrowright") &&
+            !this.isKeyPressed("arrowup") &&
+            !this.isKeyPressed("arrowdown")
         );
     }
-    pressingDownAndRight() {
-        return (
-            this.pressing("arrowdown") 
-            && this.pressing("arrowright")
-        );
-    }
-    pressingLeftOnly() {
-        return (
-            this.pressing("arrowleft") 
-            && !this.pressing("arrowup")
-            && !this.pressing("arrowdown") 
-        );
-    }
-    pressingRightOnly() {
-        return (
-            this.pressing("arrowright") 
-            && !this.pressing("arrowup")
-            && !this.pressing("arrowdown") 
-        );
-    }
+
     //   Movement methods
-    pressingWOnly() {
+    isPressingWOnly() {
         return (
-            !this.pressing("d") 
-            && !this.pressing("a") 
-            && !this.pressing("s")
+            !this.isKeyPressed("d") &&
+            !this.isKeyPressed("a") &&
+            !this.isKeyPressed("s")
         );
     }
-    pressingSOnly() {
+
+    isPressingSOnly() {
         return (
-            !this.pressing("d") 
-            && !this.pressing("w") 
-            && !this.pressing("a")
+            !this.isKeyPressed("d") &&
+            !this.isKeyPressed("w") &&
+            !this.isKeyPressed("a")
         );
     }
-    notPressingA() {
-        return !this.pressing("a");
+
+    isPressingA() {
+        return this.isKeyPressed("a");
     }
-    notPressingD() {
-        return !this.pressing("d");
+
+    isPressingD() {
+        return this.isKeyPressed("d");
     }
-    pressingDnA() {
-        return this.pressingCombination(["d", "a"]);
+
+    isPressingDnA() {
+        return this.isPressingCombination(["d", "a"]);
     }
 }

@@ -1,5 +1,5 @@
-export {BounceBomb};
-import {EnemyProjectile} from "../models/enemy-prjctl.js";
+export { BounceBomb };
+import { EnemyProjectile } from "../models/enemy-prjctl.js";
 
 class BounceBomb extends EnemyProjectile {
     constructor(sprite, screenX, screenY, speed) {
@@ -8,27 +8,21 @@ class BounceBomb extends EnemyProjectile {
         this.height = 21;
         this.timeOnScreen = 180; // Time in updates (3 seconds)
     }
+
     bounce(game) {
-        if (this.touchingCeiling() || this.touchingFloor()) {
+        if (this.isTouchingCeiling() || this.isTouchingFloor()) {
             this.reverseYDirection();
             game.soundMngr.playSound("bombBounce");
-        }
-        else if (this.touchingLeftWall() || this.touchingRightWall()) {
+        } else if (this.isTouchingLeftWall() || this.isTouchingRightWall()) {
             this.reverseXDirection();
             game.soundMngr.playSound("bombBounce");
         }
     }
-    touchingWall() {
-        return (
-            this.touchingCeiling()
-            || this.touchingFloor()
-            || this.touchingLeftWall()
-            || this.touchingRightWall()
-        );
-    }
+
     reverseYDirection() {
         this.directionY *= -1;
     }
+
     reverseXDirection() {
         this.directionX *= -1;
     }

@@ -1,4 +1,4 @@
-export {Sprite};
+export { Sprite };
 
 class Sprite {
     constructor(spriteSrc, spritesIndex) {

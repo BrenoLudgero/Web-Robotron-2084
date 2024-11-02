@@ -19,6 +19,7 @@ const spritesIndex = {
     playerProjectile: imgPath + "projectiles/player_prjctl.png",
     tankProjectile: imgPath + "projectiles/bounce_bomb.png"
 };
+
 const spritesheetYIndex = {
     daddy: {
         "up": 28,
@@ -63,6 +64,7 @@ const spritesheetYIndex = {
         "right": 75
     }
 };
+
 const soundFxIndex = {
     // Sound file, sound priority, minimum sound duration
     bombBounce: [soundFxPath + "bomb_bounce.mp3", 2, 0.12],
