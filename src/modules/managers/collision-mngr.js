@@ -3,17 +3,16 @@ import { isActorOfType } from "../helpers/globals.js";
 
 class CollisionManager {
     update(game) {
-        const { actorMngr, projectileMngr, hitboxMngr, debuggerr } = game;
+        this.debuggerr = game.debuggerr;
+        const { actorMngr, projectileMngr, hitboxMngr } = game;
         const { player, enemies, humans } = actorMngr.actors;
-        if (!debuggerr.actorInvincibility) {
-            this.handleAllCollisions(
-                player,
-                enemies,
-                humans,
-                projectileMngr,
-                hitboxMngr
-            );
-        }
+        this.handleAllCollisions(
+            player,
+            enemies,
+            humans,
+            projectileMngr,
+            hitboxMngr
+        );
     }
 
     handleAllCollisions(player, enemies, humans, projectileMngr, hitboxMngr) {
@@ -83,21 +82,27 @@ class CollisionManager {
 
     handleHumanCollisions(player, enemies, humans, hitboxMngr) {
         this.handleHumanPlayerCollision(humans, player, hitboxMngr);
-        this.handleHumanEnemyCollision(humans, enemies, hitboxMngr);
+        if (!this.debuggerr.othersInvincibility) {
+            this.handleHumanEnemyCollision(humans, enemies, hitboxMngr);
+        }
     }
 
     handlePlayerEnemyCollision(player, enemies, hitboxMngr) {
-        for (const enemy of enemies) {
-            if (this.checkSingleCollision(player, enemy, hitboxMngr)) {
-                player.updateState("destroyed");
-                break;
+        if (!this.debuggerr.playerInvincibility) {
+            for (const enemy of enemies) {
+                if (this.checkSingleCollision(player, enemy, hitboxMngr)) {
+                    player.updateState("destroyed");
+                    break;
+                }
             }
         }
     }
 
     handleCollisionOutcome(playerProjectile, enemy) {
         if (!isActorOfType(enemy, "Hulk")) {
-            enemy.updateState("destroyed");
+            if (!this.debuggerr.othersInvincibility) {
+                enemy.updateState("destroyed");
+            }
         } else {
             playerProjectile.pushEnemy(enemy);
         }
@@ -148,12 +153,18 @@ class CollisionManager {
     }
 
     handleEnemyProjectilePlayerCollision(enemyProjectiles, player, hitboxMngr) {
-        for (const enemyProjectile of enemyProjectiles) {
-            if (
-                this.checkSingleCollision(enemyProjectile, player, hitboxMngr)
-            ) {
-                player.updateState("destroyed");
-                break;
+        if (!this.debuggerr.playerInvincibility) {
+            for (const enemyProjectile of enemyProjectiles) {
+                if (
+                    this.checkSingleCollision(
+                        enemyProjectile,
+                        player,
+                        hitboxMngr
+                    )
+                ) {
+                    player.updateState("destroyed");
+                    break;
+                }
             }
         }
     }

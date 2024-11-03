@@ -5,7 +5,8 @@ class Debugger {
     constructor(game) {
         this.game = game;
         this.shouldDrawHitboxes = false;
-        this.actorInvincibility = false;
+        this.playerInvincibility = false;
+        this.othersInvincibility = false;
         this.shouldUpdateActors = true;
     }
 
@@ -14,8 +15,11 @@ class Debugger {
             case "h":
                 this.toggleHitboxes();
                 break;
-            case "i":
-                this.toggleInvincibility();
+            case "p":
+                this.togglePlayerInvincibility();
+                break;
+            case "o":
+                this.toggleOthersInvincibility();
                 break;
             case "u":
                 this.toggleActorUpdates();
@@ -31,9 +35,14 @@ class Debugger {
         console.log("DRAW HITBOXES: " + this.shouldDrawHitboxes);
     }
 
-    toggleInvincibility() {
-        this.actorInvincibility = !this.actorInvincibility;
-        console.log("INVINCIBILITY: " + this.actorInvincibility);
+    togglePlayerInvincibility() {
+        this.playerInvincibility = !this.playerInvincibility;
+        console.log("PLAYER INVINCIBILITY: " + this.playerInvincibility);
+    }
+
+    toggleOthersInvincibility() {
+        this.othersInvincibility = !this.othersInvincibility;
+        console.log("OTHER'S INVINCIBILITY: " + this.othersInvincibility);
     }
 
     toggleActorUpdates() {

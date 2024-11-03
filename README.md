@@ -64,7 +64,8 @@ Unexpected audio and visual behavior occurs when the browser console is open
 ## Debugging Shortcuts
 | Keyboard Key | Description |
 | :----------: | :---------: |
-| R | Reset wave |
+| R | Resets the current wave |
 | U | Freezes / updates all actors |
 | H | Draws / hides all hitboxes |
-| I | Disables / enables all collision |
+| P | Enables / disables player invincibility |
+| O | Enables / disables others' invincibility |
