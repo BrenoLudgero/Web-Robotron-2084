@@ -20,10 +20,10 @@ class EnemyProjectile extends Projectile {
     move(game) {
         this.setMovementBoundaries(game);
         this.shoot(game);
-        this.moveToDirection();
+        this.moveToDirection(game); // REMOVE GAME WITH DEBUGGER
         this.executeEnemyProjectileBehavior(game);
         this.stayWithinCanvas();
-        this.elapseTimeOnScreen();
+        this.elapseTimeOnScreen(game); // REMOVE GAME WITH DEBUGGER
         this.vanishAfterTimeElapsed();
     }
 
@@ -44,13 +44,15 @@ class EnemyProjectile extends Projectile {
         }
     }
 
-    moveToDirection() {
-        this.screenX += this.directionX * this.speed;
-        this.screenY += this.directionY * this.speed;
+    moveToDirection(game) {
+        if (game.debuggerr.shouldUpdateActors) {
+            this.screenX += this.directionX * this.speed;
+            this.screenY += this.directionY * this.speed;
+        }
     }
 
-    elapseTimeOnScreen() {
-        if (this.timeOnScreen) {
+    elapseTimeOnScreen(game) {
+        if (this.timeOnScreen && game.debuggerr.shouldUpdateActors) {
             this.timeOnScreen--;
         }
     }

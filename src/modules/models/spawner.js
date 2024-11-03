@@ -71,7 +71,7 @@ class Spawner extends Enemy {
             soundMngr.playSound(this.spawnSound);
             this.spawnAmount--;
             this.secondsBetweenSpawns = generateRandomNumber(1, 3); // Time untill the next spawn
-        } else {
+        } else if (this.game.debuggerr.shouldUpdateActors) {
             this.secondsBetweenSpawns -= 1 / 60;
         }
     }
