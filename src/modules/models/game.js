@@ -35,7 +35,7 @@ class Game {
         this.inputMngr = new InputManager(this);
         this.collisionMngr = new CollisionManager();
         this.stateMngr = new StateManager(this);
-        this.debuggerr = new Debugger();
+        this.debuggerr = new Debugger(this);
     }
 
     update() {
@@ -59,15 +59,15 @@ class Game {
     }
 
     // TEMPORARY. WAVE METHOD
-    // HUMANS -> SPAWNERS -> OBSTACLES -> HULKS -> ELSE
+    // HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const { actorMngr } = this;
         actorMngr.addActors(5, Daddy);
         actorMngr.addActors(5, Mommy);
         actorMngr.addActors(5, Mikey);
+        actorMngr.addActors(5, Hulk);
         actorMngr.addActors(5, Spheroid);
         actorMngr.addActors(5, Quark);
-        actorMngr.addActors(5, Hulk);
         actorMngr.addActors(20, Grunt);
     }
 }

@@ -2,7 +2,8 @@ export { Debugger };
 
 // TEMPORARY
 class Debugger {
-    constructor() {
+    constructor(game) {
+        this.game = game;
         this.shouldDrawHitboxes = false;
         this.actorInvincibility = false;
         this.shouldUpdateActors = true;
@@ -18,6 +19,9 @@ class Debugger {
                 break;
             case "u":
                 this.toggleActorUpdates();
+                break;
+            case "r":
+                this.resetWave();
                 break;
         }
     }
@@ -35,6 +39,19 @@ class Debugger {
     toggleActorUpdates() {
         this.shouldUpdateActors = !this.shouldUpdateActors;
         console.log("UPDATING ACTORS: " + this.shouldUpdateActors);
+    }
+
+    resetWave() {
+        const { projectiles } = this.game.projectileMngr;
+        const { enemies, humans, player } = this.game.actorMngr.actors;
+        enemies.clear();
+        humans.clear();
+        projectiles.player.clear();
+        projectiles.enemies.clear();
+        player.currentState = "alive";
+        player.screenX = this.game.ui.canvas.width / 2 - player.originalWidth;
+        player.screenY = this.game.ui.canvas.height / 2 - player.originalHeight;
+        this.game.spawnActors();
     }
 
     // Not 100% accurate due to rect() limitations

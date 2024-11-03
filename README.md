@@ -64,6 +64,7 @@ Unexpected audio and visual behavior occurs when the browser console is open
 ## Debugging Shortcuts
 | Keyboard Key | Description |
 | :----------: | :---------: |
-| U  | Freezes / updates all actors |
-| H  | Draws / hides all hitboxes |
-| I  | Disables / enables all collision |
+| R | Reset wave |
+| U | Freezes / updates all actors |
+| H | Draws / hides all hitboxes |
+| I | Disables / enables all collision |
