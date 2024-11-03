@@ -129,13 +129,12 @@ class ArtificialIntelligence {
 
     // Returns one of 4 or 8 directions based on the actor's movementDirections if not found in previousDirections
     getRandomDirection(actor, directions, previousDirections) {
-        const numberOfDirections = actor.movementDirections === 4 ? 4 : 8;
-        let newDirection;
-        do {
-            newDirection =
-                directions[Math.floor(Math.random() * numberOfDirections)];
-        } while (previousDirections.includes(newDirection));
-        return newDirection;
+        const availableDirections = directions
+            .slice(0, actor.movementDirections)
+            .filter((direction) => !previousDirections.includes(direction));
+        return availableDirections[
+            Math.floor(Math.random() * availableDirections.length)
+        ];
     }
 
     isDesiredAmountReached(previousDirections, amountToStore) {

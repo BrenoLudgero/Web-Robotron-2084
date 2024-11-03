@@ -6,6 +6,7 @@ class Tank extends Enemy {
     constructor(game) {
         super(game, 26, 32);
         this.pointsAwarded = 200;
+        this.movementDirections = 8;
         this.minMoveSpeed = 1; // CHANGES ACCORDING TO WAVE
         this.maxMoveSpeed = 2; // CHANGES ACCORDING TO WAVE
         this.movementSpeed = generateRandomNumber(
