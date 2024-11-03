@@ -49,14 +49,14 @@ Obstacles are scattered around the screen and will destroy the player on contact
 ## Controls
 | Keyboard Key | Description |
 | :----------: | :---------: |
-| W  | Move up |
-| A  | Move left |
-| S  | Move down |
-| D  | Move right |
-| Arrow Up  | Shoot up |
-| Arrow Left  | Shoot left |
-| Arrow Down  | Shoot down |
-| Arrow Right  | Shoot right |
+| W | Move up |
+| A | Move left |
+| S | Move down |
+| D | Move right |
+| Arrow Up | Shoot up |
+| Arrow Left | Shoot left |
+| Arrow Down | Shoot down |
+| Arrow Right | Shoot right |
 
 ## Known Issues
 Unexpected audio and visual behavior occurs when the browser console is open
@@ -65,7 +65,7 @@ Unexpected audio and visual behavior occurs when the browser console is open
 | Keyboard Key | Description |
 | :----------: | :---------: |
 | R | Resets the current wave |
-| U | Freezes / updates all actors |
 | H | Draws / hides all hitboxes |
+| U | Freezes / unfreezes other actors |
 | P | Enables / disables player invincibility |
 | O | Enables / disables others' invincibility |
