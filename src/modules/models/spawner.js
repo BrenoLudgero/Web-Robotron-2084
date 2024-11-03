@@ -7,7 +7,8 @@ class Spawner extends Enemy {
         super(game, 30, 30);
         this.pointsAwarded = 1000;
         this.currentSprite = generateRandomNumber(1, 4);
-        this.minPlayerSpawnDistance = 450;
+        this.minHumanSpawnDistance = 0;
+        this.minPlayerSpawnDistance = 400;
         this.minMoveSpeed = 2; // CHANGES ACCORDING TO WAVE
         this.maxMoveSpeed = 3; // CHANGES ACCORDING TO WAVE
         this.movementSpeed = generateRandomNumber(
