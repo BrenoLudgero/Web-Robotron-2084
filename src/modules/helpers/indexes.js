@@ -1,4 +1,4 @@
-export {spritesIndex, spritesheetYIndex, soundFxIndex};
+export { spritesIndex, spritesheetYIndex, soundFxIndex };
 
 const imgPath = "../../src/assets/sprites/";
 const soundFxPath = "../../src/assets/sound_fx/";
@@ -17,52 +17,52 @@ const spritesIndex = {
     tank: imgPath + "actors/enemies/tank.png",
     enforcerProjectile: imgPath + "projectiles/spark.png",
     playerProjectile: imgPath + "projectiles/player_prjctl.png",
-    tankProjectile: imgPath + "projectiles/bounce_bomb.png"
+    tankProjectile: imgPath + "projectiles/bounce_bomb.png",
 };
 
 const spritesheetYIndex = {
     daddy: {
-        "up": 28,
-        "down": 0,
-        "left": 56,
-        "right": 82,
-        "upleft": 56,
-        "upright": 82,
-        "downleft": 56,
-        "downright": 82
+        up: 28,
+        down: 0,
+        left: 56,
+        right: 82,
+        upleft: 56,
+        upright: 82,
+        downleft: 56,
+        downright: 82,
     },
     hulk: {
-        "up": 0,
-        "down": 0,
-        "left": 33,
-        "right": 65
+        up: 0,
+        down: 0,
+        left: 33,
+        right: 65,
     },
     mikey: {
-        "up": 24,
-        "down": 0,
-        "left": 48,
-        "right": 70,
-        "upleft": 48,
-        "upright": 70,
-        "downleft": 48,
-        "downright": 70
+        up: 24,
+        down: 0,
+        left: 48,
+        right: 70,
+        upleft: 48,
+        upright: 70,
+        downleft: 48,
+        downright: 70,
     },
     mommy: {
-        "up": 30,
-        "down": 0,
-        "left": 59,
-        "right": 88,
-        "upleft": 59,
-        "upright": 88,
-        "downleft": 59,
-        "downright": 88
+        up: 30,
+        down: 0,
+        left: 59,
+        right: 88,
+        upleft: 59,
+        upright: 88,
+        downleft: 59,
+        downright: 88,
     },
     player: {
-        "up": 26,
-        "down": 0,
-        "left": 51,
-        "right": 75
-    }
+        up: 26,
+        down: 0,
+        left: 51,
+        right: 75,
+    },
 };
 
 const soundFxIndex = {
@@ -89,5 +89,5 @@ const soundFxIndex = {
     regularWave: soundFxPath + "regular_wave.mp3",
     sparkShot: [soundFxPath + "spark_shot.mp3", 3, 0.2],
     spheroidDestroyed: [soundFxPath + "spheroid_destroyed.mp3", 4, 0.09],
-    tankSpawn: [soundFxPath + "tank_spawn.mp3", 4, 0.2]
+    tankSpawn: [soundFxPath + "tank_spawn.mp3", 4, 0.2],
 };
