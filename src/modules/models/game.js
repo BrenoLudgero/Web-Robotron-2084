@@ -40,7 +40,7 @@ class Game {
 
     update() {
         const { score, ui, soundMngr, actorMngr, stateMngr } = this;
-        let player = actorMngr.actors.player;
+        const player = actorMngr.actors.player;
         if (!stateMngr.isDestroyed(player)) {
             actorMngr.update();
             this.inputMngr.update(player);

@@ -44,8 +44,7 @@ class ArtificialIntelligence {
 
     // Grunts only. 50% change to stepTowardsPlayer
     moveAtRandomIntervals(grunt, game) {
-        let randomNumber = generateRandomNumber(1, 2);
-        if (randomNumber === 1) {
+        if (generateRandomNumber(1, 2) === 1) {
             this.stepTowardsPlayer(grunt, game);
             game.soundMngr.playSound("gruntStep");
             game.spriteMngr.moveToNextSprite(grunt);
@@ -143,7 +142,7 @@ class ArtificialIntelligence {
 
     // Stores the actor's last 2 or 4 directions based on its movementDirections
     storePreviousDirection(actor, previousDirections) {
-        let amountToStore = actor.movementDirections === 4 ? 2 : 4;
+        const amountToStore = actor.movementDirections === 4 ? 2 : 4;
         if (this.isDesiredAmountReached(previousDirections, amountToStore)) {
             previousDirections.shift();
         }

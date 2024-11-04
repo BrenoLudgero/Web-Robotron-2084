@@ -56,7 +56,7 @@ class UIManager {
     }
 
     isLivesIndicatorOutdated(ui, playerLives) {
-        let interfaceLivesCount = ui.livesElement.childElementCount;
+        const interfaceLivesCount = ui.livesElement.childElementCount;
         return interfaceLivesCount !== playerLives;
     }
 
@@ -73,7 +73,7 @@ class UIManager {
     updateLivesIndicator(ui, currentLives) {
         ui.livesElement.innerHTML = "";
         for (let i = 0; i < currentLives; i++) {
-            let lifeIndicator = this.createLifeIcon(ui);
+            const lifeIndicator = this.createLifeIcon(ui);
             ui.livesElement.appendChild(lifeIndicator);
         }
     }
@@ -83,7 +83,7 @@ class UIManager {
     }
 
     updateLivesElement(ui, actorMngr) {
-        let playerLives = actorMngr.actors.player.lives;
+        const playerLives = actorMngr.actors.player.lives;
         if (!this.isLivesIndicatorOutdated(ui, playerLives)) {
             return;
         }
