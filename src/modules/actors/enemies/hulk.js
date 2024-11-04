@@ -8,7 +8,7 @@ class Hulk extends Enemy {
         this.movementDirections = 4;
         this.movementSpeed = 8; // INCREASES ACCORDING TO WAVE
         this.animationDelay = 9;
-        this.minHumanSpawnDistance = 90;
+        this.minHumanSpawnDistance = 120;
         this.hitboxConfig = {
             up: {
                 head: { width: 9, height: 9, xPosition: 15, yPosition: 0 },

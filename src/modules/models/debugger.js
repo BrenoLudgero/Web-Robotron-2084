@@ -60,6 +60,8 @@ class Debugger {
         player.currentState = "alive";
         player.screenX = this.game.ui.canvas.width / 2 - player.originalWidth;
         player.screenY = this.game.ui.canvas.height / 2 - player.originalHeight;
+        player.spritesheetX = 0;
+        player.spritesheetY = 0;
         this.game.spawnActors();
     }
 

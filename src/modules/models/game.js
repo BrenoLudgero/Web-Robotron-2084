@@ -62,12 +62,12 @@ class Game {
     // HUMANS -> OBSTACLES -> HULKS -> ELSE
     spawnActors() {
         const { actorMngr } = this;
-        actorMngr.addActors(5, Daddy);
-        actorMngr.addActors(5, Mommy);
-        actorMngr.addActors(5, Mikey);
-        actorMngr.addActors(5, Hulk);
+        actorMngr.addActors(7, Daddy);
+        actorMngr.addActors(7, Mommy);
+        actorMngr.addActors(6, Mikey);
+        actorMngr.addActors(15, Hulk);
         actorMngr.addActors(5, Spheroid);
         actorMngr.addActors(5, Quark);
-        actorMngr.addActors(20, Grunt);
+        actorMngr.addActors(75, Grunt);
     }
 }
